@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 17: עבודה עם משתמשים</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="17-users">
+<main>
+    <h1>מדריך 17: עבודה עם משתמשים</h1>
+    <div class="subtitle">עמודים למחוברים בלבד, המשתמש המחובר, ותפקיד "מנהל"</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> מערכת ההרשמה וההתחברות כבר קיימת באתר מהיום הראשון (בזכות Individual Accounts במדריך 1). עכשיו נשתמש בה: נחסום עמודים למי שלא מחובר, נציג מידע לפי המשתמש, וניצור תפקיד "מנהל" שרק לו מותר לנהל את האתר.
+        <br><br>
+        <strong>מה צריך לפני:</strong> פרויקט עם Individual Accounts (מדריך 1), ומסד נתונים שכבר נוצר, כלומר נרשמתם לפחות פעם אחת (מדריך 2, סעיף 7). לדוגמאות כדאי שיהיו לכם <code class="inline">ProductsController</code> (מדריכים 10-13) ו-<code class="inline">CategoriesController</code> (מדריך 15), אבל זה עובד עם כל Controller.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. שני מושגים שנשמעים דומה</h2>
+    <div class="concept">
+        <span class="concept-title">📖 Authentication (אימות זהות)</span>
+        "מי אתה?". ההתחברות עם אימייל וסיסמה. אחרי התחברות, האתר יודע מי המשתמש.
+    </div>
+    <div class="concept">
+        <span class="concept-title">📖 Authorization (הרשאה)</span>
+        "מה מותר לך?". גם אחרי שהאתר יודע מי אתם, לא בטוח שמותר לכם להיכנס לכל עמוד.
+        <span class="example">דוגמה: בבית הספר, כרטיס התלמיד מוכיח מי אתם (Authentication). אבל לחדר המורים מותר להיכנס רק למורים (Authorization).</span>
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. עמודים למחוברים בלבד: [Authorize]</h2>
+    <p>כדי לחסום עמוד למי שלא מחובר, שמים מעליו <code class="inline">[Authorize]</code>. לדוגמה, רק משתמש מחובר יוכל להוסיף מוצר. ב-<code class="inline">ProductsController</code>, הוסיפו מעל <strong>שני</strong> ה-<code class="inline">Create</code>:</p>
+<pre class="code-block">[Authorize]
+public IActionResult Create()
+{
+    ...
+}
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+[Authorize]
+public IActionResult Create(Product product)
+{
+    ...
+}</pre>
+    <p>(ה-<code class="inline">...</code> הוא הקוד שכבר יש לכם בפנים, אל תמחקו אותו.) <code class="inline">Authorize</code> יסומן באדום. <span class="keyboard">Ctrl+.</span> יוסיף <code class="inline">using Microsoft.AspNetCore.Authorization;</code>.</p>
+
+    <div class="checkpoint">התנתקו מהאתר (Logout) ונסו להיכנס ל-<code class="inline">/Products/Create</code>. האתר שולח אתכם לעמוד ההתחברות. אחרי שתתחברו, תחזרו אוטומטית לטופס.</div>
+
+    <div class="explanation">
+        <strong>💡 על כל ה-Controller בבת אחת:</strong> אפשר לשים <code class="inline">[Authorize]</code> מעל השורה <code class="inline">public class ...Controller</code>, ואז <strong>כל</strong> העמודים בו חסומים. אם רוצים שעמוד אחד בכל זאת יהיה פתוח לכולם, שמים מעליו <code class="inline">[AllowAnonymous]</code>.
+    </div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. מי מחובר עכשיו?</h2>
+    <p>בכל View אפשר לבדוק אם המשתמש מחובר, ולהציג את השם שלו, דרך <code class="inline">User</code>:</p>
+<pre class="code-block">@if (User.Identity?.IsAuthenticated == true)
+{
+    &lt;p&gt;שלום, @User.Identity.Name! 👋&lt;/p&gt;
+}
+else
+{
+    &lt;p&gt;
+        שלום אורח!
+        &lt;a asp-area="Identity" asp-page="/Account/Login"&gt;התחברו&lt;/a&gt;
+        או
+        &lt;a asp-area="Identity" asp-page="/Account/Register"&gt;הירשמו&lt;/a&gt;
+    &lt;/p&gt;
+}</pre>
+    <table class="simple">
+        <tr><th>מה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">User.Identity?.IsAuthenticated</code></td><td><code class="inline">true</code> אם מישהו מחובר.</td></tr>
+        <tr><td><code class="inline">User.Identity.Name</code></td><td>שם המשתמש. כברירת מחדל זה האימייל שאיתו נרשם.</td></tr>
+        <tr><td><code class="inline">asp-area="Identity" asp-page="..."</code></td><td>עמודי ההרשמה וההתחברות לא נמצאים ב-Controller רגיל, אלא באזור מיוחד בשם Identity. לכן הקישור אליהם קצת שונה.</td></tr>
+    </table>
+    <p>ב-Controller, המזהה (Id) של המשתמש המחובר מתקבל כך. הוא שימושי כשרוצים לשמור "מי יצר את זה", למשל להזמנות של כל משתמש:</p>
+<pre class="code-block">var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);</pre>
+    <p>(<span class="keyboard">Ctrl+.</span> יוסיף <code class="inline">using System.Security.Claims;</code>. דוגמה מלאה של "רק הנתונים שלי" תמצאו בספריית קטעי הקוד.)</p>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. תפקיד "מנהל"</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Role (תפקיד)</span>
+        קבוצה של משתמשים עם אותן הרשאות. נותנים למשתמש תפקיד, ואז חוסמים עמודים לפי תפקיד, ולא לפי כל משתמש בנפרד.
+        <span class="example">דוגמה: תפקיד <code class="inline">Admin</code> (מנהל). רק מי שיש לו את התפקיד הזה יוכל להיכנס לעמודי הניהול.</span>
+    </div>
+
+    <h3>שלב א: מפעילים תפקידים</h3>
+    <p>פתחו את <code class="inline">Program.cs</code> וחפשו את השורה שמתחילה ב-<code class="inline">builder.Services.AddDefaultIdentity</code>. היא נראית בערך כך:</p>
+<pre class="code-block">builder.Services.AddDefaultIdentity&lt;IdentityUser&gt;(options =&gt; options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores&lt;ApplicationDbContext&gt;();</pre>
+    <p>הוסיפו לפני <code class="inline">.AddEntityFrameworkStores</code> את השורה <code class="inline">.AddRoles&lt;IdentityRole&gt;()</code>:</p>
+<pre class="code-block">builder.Services.AddDefaultIdentity&lt;IdentityUser&gt;(options =&gt; options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles&lt;IdentityRole&gt;()
+    .AddEntityFrameworkStores&lt;ApplicationDbContext&gt;();</pre>
+
+    <h3>שלב ב: יוצרים את המנהל הראשון</h3>
+    <p>בעיה: רק מנהל יכול לתת תפקיד מנהל, אבל עוד אין אף מנהל. הפתרון: קוד שרץ כשהאתר עולה, ונותן תפקיד מנהל לאימייל מסוים.</p>
+    <ul class="step-list">
+        <li>הירשמו לאתר (Register) עם האימייל שאתם רוצים שיהיה המנהל, ואשרו את החשבון בקישור <strong>Click here to confirm your account</strong>.</li>
+        <li>ב-<code class="inline">Program.cs</code>, מצאו את השורה <code class="inline">var app = builder.Build();</code>, והדביקו <strong>מיד אחריה</strong>:
+<pre class="code-block">using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService&lt;RoleManager&lt;IdentityRole&gt;&gt;();
+    var userManager = scope.ServiceProvider.GetRequiredService&lt;UserManager&lt;IdentityUser&gt;&gt;();
+
+    // יוצרים את התפקיד Admin, אם הוא עוד לא קיים
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+
+    // נותנים תפקיד Admin למשתמש עם האימייל הזה
+    var adminEmail = "<span class="change">admin@example.com</span>";
+    var admin = await userManager.FindByEmailAsync(adminEmail);
+    if (admin != null &amp;&amp; !await userManager.IsInRoleAsync(admin, "Admin"))
+    {
+        await userManager.AddToRoleAsync(admin, "Admin");
+    }
+}</pre>
+            <p class="change-note">החליפו את <code class="inline">admin@example.com</code> באימייל שאיתו נרשמתם.</p>
+        </li>
+        <li>הריצו את האתר. אם הייתם מחוברים, <strong>התנתקו והתחברו מחדש</strong> (התפקיד נטען רק בהתחברות).</li>
+    </ul>
+    <div class="explanation">
+        <strong>💡 מה הקוד עושה?</strong> בכל הפעלה של האתר הוא בודק: האם יש תפקיד Admin? אם לא, יוצר. האם המשתמש עם האימייל הזה קיים, ועוד אין לו את התפקיד? אם כן, נותן לו. בהפעלות הבאות הוא רואה שהכול כבר קיים, ולא עושה כלום. <code class="inline">await</code> פירושו "חכה שהפעולה במסד הנתונים תסתיים" (ראינו אותו ב-Scaffolding, מדריך 15).
+    </div>
+    <div class="explanation">
+        <strong>💡 עוד מנהלים:</strong> אפשר לשכפל את שלוש השורות האחרונות (מ-<code class="inline">var adminEmail</code>) עם אימייל אחר.
+    </div>
+
+    <h3>שלב ג: חוסמים עמודים למנהלים בלבד</h3>
+    <p>כותבים את התפקיד בתוך ה-<code class="inline">[Authorize]</code>. לדוגמה, כל עמודי ניהול הקטגוריות ממדריך 15. ב-<code class="inline">CategoriesController.cs</code>, מעל השורה <code class="inline">public class CategoriesController : Controller</code>:</p>
+<pre class="code-block">[Authorize(Roles = "Admin")]</pre>
+    <div class="checkpoint">
+        <ul style="margin:0.3rem 0 0;">
+            <li>מחוברים כמנהל: <code class="inline">/Categories</code> עובד כרגיל.</li>
+            <li>מחוברים כמשתמש רגיל (הירשמו עם אימייל אחר): מופיע עמוד <strong>Access denied</strong>.</li>
+            <li>לא מחוברים: מועברים לעמוד ההתחברות.</li>
+        </ul>
+    </div>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. כפתורים וקישורים שרק מנהל רואה</h2>
+    <p>ב-View, <code class="inline">User.IsInRole("Admin")</code> בודק אם המשתמש המחובר הוא מנהל. לדוגמה, קישור לניהול הקטגוריות בתפריט (<code class="inline">_Layout.cshtml</code>), שמופיע רק למנהל:</p>
+<pre class="code-block">@if (User.IsInRole("Admin"))
+{
+    &lt;li class="nav-item"&gt;
+        &lt;a class="nav-link text-dark" asp-controller="Categories" asp-action="Index"&gt;ניהול קטגוריות&lt;/a&gt;
+    &lt;/li&gt;
+}</pre>
+    <div class="warning">
+        <strong>⚠️ להסתיר כפתור זה לא להגן על העמוד!</strong> גם אם הכפתור לא מופיע, מישהו יכול להקליד את הכתובת ישירות בדפדפן. ההגנה האמיתית היא <code class="inline">[Authorize(Roles = "Admin")]</code> ב-Controller. הסתרת הכפתור היא רק בשביל הנוחות. תמיד עושים את שניהם.
+    </div>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>נתתם תפקיד מנהל, אבל עדיין מקבלים Access denied:</strong> התנתקו והתחברו מחדש. בדקו גם שהאימייל בקוד כתוב בדיוק כמו שנרשמתם.</li>
+            <li><strong>"No service for type RoleManager":</strong> שכחתם את <code class="inline">.AddRoles&lt;IdentityRole&gt;()</code> ב-<code class="inline">Program.cs</code> (שלב א).</li>
+            <li><strong>קווים אדומים על <code class="inline">await</code> ב-Program.cs:</strong> ודאו שהדבקתם את הקוד אחרי <code class="inline">var app = builder.Build();</code>, ולא בתוך פונקציה אחרת.</li>
+            <li><strong>[Authorize] לא חוסם כלום:</strong> בדקו שהוא מעל ה-Action או ה-Controller הנכון, ושלא שמתם בטעות <code class="inline">[AllowAnonymous]</code>.</li>
+            <li><strong>במחשב אחר המשתמש לא מנהל:</strong> מסד הנתונים שם חדש וריק (מדריך 13). הירשמו שם עם אותו אימייל, והקוד ייתן לו את התפקיד בהפעלה הבאה.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>אפשרו להוסיף מוצרים (Create) רק למנהלים, והציגו את הכפתור "הוספת מוצר" ברשימה רק למנהלים.</li>
+            <li>הוסיפו לדף הבית ברכה אישית: "שלום, [אימייל]" למחוברים, ו"שלום אורח" עם קישור להרשמה לאחרים.</li>
+            <li>צרו עמוד "האזור האישי" (<code class="inline">Profile</code>) שרק משתמשים מחוברים יכולים להיכנס אליו, והציגו בו את האימייל ואת ה-Id של המשתמש.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li><code class="inline">[Authorize]</code> חוסם עמוד למי שלא מחובר, ו-<code class="inline">[Authorize(Roles = "Admin")]</code> חוסם למי שאינו מנהל.</li>
+            <li>ב-View: <code class="inline">User.Identity.IsAuthenticated</code>, <code class="inline">User.Identity.Name</code> ו-<code class="inline">User.IsInRole("Admin")</code>.</li>
+            <li>תפקידים מפעילים עם <code class="inline">.AddRoles&lt;IdentityRole&gt;()</code>, ואת המנהל הראשון יוצרים בקוד ב-<code class="inline">Program.cs</code>.</li>
+            <li>אחרי שינוי תפקיד צריך להתנתק ולהתחבר מחדש. ולהסתיר כפתור לא מחליף את <code class="inline">[Authorize]</code>.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

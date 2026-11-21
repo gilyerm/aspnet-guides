@@ -45,9 +45,9 @@
         { num: '15', slug: '15-scaffolding', section: 'data', title: 'הכול בלחיצת כפתור', desc: 'עמודי הצגה, הוספה, עריכה ומחיקה שנוצרים לבד', ready: true,
           keywords: 'Scaffolding CRUD async await Entity Framework' },
 
-        { num: '16', slug: '16-images', section: 'users', title: 'העלאת תמונות', desc: 'טופס להעלאת קובץ, שמירה והצגה',
+        { num: '16', slug: '16-images', section: 'users', title: 'העלאת תמונות', desc: 'טופס להעלאת קובץ, שמירה והצגה', ready: true,
           keywords: 'IFormFile upload קובץ תמונה wwwroot' },
-        { num: '17', slug: '17-users', section: 'users', title: 'עבודה עם משתמשים', desc: 'עמודים למחוברים בלבד, המשתמש המחובר ותפקידים',
+        { num: '17', slug: '17-users', section: 'users', title: 'עבודה עם משתמשים', desc: 'עמודים למחוברים בלבד, המשתמש המחובר ותפקידים', ready: true,
           keywords: 'Authorize Roles מנהל Admin User.Identity Login' },
 
         { num: 'א', slug: 'adv-a-partial-views', section: 'advanced', title: 'Partial Views', desc: 'חלקי עמוד שחוזרים על עצמם' },
@@ -56,9 +56,9 @@
         { num: 'ד', slug: 'adv-d-fetch', section: 'advanced', title: 'JS שמדבר עם השרת', desc: 'עדכון חלק מהעמוד בלי לטעון מחדש', keywords: 'fetch JSON AJAX' },
         { num: 'ה', slug: 'adv-e-cart', section: 'advanced', title: 'עגלת קניות', desc: 'הוספה לעגלה, עמוד עגלה ומחיקה', keywords: 'Session חנות' },
 
-        { num: '🛠️', slug: 'tool-errors', section: 'tools', title: 'קריאת שגיאות ושגיאות נפוצות', desc: 'איך מבינים מה השתבש, ואיך מתקנים', keywords: 'Error שגיאה Exception Clean Rebuild' },
-        { num: '🛠️', slug: 'tool-debug', section: 'tools', title: 'דיבאג עם Breakpoints', desc: 'עוצרים את הקוד ובודקים ערכים', keywords: 'Breakpoint F10 F11 Watch' },
-        { num: '🛠️', slug: 'tool-planning', section: 'tools', title: 'תכנון הפרויקט', desc: 'תבנית למילוי לפני שמתחילים לכתוב קוד' },
+        { num: '🛠️', slug: 'tool-errors', section: 'tools', title: 'קריאת שגיאות ושגיאות נפוצות', desc: 'איך מבינים מה השתבש, ואיך מתקנים', ready: true, keywords: 'Error שגיאה Exception Clean Rebuild' },
+        { num: '🛠️', slug: 'tool-debug', section: 'tools', title: 'דיבאג עם Breakpoints', desc: 'עוצרים את הקוד ובודקים ערכים', ready: true, keywords: 'Breakpoint F10 F11 Watch' },
+        { num: '🛠️', slug: 'tool-planning', section: 'tools', title: 'תכנון הפרויקט', desc: 'תבנית למילוי לפני שמתחילים לכתוב קוד', ready: true },
         { num: '📚', slug: 'snippets', section: 'tools', title: 'ספריית קטעי קוד', desc: 'קטעים מוכנים להעתקה, עם הסבר מה לשנות' }
     ];
 

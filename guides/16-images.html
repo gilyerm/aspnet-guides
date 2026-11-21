@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 16: העלאת תמונות</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="16-images">
+<main>
+    <h1>מדריך 16: העלאת תמונות</h1>
+    <div class="subtitle">טופס שמעלה קובץ תמונה, שומר אותו באתר, ומציג אותו</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> מוצר בלי תמונה זה משעמם. במדריך הזה נוסיף לטופס הוספת המוצר שדה לבחירת תמונה מהמחשב. התמונה תישמר בתיקייה באתר, ומסד הנתונים ישמור רק את <strong>הכתובת</strong> שלה.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מדריך 11 (טפסים) ומדריך 13 (מסד נתונים) הם <strong>תנאי מקדים</strong>: צריך טופס הוספת מוצר שעובד עם מסד הנתונים. כדאי להכיר גם את בדיקת הקלט ממדריך 12.
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 למה לא שומרים את התמונה במסד הנתונים?</span>
+        אפשר, אבל זה מסובך ומאט את האתר. הדרך המקובלת: את הקובץ עצמו שומרים בתיקייה <code class="inline">wwwroot/images</code> (כמו כל קובץ סטטי, מדריך 8), ובמסד הנתונים שומרים רק את הנתיב שלו, למשל <code class="inline">/images/products/abc123.jpg</code>.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. שדה לכתובת התמונה במודל</h2>
+    <ul class="step-list">
+        <li>ב-<code class="inline">Models/Product.cs</code>, הוסיפו בתוך המחלקה:
+<pre class="code-block">public string? ImageUrl { get; set; }</pre>
+            סימן השאלה אומר שמוצר יכול להיות גם בלי תמונה.
+        </li>
+        <li>עצרו את האתר, ובחלון Package Manager Console הריצו (כל שורה בנפרד):
+<pre class="code-block">Add-Migration AddProductImage
+Update-Database</pre>
+        </li>
+    </ul>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. הטופס</h2>
+    <p>ב-<code class="inline">Views/Products/Create.cshtml</code> צריך שני שינויים:</p>
+    <ul class="step-list">
+        <li>בשורה של <code class="inline">&lt;form</code>, הוסיפו <code class="inline">enctype</code>, כך שתיראה כך:
+<pre class="code-block">&lt;form asp-action="Create" method="post" enctype="multipart/form-data"&gt;</pre>
+        </li>
+        <li>בתוך הטופס, לפני כפתור השמירה, הוסיפו:
+<pre class="code-block">&lt;div class="mb-3"&gt;
+    &lt;label class="form-label"&gt;תמונה&lt;/label&gt;
+    &lt;input type="file" name="imageFile" class="form-control" accept="image/*" /&gt;
+&lt;/div&gt;</pre>
+        </li>
+    </ul>
+    <table class="simple">
+        <tr><th>מה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">enctype="multipart/form-data"</code></td><td>אומר לדפדפן "הטופס הזה שולח גם קבצים". <strong>בלעדיו הקובץ לא נשלח</strong>, ולא תקבלו שום שגיאה. זו הטעות הכי נפוצה.</td></tr>
+        <tr><td><code class="inline">type="file"</code></td><td>שדה עם כפתור "בחירת קובץ".</td></tr>
+        <tr><td><code class="inline">name="imageFile"</code></td><td>השם שבו הקובץ יגיע ל-Controller. השם חייב להיות זהה לשם הפרמטר ב-Action.</td></tr>
+        <tr><td><code class="inline">accept="image/*"</code></td><td>בחלון בחירת הקובץ יוצגו רק תמונות. (זה רק לנוחות, ולא מחליף בדיקה בשרת.)</td></tr>
+    </table>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. שמירת הקובץ ב-Controller</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: IFormFile</span>
+        הסוג של קובץ שהגיע מטופס. יש לו שם (<code class="inline">FileName</code>), גודל (<code class="inline">Length</code>), ופעולה שמעתיקה אותו לקובץ על המחשב (<code class="inline">CopyTo</code>).
+    </div>
+
+    <h3>שלב א: מוסיפים גישה לתיקייה wwwroot</h3>
+    <p>ה-Controller צריך לדעת איפה בדיוק נמצאת התיקייה <code class="inline">wwwroot</code> במחשב. ב-<code class="inline">ProductsController</code>, שנו את ההתחלה (השדה והבנאי ממדריך 13) כך:</p>
+<pre class="code-block">private readonly ApplicationDbContext _context;
+private readonly IWebHostEnvironment _env;
+
+public ProductsController(ApplicationDbContext context, IWebHostEnvironment env)
+{
+    _context = context;
+    _env = env;
+}</pre>
+    <p><code class="inline">_env.WebRootPath</code> הוא הנתיב המלא לתיקייה <code class="inline">wwwroot</code> במחשב.</p>
+
+    <h3>שלב ב: Create של ה-POST</h3>
+    <p>החליפו את ה-<code class="inline">Create</code> עם ה-<code class="inline">[HttpPost]</code> ב:</p>
+<pre class="code-block">[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Create(Product product, IFormFile? imageFile)
+{
+    // בדיקה שהקובץ הוא תמונה ולא גדול מדי
+    if (imageFile != null)
+    {
+        var allowed = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+        var extension = Path.GetExtension(imageFile.FileName).ToLower();
+
+        if (!allowed.Contains(extension))
+        {
+            ModelState.AddModelError("", "אפשר להעלות רק תמונות (jpg, png, gif, webp)");
+        }
+        if (imageFile.Length &gt; 2 * 1024 * 1024)
+        {
+            ModelState.AddModelError("", "התמונה גדולה מדי (עד 2MB)");
+        }
+    }
+
+    if (!ModelState.IsValid)
+    {
+        return View(product);
+    }
+
+    // שמירת הקובץ בתיקייה wwwroot/images/products
+    if (imageFile != null)
+    {
+        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+        var folder = Path.Combine(_env.WebRootPath, "images", "products");
+        Directory.CreateDirectory(folder);
+
+        var filePath = Path.Combine(folder, fileName);
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            imageFile.CopyTo(stream);
+        }
+
+        product.ImageUrl = "/images/products/" + fileName;
+    }
+
+    _context.Products.Add(product);
+    _context.SaveChanges();
+    return RedirectToAction("Index");
+}</pre>
+    <div class="warning">
+        <strong>⚠️ עשיתם את מדריך 14?</strong> אז ב-Create הישן היתה גם שורה של <code class="inline">ViewBag.Categories</code> בתוך ה-<code class="inline">if (!ModelState.IsValid)</code>. החזירו אותה לשם, לפני ה-<code class="inline">return View(product);</code>.
+    </div>
+
+    <table class="simple">
+        <tr><th>מה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">IFormFile? imageFile</code></td><td>הקובץ מהטופס. סימן השאלה: מותר לא לבחור תמונה, ואז <code class="inline">imageFile</code> יהיה <code class="inline">null</code>.</td></tr>
+        <tr><td><code class="inline">Path.GetExtension(...)</code></td><td>הסיומת של הקובץ, למשל <code class="inline">.jpg</code>.</td></tr>
+        <tr><td><code class="inline">ModelState.AddModelError("", "...")</code></td><td>מוסיף שגיאה משלנו לבדיקת הקלט (מדריך 12). היא תוצג ב-<code class="inline">asp-validation-summary</code> בראש הטופס.</td></tr>
+        <tr><td><code class="inline">2 * 1024 * 1024</code></td><td>2 מגה-בייט, בבתים.</td></tr>
+        <tr><td><code class="inline">Guid.NewGuid()</code></td><td>מייצר שם ייחודי ואקראי, כמו <code class="inline">3f2a9c...</code>. ככה שני תלמידים שמעלים <code class="inline">image.jpg</code> לא דורסים זה את זה.</td></tr>
+        <tr><td><code class="inline">Directory.CreateDirectory(folder)</code></td><td>יוצר את התיקייה אם היא עוד לא קיימת. אם כבר קיימת, לא עושה כלום.</td></tr>
+        <tr><td><code class="inline">using (var stream = ...) { CopyTo }</code></td><td>פותח קובץ חדש במחשב, מעתיק לתוכו את התמונה, וסוגר אותו.</td></tr>
+        <tr><td><code class="inline">product.ImageUrl = ...</code></td><td>שומרים במוצר את הכתובת של התמונה, וזה מה שנכנס למסד הנתונים.</td></tr>
+    </table>
+
+    <div class="checkpoint">הוסיפו מוצר עם תמונה. ב-Solution Explorer, תחת <code class="inline">wwwroot</code>, נוצרה התיקייה <code class="inline">images/products</code> ובה קובץ עם שם ארוך ומוזר. (אם לא רואים אותה, לחצו על כפתור "Show All Files" בראש Solution Explorer, או על רענון.)</div>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. הצגת התמונה</h2>
+    <p>ב-<code class="inline">Views/Products/Details.cshtml</code>, הוסיפו מתחת ל-<code class="inline">&lt;h1&gt;</code>:</p>
+<pre class="code-block">@if (Model.ImageUrl != null)
+{
+    &lt;img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded mb-3" style="max-width: 400px;" /&gt;
+}</pre>
+    <p><code class="inline">img-fluid</code> של Bootstrap דואג שהתמונה לא תצא מהמסך בטלפון.</p>
+    <p>ברשימה (<code class="inline">Index.cshtml</code>) אפשר להוסיף עמודה עם תמונה קטנה. בשורת הכותרות <code class="inline">&lt;th&gt;&lt;/th&gt;</code>, ובתוך הלולאה:</p>
+<pre class="code-block">&lt;td&gt;
+    @if (product.ImageUrl != null)
+    {
+        &lt;img src="@product.ImageUrl" alt="" style="height: 50px;" class="rounded" /&gt;
+    }
+&lt;/td&gt;</pre>
+    <div class="checkpoint">בעמוד הפרטים של המוצר מופיעה התמונה שהעליתם, וברשימה מופיעה גרסה קטנה שלה.</div>
+
+    <div class="warning">
+        <strong>⚠️ תמונות ו-GitHub:</strong> התמונות שמעלים נשמרות בתיקיית הפרויקט, ולכן ייכנסו ל-Commit הבא (מדריך 3). זה בסדר לכמה תמונות, אבל אם מעלים הרבה, המאגר יגדל. בנוסף, במחשב אחר התמונות יגיעו עם הפרויקט, אבל המוצרים במסד הנתונים לא (מדריך 13).
+    </div>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>המוצר נשמר, אבל בלי תמונה (<code class="inline">imageFile</code> תמיד null):</strong> חסר <code class="inline">enctype="multipart/form-data"</code> ב-<code class="inline">&lt;form&gt;</code>, או שה-<code class="inline">name</code> של השדה לא זהה לשם הפרמטר (<code class="inline">imageFile</code>).</li>
+            <li><strong>התמונה לא מוצגת (ריבוע שבור):</strong> F12 ← Console תראה שגיאה 404 עם הכתובת. בדקו שהקובץ באמת קיים ב-<code class="inline">wwwroot/images/products</code>, ושהכתובת ב-<code class="inline">ImageUrl</code> מתחילה ב-<code class="inline">/images/</code> (בלי <code class="inline">wwwroot</code>).</li>
+            <li><strong>הודעות השגיאה על התמונה לא מופיעות:</strong> חסר <code class="inline">&lt;div asp-validation-summary="ModelOnly" class="text-danger"&gt;&lt;/div&gt;</code> בטופס (מדריך 12).</li>
+            <li><strong>"IWebHostEnvironment could not be found":</strong> <span class="keyboard">Ctrl+.</span> על השם יוסיף את ה-<code class="inline">using</code> החסר.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>כשאין למוצר תמונה, הציגו תמונת ברירת מחדל. (רמז: <code class="inline">else</code>, ותמונה מ-<code class="inline">https://placehold.co/400x300?text=No+Image</code>.)</li>
+            <li>הציגו את המוצרים בעמוד הרשימה ככרטיסים של Bootstrap עם תמונה (מדריך 9, סעיפים 4-5) במקום טבלה.</li>
+            <li>בונוס: שנו את המגבלה ל-5MB, ובדקו שתמונה גדולה יותר נחסמת עם הודעה בעברית.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>את הקובץ שומרים ב-<code class="inline">wwwroot</code>, ובמסד הנתונים רק את הכתובת שלו.</li>
+            <li>טופס עם קובץ חייב <code class="inline">enctype="multipart/form-data"</code>, והקובץ מגיע ל-Controller כ-<code class="inline">IFormFile</code>.</li>
+            <li>בודקים סיומת וגודל, ונותנים לקובץ שם ייחודי עם <code class="inline">Guid</code>.</li>
+            <li>מציגים עם <code class="inline">&lt;img src="@Model.ImageUrl"&gt;</code>, אחרי בדיקה שהכתובת לא <code class="inline">null</code>.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

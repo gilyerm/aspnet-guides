@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דיבאג עם Breakpoints</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="tool-debug">
+<main>
+    <h1>דיבאג עם Breakpoints</h1>
+    <div class="subtitle">עוצרים את הקוד באמצע, ובודקים מה באמת יש בכל משתנה</div>
+
+    <div class="explanation">
+        <strong>💡 למה צריך את זה?</strong> כשמשהו לא עובד ואין שום שגיאה, קשה לדעת איפה הבעיה. במקום לנחש, אפשר לעצור את הקוד בשורה מסוימת, ולראות בעיניים מה הערך של כל משתנה ברגע הזה. זה הכלי הכי חזק שיש למתכנת.
+        <br><br>
+        <strong>מה צריך לפני:</strong> פרויקט שרץ (מדריך 1). הדוגמאות כאן משתמשות בטופס הוספת המוצר (מדריך 11), אבל זה עובד בכל קוד C#.
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Breakpoint (נקודת עצירה)</span>
+        סימון על שורה בקוד שאומר: "כשהאתר מגיע לכאן, עצור והראה לי מה קורה".
+        <span class="example">דוגמה: כמו לעצור סרטון בדיוק ברגע שמשהו קורה, ולהסתכל על כל הפרטים בתמונה.</span>
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. שמים Breakpoint</h2>
+    <ul class="step-list">
+        <li>פתחו את <code class="inline">ProductsController.cs</code>, ומצאו את ה-<code class="inline">Create</code> עם ה-<code class="inline">[HttpPost]</code>.</li>
+        <li>לחצו על <strong>השוליים האפורים</strong> משמאל למספר השורה של השורה הראשונה בתוך ה-Action (למשל <code class="inline">if (!ModelState.IsValid)</code>). תופיע <strong>נקודה אדומה</strong>. אפשר גם לעמוד על השורה וללחוץ <span class="keyboard">F9</span>.</li>
+        <li>הריצו את האתר <strong>עם דיבאג</strong>: כפתור ה-Play הירוק או <span class="keyboard">F5</span>. (עם <span class="keyboard">Ctrl+F5</span>, בלי דיבאג, ה-Breakpoints לא עוצרים!)</li>
+        <li>בדפדפן, מלאו את טופס הוספת המוצר ולחצו "שמירה".</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של שורה עם נקודה אדומה בשוליים, ושל השורה הצהובה כשהקוד עוצר</div>
+    <div class="checkpoint">הדפדפן "נתקע", ו-Visual Studio קופצת קדימה. השורה עם הנקודה האדומה מסומנת <strong>בצהוב</strong>: הקוד עצר בדיוק לפניה.</div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. מסתכלים על המשתנים</h2>
+    <p>כשהקוד עצור, יש כמה דרכים לראות מה יש במשתנים:</p>
+    <table class="simple">
+        <tr><th>דרך</th><th>איך</th></tr>
+        <tr><td><strong>ריחוף עם העכבר</strong></td><td>שימו את העכבר על משתנה בקוד (למשל <code class="inline">product</code>). נפתחת חלונית עם הערך שלו. לחיצה על החץ הקטן (▶) פותחת את כל ה-Properties: Name, Price וכו'.</td></tr>
+        <tr><td><strong>החלון Locals</strong></td><td>בתחתית המסך (אם לא מופיע: Debug ← Windows ← Locals). מציג את כל המשתנים של ה-Action הנוכחי והערכים שלהם.</td></tr>
+        <tr><td><strong>החלון Watch</strong></td><td>קליק ימני על משתנה ← <strong>Add Watch</strong>. הוא יישאר במעקב, ותראו איך הערך שלו משתנה.</td></tr>
+    </table>
+    <div class="checkpoint">רחפו מעל <code class="inline">product</code> ופתחו אותו. אתם רואים בדיוק את מה שהקלדתם בטופס! אם Name ריק, למשל, ברור שהבעיה בטופס ולא ב-Controller.</div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. מתקדמים שורה אחרי שורה</h2>
+    <table class="simple">
+        <tr><th>מקש</th><th>שם</th><th>מה הוא עושה</th></tr>
+        <tr><td><span class="keyboard">F10</span></td><td>Step Over</td><td>מריץ את השורה הנוכחית, ועוצר בשורה הבאה. <strong>הכי שימושי.</strong></td></tr>
+        <tr><td><span class="keyboard">F11</span></td><td>Step Into</td><td>אם בשורה יש קריאה לפונקציה שלכם, נכנס לתוכה.</td></tr>
+        <tr><td><span class="keyboard">F5</span></td><td>Continue</td><td>ממשיך להריץ כרגיל, עד ה-Breakpoint הבא (אם יש).</td></tr>
+        <tr><td><span class="keyboard">Shift+F5</span></td><td>Stop</td><td>עוצר את האתר לגמרי.</td></tr>
+    </table>
+    <p>לחצו <span class="keyboard">F10</span> כמה פעמים, וראו לאן הקוד הולך: האם הוא נכנס לתוך ה-<code class="inline">if</code>? אם כן, הטופס לא תקין.</p>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. דוגמה: למה הטופס לא נשמר?</h2>
+    <p>מקרה נפוץ: לוחצים "שמירה", והטופס פשוט חוזר בלי לשמור ובלי הודעה ברורה. איך מגלים למה?</p>
+    <ul class="step-list">
+        <li>שימו Breakpoint על השורה <code class="inline">if (!ModelState.IsValid)</code> והריצו עם <span class="keyboard">F5</span>.</li>
+        <li>כשהקוד עוצר, רחפו מעל <code class="inline">ModelState</code>. פתחו את <strong>Values</strong>, ומצאו את השדה שיש לו <code class="inline">Errors</code> עם <code class="inline">Count</code> גדול מ-0.</li>
+        <li>פתחו את ה-Errors שלו, וב-<code class="inline">ErrorMessage</code> תראו בדיוק מה הבעיה.</li>
+    </ul>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. טיפים</h2>
+    <ul>
+        <li><strong>Breakpoint עם תנאי:</strong> קליק ימני על הנקודה האדומה ← <strong>Conditions</strong>. למשל <code class="inline">id == 5</code>: יעצור רק כשה-id הוא 5. מעולה בתוך לולאות.</li>
+        <li><strong>אפשר גם ב-cshtml:</strong> Breakpoint על שורה עם קוד C# ב-View (למשל בתוך <code class="inline">@foreach</code>) עובד בדיוק אותו דבר.</li>
+        <li><strong>להסיר הכול:</strong> בתפריט Debug ← <strong>Delete All Breakpoints</strong>. כדאי לפני שממשיכים לעבוד, כדי שהאתר לא ייעצר כל הזמן.</li>
+        <li><strong>האתר תקוע ולא נטען?</strong> כנראה הוא עצור על Breakpoint. חזרו ל-Visual Studio ולחצו <span class="keyboard">F5</span> כדי להמשיך.</li>
+    </ul>
+
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>הקוד לא עוצר:</strong> הרצתם בלי דיבאג (<span class="keyboard">Ctrl+F5</span>)? הריצו עם <span class="keyboard">F5</span>. ובדקו שהקוד באמת מגיע לשורה הזאת (למשל, ה-POST רץ רק אחרי לחיצה על "שמירה").</li>
+            <li><strong>הנקודה האדומה חלולה, עם סימן אזהרה:</strong> הקוד שבקובץ שונה ממה שרץ. עצרו את האתר והריצו מחדש.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>שימו Breakpoint ב-Action <code class="inline">Details</code>, ובדקו מה הערך של <code class="inline">id</code> כשנכנסים לפרטים של מוצרים שונים.</li>
+            <li>שלחו את טופס ההוספה עם שם ריק, ומצאו ב-<code class="inline">ModelState</code> את הודעת השגיאה של השדה Name.</li>
+            <li>שימו Breakpoint עם תנאי בתוך <code class="inline">@foreach</code> ב-<code class="inline">Index.cshtml</code>, שעוצר רק כשהמחיר גדול מ-100.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>לחיצה על השוליים (או <span class="keyboard">F9</span>) שמה Breakpoint, והוא עובד רק בהרצה עם <span class="keyboard">F5</span>.</li>
+            <li>כשהקוד עצור: מרחפים מעל משתנים, או מסתכלים בחלון Locals.</li>
+            <li><span class="keyboard">F10</span> שורה אחת קדימה, <span class="keyboard">F5</span> המשך, <span class="keyboard">Shift+F5</span> עצירה.</li>
+            <li>טופס שלא נשמר? בודקים את <code class="inline">ModelState</code>.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

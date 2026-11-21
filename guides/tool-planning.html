@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תכנון הפרויקט</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="tool-planning">
+<main>
+    <h1>תכנון הפרויקט</h1>
+    <div class="subtitle">תבנית למילוי לפני שכותבים שורת קוד: מה האתר עושה, אילו עמודים ואילו טבלאות</div>
+
+    <div class="explanation no-print">
+        <strong>💡 למה לתכנן?</strong> מי שמתחיל לכתוב קוד בלי תוכנית מגלה באמצע שחסרה לו טבלה, שעמוד מסוים לא הגיוני, או שהפרויקט גדול מדי. חצי שעה של תכנון חוסכת שבועות של תיקונים. מלאו את התבנית על דף (כפתור ההדפסה למטה), או העתיקו את הטבלאות למסמך.
+        <br><br>
+        מתחת לכל שאלה יש <strong>דוגמה</strong> מפרויקט של חנות ציוד לבית הספר. הדוגמאות לא מודפסות.
+    </div>
+    <p class="no-print"><button class="print-btn" type="button" onclick="window.print()">🖨️ הדפסת התבנית</button></p>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. האתר במשפט אחד</h2>
+    <p>מה האתר עושה, ולמי? אם לא מצליחים במשפט אחד, הרעיון עוד לא ברור מספיק.</p>
+    <div class="example-box">אתר שבו תלמידים קונים ציוד לבית הספר, ומנהל החנות מעדכן את המוצרים והמלאי.</div>
+    <table class="simple fill"><tr><td></td></tr><tr><td></td></tr></table>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. מי משתמש באתר, ומה מותר לו?</h2>
+    <p>חשבו על כל סוגי המשתמשים: אורח (לא מחובר), משתמש רשום, מנהל. (על הרשאות: מדריך 17.)</p>
+    <div class="example-box">אורח: רואה מוצרים. משתמש רשום: גם מוסיף לעגלה ומזמין. מנהל: גם מוסיף, עורך ומוחק מוצרים וקטגוריות.</div>
+    <table class="simple fill">
+        <tr><th style="width:25%">סוג משתמש</th><th>מה הוא יכול לעשות באתר</th></tr>
+        <tr><td>אורח</td><td></td></tr>
+        <tr><td>משתמש רשום</td><td></td></tr>
+        <tr><td>מנהל</td><td></td></tr>
+        <tr><td></td><td></td></tr>
+    </table>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. המידע: אילו טבלאות יהיו?</h2>
+    <p>כל "סוג דבר" באתר הוא מודל וטבלה (מדריכים 10, 13). כתבו לכל אחד את השדות שלו, ואם הוא מחובר לטבלה אחרת (מדריך 14).</p>
+    <div class="example-box">Product: שם (טקסט), מחיר (מספר עשרוני), תמונה (טקסט), מלאי (מספר שלם). מחובר ל-Category: כל מוצר שייך לקטגוריה אחת.</div>
+    <table class="simple fill">
+        <tr><th style="width:18%">שם המודל (באנגלית)</th><th>השדות והסוג שלהם</th><th style="width:28%">מחובר ל... (איך?)</th></tr>
+        <tr><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td></tr>
+    </table>
+    <p style="color:var(--muted)">💡 המשתמשים עצמם כבר קיימים (טבלת AspNetUsers), אין צורך במודל משלכם בשבילם.</p>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. העמודים</h2>
+    <p>רשימת כל העמודים באתר. לכל עמוד: מה הכתובת שלו (Controller/Action, מדריך 4), מי יכול להיכנס, ומה יש בו.</p>
+    <div class="example-box">רשימת מוצרים · ‎/Products · כולם · טבלה עם כל המוצרים, תמונה ומחיר, וכפתור "לפרטים".</div>
+    <table class="simple fill">
+        <tr><th style="width:20%">שם העמוד</th><th style="width:20%">כתובת</th><th style="width:15%">מי נכנס</th><th>מה מוצג בו / מה עושים בו</th></tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td></tr>
+    </table>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. סקיצה</h2>
+    <p>ציירו ביד, על דף, איך ייראו <strong>שני העמודים הכי חשובים</strong>: איפה התפריט, איפה הכותרת, איפה הטבלה או הכרטיסים, אילו כפתורים. לא צריך יופי, רק סידור.</p>
+    <table class="simple fill"><tr><td style="height: 14rem"></td><td style="height: 14rem"></td></tr></table>
+
+    <!-- ===================== 6 ===================== -->
+    <h2>6. מה חובה ומה בונוס</h2>
+    <p>תמיד יש יותר רעיונות מזמן. סמנו מה <strong>חייב</strong> להיות כדי שהאתר יעבוד, ומה <strong>נחמד אם יישאר זמן</strong>. בונים קודם את כל ה"חובה".</p>
+    <div class="example-box">חובה: רשימת מוצרים, הרשמה, עמודי ניהול למנהל. בונוס: חיפוש, עגלת קניות, כפתור "אהבתי".</div>
+    <table class="simple fill">
+        <tr><th style="width:50%">✅ חובה</th><th>⭐ בונוס</th></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+    </table>
+
+    <!-- ===================== 7 ===================== -->
+    <h2>7. סדר העבודה</h2>
+    <p>סדר מומלץ לבניית הפרויקט, עם המדריך המתאים לכל שלב. סמנו ✓ כשמסיימים:</p>
+    <table class="simple">
+        <tr><th style="width:6%">✓</th><th>שלב</th><th style="width:22%">מדריכים</th></tr>
+        <tr><td></td><td>יצירת פרויקט וחיבור ל-GitHub</td><td>1, 3</td></tr>
+        <tr><td></td><td>עברית, שם האתר והתפריט</td><td>6, 8</td></tr>
+        <tr><td></td><td>המודלים והטבלאות מסעיף 3</td><td>10, 13, 14</td></tr>
+        <tr><td></td><td>עמודי ניהול (הוספה, עריכה, מחיקה)</td><td>15</td></tr>
+        <tr><td></td><td>העמודים לכולם מסעיף 4</td><td>7, 9, 10</td></tr>
+        <tr><td></td><td>הרשאות: מי רואה מה</td><td>17</td></tr>
+        <tr><td></td><td>תמונות, טפסים נוספים</td><td>11, 12, 16</td></tr>
+        <tr><td></td><td>עיצוב סופי</td><td>8, 9</td></tr>
+        <tr><td></td><td>בונוסים</td><td>מדריכי הרשות וספריית קטעי הקוד</td></tr>
+    </table>
+    <div class="explanation no-print">
+        <strong>🔁 ולאורך כל הדרך:</strong> אחרי כל שלב שעובד, Commit ו-Push (מדריך 3).
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

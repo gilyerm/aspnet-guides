@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קריאת שגיאות ושגיאות נפוצות</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="tool-errors">
+<main>
+    <h1>קריאת שגיאות ושגיאות נפוצות</h1>
+    <div class="subtitle">איך מבינים מה השתבש, ורשימה של השגיאות שכמעט כל אחד נתקל בהן</div>
+
+    <div class="explanation">
+        <strong>💡 קודם כול, להירגע.</strong> שגיאות הן חלק רגיל מתכנות, גם אצל מתכנתים עם עשרים שנות ניסיון. הודעת שגיאה היא לא "נכשלתי", היא רמז שאומר בדיוק מה הבעיה ואיפה. מי שלומד לקרוא אותה, פותר את רוב הבעיות לבד ומהר.
+        <br><br>
+        <strong>איך משתמשים בעמוד הזה:</strong> חלק 1 מלמד לקרוא שגיאות. אחר כך יש רשימה של שגיאות נפוצות: חפשו בה (<span class="keyboard">Ctrl+F</span>) מילה מהשגיאה שקיבלתם.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. שלושה סוגי שגיאות</h2>
+    <table class="simple">
+        <tr><th>סוג</th><th>איך מזהים</th><th>איפה רואים אותה</th></tr>
+        <tr><td><strong>שגיאת קומפילציה</strong><br>(שגיאה בכתיבת הקוד)</td><td>קו אדום מתחת לקוד. האתר <strong>בכלל לא עולה</strong>.</td><td>ב-Visual Studio, בחלון <strong>Error List</strong></td></tr>
+        <tr><td><strong>שגיאה בזמן ריצה</strong><br>(Exception)</td><td>האתר עולה, אבל עמוד מסוים מציג דף שגיאה.</td><td>בדפדפן, בדף השגיאה</td></tr>
+        <tr><td><strong>שגיאת JavaScript</strong></td><td>הכול נראה תקין, אבל כפתור או משהו אחר בעמוד לא עובד.</td><td>בדפדפן: <span class="keyboard">F12</span> ← לשונית <strong>Console</strong></td></tr>
+    </table>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. שגיאות קומפילציה: Error List</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: קומפילציה (Build)</span>
+        לפני שהאתר רץ, Visual Studio "מתרגמת" את כל קוד ה-C# לשפה שהמחשב מבין. אם יש בקוד משהו שהיא לא מבינה (חסרה נקודה-פסיק, שם לא מוכר), התרגום נכשל והאתר לא עולה.
+    </div>
+    <p>פתחו את <strong>Error List</strong> (View ← Error List). לכל שגיאה יש:</p>
+    <table class="simple">
+        <tr><th>עמודה</th><th>מה יש בה</th></tr>
+        <tr><td><strong>Code</strong></td><td>קוד השגיאה, כמו <code class="inline">CS0103</code>. אפשר לחפש אותו בגוגל.</td></tr>
+        <tr><td><strong>Description</strong></td><td>מה הבעיה, במילים. <strong>קראו את זה!</strong> בדרך כלל זה אומר בדיוק מה לא בסדר.</td></tr>
+        <tr><td><strong>File</strong> ו-<strong>Line</strong></td><td>באיזה קובץ ובאיזו שורה. לחיצה כפולה על השגיאה קופצת ישר לשם.</td></tr>
+    </table>
+    <div class="warning">
+        <strong>⚠️ אם קופץ חלון "There were build errors. Would you like to continue and run the last successful build?"</strong> לחצו <strong>No</strong>! אחרת יופעל האתר מהגרסה הקודמת, ותחשבו שהשינויים שלכם לא עובדים. תקנו קודם את השגיאות.
+    </div>
+    <div class="explanation">
+        <strong>💡 טיפ:</strong> כשיש הרבה שגיאות, התחילו מ<strong>הראשונה</strong>. לפעמים שגיאה אחת (למשל סוגר מסולסל חסר) גורמת לעשרות שגיאות אחריה, וכשמתקנים אותה, כולן נעלמות.
+    </div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. שגיאות בזמן ריצה: דף השגיאה</h2>
+    <p>כשמשהו נכשל בזמן שהאתר רץ, מופיע דף שגיאה (בזמן פיתוח הוא מפורט מאוד). כך קוראים אותו:</p>
+    <ul class="step-list">
+        <li><strong>השורה הראשונה, בגדול:</strong> סוג השגיאה (למשל <code class="inline">NullReferenceException</code>) והתיאור שלה. זה הכי חשוב.</li>
+        <li><strong>הרשימה שמתחת (Stack):</strong> הדרך שהקוד עבר עד שנכשל. חפשו את השורה <strong>הראשונה שבה מופיע קובץ שלכם</strong> (למשל <code class="inline">ProductsController.cs</code> או <code class="inline">Index.cshtml</code>), עם מספר שורה. שם הבעיה.</li>
+        <li>לפעמים מוצג גם קטע מהקוד, עם השורה הבעייתית מסומנת.</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של דף שגיאה, עם סימון של שם השגיאה ושל השורה עם הקובץ שלכם</div>
+
+    <h3>קודי סטטוס שכדאי להכיר</h3>
+    <table class="simple">
+        <tr><th>קוד</th><th>פירוש</th><th>סיבה נפוצה</th></tr>
+        <tr><td><strong>404</strong></td><td>העמוד לא נמצא</td><td>טעות בכתובת, או שאין Controller/Action בשם הזה (מדריך 4).</td></tr>
+        <tr><td><strong>400</strong></td><td>בקשה לא תקינה</td><td>בטופסי POST: חסר שדה ההגנה (מדריך 11).</td></tr>
+        <tr><td><strong>Access denied</strong></td><td>אין הרשאה</td><td>מחוברים, אבל בלי התפקיד הנדרש (מדריך 17).</td></tr>
+        <tr><td><strong>500</strong></td><td>שגיאה בשרת</td><td>Exception בקוד. בזמן פיתוח תראו את דף השגיאה המפורט.</td></tr>
+    </table>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. שגיאות נפוצות ופתרונן</h2>
+    <p>חפשו (<span class="keyboard">Ctrl+F</span>) מילה מהשגיאה שלכם.</p>
+
+    <h3>שגיאות קומפילציה</h3>
+    <table class="simple">
+        <tr><th>השגיאה</th><th>מה היא אומרת</th><th>מה עושים</th></tr>
+        <tr><td><code class="inline">CS0103</code> The name 'X' does not exist in the current context</td><td>C# לא מכירה את השם X.</td><td>בדקו כתיב ו<strong>אותיות גדולות/קטנות</strong> (<code class="inline">name</code> ≠ <code class="inline">Name</code>), ושהמשתנה הוגדר.</td></tr>
+        <tr><td><code class="inline">CS0246</code> The type or namespace name 'X' could not be found</td><td>C# לא מוצאת מחלקה בשם X.</td><td>חסר <code class="inline">using</code>: עמדו על השם ולחצו <span class="keyboard">Ctrl+.</span>. או טעות כתיב בשם המחלקה.</td></tr>
+        <tr><td><code class="inline">CS1002</code> ; expected</td><td>חסרה נקודה-פסיק.</td><td>הוסיפו <code class="inline">;</code> בסוף השורה שמסומנת (או בשורה שלפניה).</td></tr>
+        <tr><td><code class="inline">CS1513</code> } expected</td><td>חסר סוגר מסולסל.</td><td>ספרו: לכל <code class="inline">{</code> צריך <code class="inline">}</code>. <span class="keyboard">Ctrl+K</span> ואז <span class="keyboard">Ctrl+D</span> מסדר את הקוד ועוזר לראות מה לא סגור.</td></tr>
+        <tr><td><code class="inline">CS0029</code> Cannot implicitly convert type 'X' to 'Y'</td><td>מנסים לשים ערך מסוג אחד במשתנה מסוג אחר.</td><td>למשל טקסט במשתנה של מספר. בדקו את הסוגים.</td></tr>
+        <tr><td><code class="inline">CS0161</code> not all code paths return a value</td><td>יש מקרה שבו ה-Action לא מחזיר כלום.</td><td>ודאו שבסוף ה-Action יש <code class="inline">return</code>.</td></tr>
+        <tr><td>The process cannot access the file ... because it is being used by another process</td><td>האתר עדיין רץ, והקבצים "תפוסים".</td><td>עצרו את האתר (<span class="keyboard">Shift+F5</span>) ונסו שוב.</td></tr>
+    </table>
+
+    <h3>שגיאות בזמן ריצה</h3>
+    <table class="simple">
+        <tr><th>השגיאה</th><th>מה היא אומרת</th><th>מה עושים</th></tr>
+        <tr><td><code class="inline">NullReferenceException</code><br>Object reference not set to an instance of an object</td><td>מנסים להשתמש במשהו שהוא <code class="inline">null</code> (ריק).</td><td>הכי נפוץ: ה-Controller לא שלח Model (<code class="inline">return View()</code> במקום <code class="inline">return View(products)</code>), חסר <code class="inline">Include</code>, או שצריך <code class="inline">?.</code> במקום נקודה (מדריכים 10, 14).</td></tr>
+        <tr><td>The view 'X' was not found</td><td>יש Action, אבל אין View מתאים.</td><td>השגיאה מפרטת איפה האתר חיפש. בדקו את שם הקובץ ואת התיקייה (מדריך 7).</td></tr>
+        <tr><td>The model item passed into the ViewDataDictionary is of type 'X', but this ViewDataDictionary instance requires 'Y'</td><td>ה-Controller שלח סוג אחד, וה-View מצפה לסוג אחר.</td><td>השוו את <code class="inline">@model</code> ב-View למה שנשלח ב-<code class="inline">return View(...)</code>. למשל רשימה מול פריט אחד.</td></tr>
+        <tr><td>A database operation failed while processing the request ... <strong>Apply Migrations</strong></td><td>מסד הנתונים לא קיים או לא מעודכן.</td><td>לחצו על הכפתור <strong>Apply Migrations</strong> שבדף, ורעננו. או הריצו <code class="inline">Update-Database</code>. קורה בהרשמה הראשונה (מדריך 2) ובמחשב חדש (מדריך 3).</td></tr>
+        <tr><td><code class="inline">SqlException</code>: Invalid object name 'X'</td><td>אין טבלה בשם X במסד הנתונים.</td><td>הריצו <code class="inline">Update-Database</code>. אם עוד לא יצרתם Migration, קודם <code class="inline">Add-Migration</code> (מדריך 13).</td></tr>
+        <tr><td>The model for context 'ApplicationDbContext' has pending changes</td><td>שיניתם מודל, ולא יצרתם לזה Migration.</td><td><code class="inline">Add-Migration</code> עם שם חדש, ואז <code class="inline">Update-Database</code>.</td></tr>
+        <tr><td>RenderBody has not been called</td><td>נמחק <code class="inline">@RenderBody()</code> מה-Layout.</td><td>החזירו אותו ל-<code class="inline">_Layout.cshtml</code> (מדריך 6).</td></tr>
+        <tr><td>Sequence contains no elements</td><td>ניסיתם לקחת פריט מרשימה ריקה (למשל <code class="inline">Max</code> או <code class="inline">First</code>).</td><td>השתמשו ב-<code class="inline">FirstOrDefault</code>, או בדקו קודם שהרשימה לא ריקה.</td></tr>
+    </table>
+
+    <h3>"זה לא עובד" בלי שום שגיאה</h3>
+    <table class="simple">
+        <tr><th>מה קורה</th><th>מה בודקים</th></tr>
+        <tr><td>שיניתי משהו וזה לא מופיע</td><td>שמרתם (<span class="keyboard">Ctrl+S</span>)? רעננו את הדפדפן. ב-CSS/JS: רענון מלא <span class="keyboard">Ctrl+Shift+R</span> (מדריך 8). אם עדיין לא, עצרו את האתר והריצו מחדש.</td></tr>
+        <tr><td>הטופס נשמר עם שדות ריקים</td><td>ה-<code class="inline">asp-for</code> לא תואם לשם ה-Property (מדריך 11).</td></tr>
+        <tr><td>הנתונים לא נשמרים במסד</td><td>חסר <code class="inline">_context.SaveChanges();</code> (מדריך 13).</td></tr>
+        <tr><td>כפתור לא עושה כלום</td><td><span class="keyboard">F12</span> ← Console. בדרך כלל יש שם שגיאה באדום.</td></tr>
+        <tr><td>התמונה שהעליתי לא נשמרת</td><td>חסר <code class="inline">enctype="multipart/form-data"</code> בטופס (מדריך 16).</td></tr>
+        <tr><td>נתתי תפקיד מנהל וזה לא עובד</td><td>התנתקו והתחברו מחדש (מדריך 17).</td></tr>
+    </table>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. כשממש שום דבר לא עוזר: Clean ו-Rebuild</h2>
+    <p>לפעמים Visual Studio "מתבלבלת" משאריות של בנייה קודמת, ומופיעות שגיאות מוזרות שלא קשורות לשום דבר. אז:</p>
+    <ul class="step-list">
+        <li>עצרו את האתר.</li>
+        <li>בתפריט: <strong>Build ← Clean Solution</strong> (מוחק את כל קבצי הבנייה הזמניים).</li>
+        <li>אחר כך: <strong>Build ← Rebuild Solution</strong> (בונה הכול מחדש).</li>
+        <li>אם גם זה לא עזר: סגרו את Visual Studio, מחקו בתיקיית הפרויקט את התיקיות <code class="inline">bin</code> ו-<code class="inline">obj</code>, ופתחו מחדש. (אלה קבצים זמניים, הם ייווצרו שוב.)</li>
+    </ul>
+
+    <!-- ===================== 6 ===================== -->
+    <h2>6. איך מבקשים עזרה נכון</h2>
+    <p>כשפונים למורה או לחבר, ככה הוא יוכל לעזור הכי מהר:</p>
+    <ul>
+        <li><strong>צילום של כל ההודעה</strong>, לא רק של חלק ממנה. בדף שגיאה: גם את השורה הראשונה וגם את השורה עם הקובץ שלכם.</li>
+        <li><strong>מה עשיתם רגע לפני</strong> שזה התחיל. ("הוספתי Property למודל" עוזר הרבה יותר מ"זה פשוט הפסיק לעבוד".)</li>
+        <li><strong>מה כבר ניסיתם.</strong></li>
+    </ul>
+    <div class="explanation">
+        <strong>💡 הרגל שחוסך הרבה צרות:</strong> לפני שמנסים משהו חדש וגדול, עשו <strong>Commit</strong> (מדריך 3). אם הכול נשבר, אפשר תמיד לחזור לגרסה שעבדה.
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>שלושה סוגי שגיאות: קומפילציה (Error List), זמן ריצה (דף שגיאה) ו-JavaScript (F12 ← Console).</li>
+            <li>ב-Error List מתחילים מהשגיאה הראשונה, ולחיצה כפולה קופצת לשורה.</li>
+            <li>בדף שגיאה קוראים את השורה הראשונה, ומחפשים את השורה הראשונה עם קובץ שלכם.</li>
+            <li>כשמשהו מוזר: Clean ואז Rebuild.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>
