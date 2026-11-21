@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מתקדם ג: התאמת ההרשמה</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="adv-c-identity">
+<main>
+    <h1>מתקדם ג: התאמת ההרשמה</h1>
+    <div class="subtitle">שדה "שם מלא" למשתמש, ודפי הרשמה והתחברות בעברית</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> מערכת המשתמשים שקיבלנו מוכנה שומרת רק אימייל וסיסמה, והדפים שלה באנגלית. כאן נוסיף למשתמש שדה משלנו (שם מלא), נבקש אותו בהרשמה, ונתרגם את הדפים.
+        <br><br>
+        <strong>מה צריך לפני:</strong> פרויקט עם Individual Accounts (מדריך 1), והיכרות עם Migrations (מדריך 13) ועם Scaffolding (מדריך 15). אם עשיתם את מדריך 17, יש שם קוד שגם אותו נעדכן.
+    </div>
+
+    <div class="warning">
+        <strong>⚠️ לפני שמתחילים: Commit!</strong> המדריך הזה משנה קבצים בכמה מקומות. עשו Commit (מדריך 3) עכשיו, כדי שאם משהו ישתבש, תוכלו לחזור.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. מחלקת משתמש משלנו</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: ירושה (Inheritance)</span>
+        מחלקה שמקבלת את כל מה שיש במחלקה אחרת, ומוסיפה משהו משלה. נכתב עם נקודתיים: <code class="inline">class ApplicationUser : IdentityUser</code>.
+        <span class="example">דוגמה: <code class="inline">IdentityUser</code> כבר כולל אימייל, סיסמה ועוד. <code class="inline">ApplicationUser</code> יקבל את כל אלה, ועוד שדה אחד: שם מלא. (ראינו את זה כבר: <code class="inline">HomeController : Controller</code>.)</span>
+    </div>
+    <p>קליק ימני על <strong>Models</strong> ← <strong>Add</strong> ← <strong>Class</strong> ← <code class="inline">ApplicationUser.cs</code>. החליפו את כל התוכן ב:</p>
+<pre class="code-block">using Microsoft.AspNetCore.Identity;
+
+namespace <span class="change">MyProject</span>.Models
+{
+    public class ApplicationUser : IdentityUser
+    {
+        public string FullName { get; set; } = "";
+    }
+}</pre>
+    <p class="change-note">שנו את <code class="inline">MyProject</code> לשם הפרויקט שלכם (כמו שכתוב בשורת ה-namespace בקבצים האחרים).</p>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. מחליפים IdentityUser ב-ApplicationUser</h2>
+    <p>עכשיו צריך להגיד לכל האתר להשתמש במחלקה החדשה. זה ב<strong>ארבעה</strong> מקומות:</p>
+    <ul class="step-list">
+        <li><strong><code class="inline">Data/ApplicationDbContext.cs</code>:</strong> בשורה של המחלקה, הוסיפו <code class="inline">&lt;ApplicationUser&gt;</code>:
+<pre class="code-block">public class ApplicationDbContext : IdentityDbContext&lt;ApplicationUser&gt;</pre>
+        </li>
+        <li><strong><code class="inline">Program.cs</code>:</strong> בשורה של <code class="inline">AddDefaultIdentity</code>, החליפו <code class="inline">IdentityUser</code> ב-<code class="inline">ApplicationUser</code>:
+<pre class="code-block">builder.Services.AddDefaultIdentity&lt;ApplicationUser&gt;(options =&gt; options.SignIn.RequireConfirmedAccount = true)</pre>
+            (אם יש בראש הקובץ קו אדום על <code class="inline">ApplicationUser</code>, <span class="keyboard">Ctrl+.</span>.)
+        </li>
+        <li><strong><code class="inline">Views/Shared/_LoginPartial.cshtml</code>:</strong> בשתי השורות הראשונות (<code class="inline">@inject</code>), החליפו <code class="inline">IdentityUser</code> ב-<code class="inline">ApplicationUser</code>:
+<pre class="code-block">@inject SignInManager&lt;ApplicationUser&gt; SignInManager
+@inject UserManager&lt;ApplicationUser&gt; UserManager</pre>
+        </li>
+        <li><strong>בכל מקום אחר:</strong> חפשו בכל הפרויקט (<span class="keyboard">Ctrl+Shift+F</span>) את המילה <code class="inline">IdentityUser</code>. אם עשיתם את מדריך 17, היא תופיע גם בקוד שיוצר את המנהל הראשון ב-<code class="inline">Program.cs</code> (<code class="inline">UserManager&lt;IdentityUser&gt;</code>). החליפו בכל מקום ל-<code class="inline">ApplicationUser</code>, <strong>חוץ</strong> מהשורה <code class="inline">: IdentityUser</code> בקובץ <code class="inline">ApplicationUser.cs</code> עצמו.</li>
+    </ul>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. Migration</h2>
+    <p>עשו Build (<span class="keyboard">Ctrl+Shift+B</span>) וודאו שאין שגיאות. אחר כך, עם האתר עצור, ב-Package Manager Console:</p>
+<pre class="code-block">Add-Migration AddUserFullName
+Update-Database</pre>
+    <div class="checkpoint">ב-SQL Server Object Explorer, לטבלה <strong>dbo.AspNetUsers</strong> נוספה עמודה <strong>FullName</strong>.</div>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. מוציאים את דפי ההרשמה לעריכה</h2>
+    <p>דפי ההרשמה וההתחברות "מוסתרים" בתוך ספרייה. כדי לשנות אותם, צריך ליצור עותק שלהם בפרויקט, עם Scaffolding:</p>
+    <ul class="step-list">
+        <li>עצרו את האתר. ב-Solution Explorer, קליק ימני על <strong>שם הפרויקט</strong> ← <strong>Add</strong> ← <strong>New Scaffolded Item</strong>.</li>
+        <li>בצד בחרו <strong>Identity</strong>, ובמרכז שוב <strong>Identity</strong>. לחצו <strong>Add</strong> (ייתכן שתצטרכו לחכות להתקנת חבילות).</li>
+        <li>בחלון שנפתח, סמנו רק את <strong>Account\Register</strong> ואת <strong>Account\Login</strong>.</li>
+        <li>ב-<strong>DbContext class</strong> בחרו <code class="inline">ApplicationDbContext</code>, ולחצו <strong>Add</strong>.</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של חלון Add Identity עם Register ו-Login מסומנים</div>
+    <div class="checkpoint">נוצרה התיקייה <code class="inline">Areas/Identity/Pages/Account</code>, ובה <code class="inline">Register.cshtml</code> ו-<code class="inline">Login.cshtml</code>. לכל אחד מהם יש גם קובץ <code class="inline">.cshtml.cs</code> (לחצו על החץ שלידו ב-Solution Explorer).</div>
+    <div class="concept">
+        <span class="concept-title">📖 מה זה .cshtml.cs?</span>
+        דפי Identity בנויים בשיטה קצת אחרת, שנקראת <strong>Razor Pages</strong>: במקום Controller נפרד, לכל עמוד יש קובץ קוד צמוד (<code class="inline">.cshtml.cs</code>). התפקיד שלו דומה ל-Controller: הוא מטפל בטופס.
+    </div>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. שדה "שם מלא" בהרשמה</h2>
+    <h3>בקוד (Register.cshtml.cs)</h3>
+    <ul class="step-list">
+        <li>חפשו בקובץ את <code class="inline">public class InputModel</code>. בתוכו, לפני ה-<code class="inline">Email</code>, הוסיפו:
+<pre class="code-block">[Required(ErrorMessage = "נא להזין שם מלא")]
+[Display(Name = "שם מלא")]
+public string FullName { get; set; } = "";</pre>
+        </li>
+        <li>חפשו את השורה <code class="inline">var user = CreateUser();</code>. מיד אחריה הוסיפו:
+<pre class="code-block">user.FullName = Input.FullName;</pre>
+        </li>
+    </ul>
+
+    <h3>בעמוד (Register.cshtml)</h3>
+    <p>חפשו את הבלוק של שדה האימייל (מתחיל ב-<code class="inline">&lt;div class="form-floating mb-3"&gt;</code> ובתוכו <code class="inline">Input.Email</code>). <strong>לפניו</strong> הדביקו:</p>
+<pre class="code-block">&lt;div class="form-floating mb-3"&gt;
+    &lt;input asp-for="Input.FullName" class="form-control" autocomplete="name" aria-required="true" placeholder="שם מלא" /&gt;
+    &lt;label asp-for="Input.FullName"&gt;&lt;/label&gt;
+    &lt;span asp-validation-for="Input.FullName" class="text-danger"&gt;&lt;/span&gt;
+&lt;/div&gt;</pre>
+    <div class="checkpoint">בעמוד ההרשמה יש שדה "שם מלא". הירשמו עם משתמש חדש, ובדקו ב-View Data של dbo.AspNetUsers שהשם נשמר בעמודה FullName.</div>
+
+    <!-- ===================== 6 ===================== -->
+    <h2>6. תרגום לעברית</h2>
+    <p>עכשיו, כשהדפים בפרויקט שלכם, אפשר לתרגם הכול:</p>
+    <ul class="step-list">
+        <li><strong>טקסטים בעמוד</strong> (<code class="inline">Register.cshtml</code>, <code class="inline">Login.cshtml</code>): כותרות כמו <code class="inline">Create a new account.</code>, טקסט הכפתורים, וקישורים כמו <code class="inline">Forgot your password?</code>.</li>
+        <li><strong>שמות השדות והודעות השגיאה</strong> (בקבצי ה-<code class="inline">.cshtml.cs</code>, בתוך <code class="inline">InputModel</code>): ל-<code class="inline">[Display(Name = "Email")]</code> שנו ל-<code class="inline">"אימייל"</code>, ולכל <code class="inline">[Required]</code> הוסיפו <code class="inline">ErrorMessage</code> בעברית (כמו במדריך 12).</li>
+    </ul>
+    <div class="warning">
+        <strong>⚠️ הודעות על הסיסמה</strong> (למשל "Passwords must have at least one uppercase") מגיעות מ-Identity עצמו, ולא מהקבצים האלה. לתרגם אותן זה מורכב יותר, ואפשר לוותר על זה.
+    </div>
+
+    <!-- ===================== 7 ===================== -->
+    <h2>7. "שלום, [שם מלא]" בתפריט</h2>
+    <p>ב-<code class="inline">_LoginPartial.cshtml</code>, חפשו את הקישור שבו כתוב <code class="inline">Hello @User.Identity?.Name!</code>. החליפו את הטקסט הזה ב:</p>
+<pre class="code-block" data-lang="cshtml">שלום, @((await UserManager.GetUserAsync(User))?.FullName)!</pre>
+    <p><code class="inline">UserManager.GetUserAsync(User)</code> מביא את המשתמש המחובר ממסד הנתונים, כ-<code class="inline">ApplicationUser</code>, ומשם לוקחים את <code class="inline">FullName</code>.</p>
+    <div class="checkpoint">אחרי התחברות, בתפריט כתוב "שלום" עם השם המלא. (למשתמשים שנרשמו לפני השינוי אין שם, ולכן יופיע רק "שלום, !".)</div>
+
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>"No service for type UserManager&lt;IdentityUser&gt;" (או SignInManager):</strong> נשאר <code class="inline">IdentityUser</code> במקום כלשהו. חפשו שוב בכל הפרויקט (סעיף 2).</li>
+            <li><strong>Scaffolding של Identity נכשל:</strong> עשו Build ותקנו את כל השגיאות, ודאו שהאתר עצור, ונסו שוב.</li>
+            <li><strong>ב-Register.cshtml.cs, <code class="inline">user.FullName</code> מסומן באדום:</strong> הפונקציה <code class="inline">CreateUser</code> בקובץ מחזירה <code class="inline">IdentityUser</code>. החליפו בה (ובשורות סביבה) את <code class="inline">IdentityUser</code> ב-<code class="inline">ApplicationUser</code>.</li>
+            <li><strong>הכול נשבר ולא ברור למה:</strong> בשביל זה עשינו Commit בהתחלה. ב-Git Changes אפשר לבטל את השינויים ולהתחיל מחדש.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>הוסיפו למשתמש גם שדה "כיתה" (<code class="inline">public string? ClassName { get; set; }</code>), עם Migration, שדה בהרשמה, והצגה בתפריט.</li>
+            <li>תרגמו לעברית את כל הטקסטים ושמות השדות בעמוד ההתחברות.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>מוסיפים שדות למשתמש עם מחלקה שיורשת מ-<code class="inline">IdentityUser</code>, ומחליפים אותה בכל הפרויקט.</li>
+            <li>כדי לערוך את דפי ההרשמה וההתחברות, יוצרים להם עותק עם Scaffolding של Identity.</li>
+            <li>שדה חדש בהרשמה: ב-<code class="inline">InputModel</code>, ב-<code class="inline">OnPostAsync</code> ובעמוד עצמו.</li>
+            <li><code class="inline">UserManager.GetUserAsync(User)</code> מביא את המשתמש המחובר עם כל השדות שלו.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

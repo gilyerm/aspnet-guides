@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מתקדם א: Partial Views</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="adv-a-partial-views">
+<main>
+    <h1>מתקדם א: Partial Views</h1>
+    <div class="subtitle">חלק של עמוד שכותבים פעם אחת, ומשתמשים בו בהרבה מקומות</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> נניח שבנינו כרטיס יפה של מוצר (תמונה, שם, מחיר, כפתור). אנחנו רוצים אותו ברשימת המוצרים, בדף הבית ("מוצרים חדשים") ובעמוד הקטגוריה. במקום להעתיק את אותו HTML לשלושה מקומות, שמים אותו בקובץ אחד, ו"מכניסים" אותו לכל מקום שצריך.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מדריך 10 (מודלים), ומדריך 9 (Bootstrap) בשביל הכרטיס. אם עשיתם את מדריך 16, נציג גם תמונה.
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Partial View</span>
+        קובץ cshtml קטן שמכיל רק <strong>חלק</strong> מעמוד, ולא עמוד שלם. משתמשים בו מתוך עמודים אחרים.
+        <span class="example">דוגמה: כבר יש לכם אחד! <code class="inline">_LoginPartial.cshtml</code> (מדריך 6) הוא Partial View שה-Layout מכניס לתפריט.</span>
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. יוצרים את ה-Partial</h2>
+    <ul class="step-list">
+        <li>קליק ימני על התיקייה <code class="inline">Views/Shared</code> ← <strong>Add</strong> ← <strong>View</strong> ← <strong>Razor View - Empty</strong>.</li>
+        <li>תנו שם <code class="inline">_ProductCard.cshtml</code>. <strong>הקו התחתון בהתחלה</strong> הוא מוסכמה שאומרת "זה Partial, לא עמוד שלם".</li>
+        <li>החליפו את התוכן ב:
+<pre class="code-block">@model Product
+
+&lt;div class="card h-100"&gt;
+    @if (Model.ImageUrl != null)
+    {
+        &lt;img src="@Model.ImageUrl" class="card-img-top" alt="@Model.Name" /&gt;
+    }
+    &lt;div class="card-body"&gt;
+        &lt;h5 class="card-title"&gt;@Model.Name&lt;/h5&gt;
+        &lt;p class="card-text"&gt;@Model.Price ₪&lt;/p&gt;
+        &lt;a asp-controller="Products" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary"&gt;לפרטים&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+            <p class="change-note">אם אין לכם <code class="inline">ImageUrl</code> (לא עשיתם את מדריך 16), מחקו את כל בלוק ה-<code class="inline">@if</code>.</p>
+        </li>
+    </ul>
+    <p>שימו לב: ל-Partial יש <code class="inline">@model</code> משלו, והוא מוצר <strong>אחד</strong>. אין בו <code class="inline">ViewData["Title"]</code>, כי הוא לא עמוד.</p>
+    <div class="explanation">
+        <strong>💡 למה בתיקייה Shared?</strong> קבצים ב-<code class="inline">Views/Shared</code> זמינים לכל ה-Views, מכל Controller. אם ה-Partial היה בתיקייה <code class="inline">Views/Products</code>, רק עמודים של ProductsController היו מוצאים אותו.
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. משתמשים ב-Partial</h2>
+    <p>ב-<code class="inline">Views/Products/Index.cshtml</code>, החליפו את הטבלה ברשת של כרטיסים:</p>
+<pre class="code-block">&lt;div class="row"&gt;
+    @foreach (var product in Model)
+    {
+        &lt;div class="col-12 col-md-6 col-lg-4 mb-4"&gt;
+            &lt;partial name="_ProductCard" model="product" /&gt;
+        &lt;/div&gt;
+    }
+&lt;/div&gt;</pre>
+    <table class="simple">
+        <tr><th>מה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">&lt;partial name="_ProductCard" ... /&gt;</code></td><td>"הכנס כאן את התוכן של <code class="inline">_ProductCard.cshtml</code>". כותבים את השם בלי <code class="inline">.cshtml</code>.</td></tr>
+        <tr><td><code class="inline">model="product"</code></td><td>איזה מידע לשלוח ל-Partial. כאן: המוצר הנוכחי בלולאה. בתוך ה-Partial הוא יהיה <code class="inline">Model</code>.</td></tr>
+    </table>
+    <div class="checkpoint">רשימת המוצרים מוצגת ככרטיסים: שלושה בשורה במחשב, ואחד בשורה בטלפון.</div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. אותו כרטיס, במקום אחר</h2>
+    <p>עכשיו אפשר להציג את אותו כרטיס בכל מקום. למשל, בעמוד הקטגוריה (<code class="inline">ByCategory.cshtml</code> ממדריך 14), במקום הרשימה:</p>
+<pre class="code-block">&lt;div class="row"&gt;
+    @foreach (var product in Model.Products)
+    {
+        &lt;div class="col-12 col-md-6 col-lg-4 mb-4"&gt;
+            &lt;partial name="_ProductCard" model="product" /&gt;
+        &lt;/div&gt;
+    }
+&lt;/div&gt;</pre>
+    <div class="checkpoint">שנו משהו ב-<code class="inline">_ProductCard.cshtml</code> (למשל צבע הכפתור ל-<code class="inline">btn-success</code>). השינוי מופיע <strong>בכל</strong> המקומות בבת אחת. זה כל הרעיון!</div>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. Partial בלי Model</h2>
+    <p>Partial לא חייב לקבל מידע. למשל, קופסת "צרו קשר" שחוזרת בכמה עמודים. צרו <code class="inline">Views/Shared/_ContactBox.cshtml</code>:</p>
+<pre class="code-block">&lt;div class="alert alert-info mt-4"&gt;
+    יש שאלה? כתבו לנו: &lt;strong&gt;shop@example.com&lt;/strong&gt;
+&lt;/div&gt;</pre>
+    <p>ובכל עמוד שרוצים:</p>
+<pre class="code-block">&lt;partial name="_ContactBox" /&gt;</pre>
+
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>"The partial view '_ProductCard' was not found":</strong> בדקו שהקובץ נמצא ב-<code class="inline">Views/Shared</code>, ושהשם זהה, כולל הקו התחתון.</li>
+            <li><strong>NullReferenceException בתוך ה-Partial:</strong> שכחתם את <code class="inline">model="product"</code>, ולכן ה-Partial קיבל <code class="inline">null</code>.</li>
+            <li><strong>שגיאה על סוג ה-Model:</strong> ה-<code class="inline">@model</code> ב-Partial חייב להתאים למה ששולחים. ל-<code class="inline">_ProductCard</code> שולחים מוצר אחד, לא רשימה.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>בדף הבית, הציגו את שלושת המוצרים האחרונים שנוספו, עם אותו כרטיס. (רמז: ב-HomeController צריך גישה ל-<code class="inline">_context</code> כמו במדריך 13, ו-<code class="inline">_context.Products.OrderByDescending(p =&gt; p.Id).Take(3).ToList()</code>.)</li>
+            <li>צרו Partial לכותרת עמוד מעוצבת, שמקבל טקסט: <code class="inline">@model string</code>, ושימוש: <code class="inline">&lt;partial name="_PageTitle" model='"המוצרים שלנו"' /&gt;</code>.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>Partial View הוא חלק של עמוד, בקובץ שמתחיל בקו תחתון, בדרך כלל ב-<code class="inline">Views/Shared</code>.</li>
+            <li>מכניסים אותו עם <code class="inline">&lt;partial name="..." model="..." /&gt;</code>.</li>
+            <li>משנים פעם אחת, וזה משתנה בכל מקום.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מתקדם ד: JS שמדבר עם השרת</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="adv-d-fetch">
+<main>
+    <h1>מתקדם ד: JS שמדבר עם השרת</h1>
+    <div class="subtitle">כפתור "אהבתי" שמתעדכן בלי לטעון את העמוד מחדש, עם fetch</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> עד עכשיו, כל פעולה (שליחת טופס, לחיצה על קישור) טענה עמוד שלם מחדש. באתרים מודרניים, הרבה דברים קורים "בשקט": לוחצים לייק, והמספר עולה מיד. כאן נבנה כפתור "אהבתי" כזה: JavaScript שולח בקשה לשרת, מקבל תשובה, ומעדכן רק את המספר.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מדריך 13 (מסד נתונים) הוא <strong>תנאי מקדים</strong>. צריך גם להכיר JavaScript בעמוד (מדריך 8).
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: JSON</span>
+        פורמט טקסט פשוט להעברת מידע בין השרת ל-JavaScript. נראה כמו אובייקט של JavaScript.
+        <span class="example">דוגמה: <code class="inline">{ "likes": 7 }</code>. השרת יחזיר את זה במקום עמוד HTML שלם.</span>
+    </div>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: fetch</span>
+        פונקציה של JavaScript ששולחת בקשה לשרת <strong>מתוך העמוד</strong>, בלי לעבור לעמוד אחר. התשובה חוזרת ל-JavaScript, והוא מחליט מה לעשות איתה.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. מונה לייקים במודל</h2>
+    <ul class="step-list">
+        <li>ב-<code class="inline">Models/Product.cs</code>, הוסיפו:
+<pre class="code-block">public int Likes { get; set; }</pre>
+        </li>
+        <li>עצרו את האתר, וב-Package Manager Console (כל שורה בנפרד):
+<pre class="code-block">Add-Migration AddProductLikes
+Update-Database</pre>
+        </li>
+    </ul>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. Action שמחזיר JSON</h2>
+    <p>ב-<code class="inline">ProductsController</code>, הוסיפו:</p>
+<pre class="code-block">[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Like(int id)
+{
+    var product = _context.Products.Find(id);
+    if (product == null)
+    {
+        return NotFound();
+    }
+
+    product.Likes++;
+    _context.SaveChanges();
+
+    return Json(new { likes = product.Likes });
+}</pre>
+    <table class="simple">
+        <tr><th>מה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">product.Likes++</code></td><td>מעלה את המונה ב-1.</td></tr>
+        <tr><td><code class="inline">return Json(...)</code></td><td>במקום View, מחזירים JSON. הדפדפן יקבל <code class="inline">{"likes":8}</code>.</td></tr>
+        <tr><td><code class="inline">new { likes = ... }</code></td><td>אובייקט "על המקום", בלי מחלקה. נוח כשרק מחזירים כמה ערכים.</td></tr>
+        <tr><td><code class="inline">[HttpPost]</code> ו-<code class="inline">[ValidateAntiForgeryToken]</code></td><td>הפעולה משנה מידע, אז היא POST ומוגנת, כמו טופס (מדריך 11).</td></tr>
+    </table>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. הכפתור בעמוד</h2>
+    <p>ב-<code class="inline">Views/Products/Index.cshtml</code>:</p>
+    <ul class="step-list">
+        <li>בראש העמוד (אחרי ה-<code class="inline">&lt;h1&gt;</code>) הוסיפו את שדה ההגנה. ה-JavaScript ייקח ממנו את הקוד ויצרף אותו לבקשה:
+<pre class="code-block">@Html.AntiForgeryToken()</pre>
+        </li>
+        <li>ליד כל מוצר (בתוך הלולאה, למשל בעמודה חדשה בטבלה) הוסיפו כפתור:
+<pre class="code-block">&lt;button type="button" class="btn btn-sm btn-outline-danger like-btn" data-id="@product.Id"&gt;
+    ❤️ &lt;span class="count"&gt;@product.Likes&lt;/span&gt;
+&lt;/button&gt;</pre>
+            <code class="inline">data-id</code> שומר על הכפתור את ה-Id של המוצר, כדי שה-JavaScript ידע על איזה מוצר לחצו.
+        </li>
+        <li>בסוף הקובץ:
+<pre class="code-block">@section Scripts {
+    &lt;script src="~/js/likes.js" asp-append-version="true"&gt;&lt;/script&gt;
+}</pre>
+        </li>
+    </ul>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. ה-JavaScript</h2>
+    <p>צרו את הקובץ <code class="inline">wwwroot/js/likes.js</code> (קליק ימני על <code class="inline">wwwroot/js</code> ← Add ← New Item ← JavaScript File):</p>
+<pre class="code-block">document.querySelectorAll(".like-btn").forEach(function (btn) {
+    btn.addEventListener("click", async function () {
+        const id = btn.dataset.id;
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        const response = await fetch("/Products/Like/" + id, {
+            method: "POST",
+            headers: { "RequestVerificationToken": token }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            btn.querySelector(".count").textContent = data.likes;
+        }
+    });
+});</pre>
+    <table class="simple">
+        <tr><th>שורה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">querySelectorAll(".like-btn").forEach</code></td><td>עובר על כל כפתורי הלייק בעמוד, ומחבר לכל אחד פעולה בלחיצה.</td></tr>
+        <tr><td><code class="inline">btn.dataset.id</code></td><td>קורא את ה-<code class="inline">data-id</code> מהכפתור.</td></tr>
+        <tr><td><code class="inline">token</code></td><td>הקוד משדה ההגנה (<code class="inline">@Html.AntiForgeryToken()</code>). שולחים אותו בכותרת בשם <code class="inline">RequestVerificationToken</code>, וכך <code class="inline">[ValidateAntiForgeryToken]</code> מוצא אותו.</td></tr>
+        <tr><td><code class="inline">await fetch(...)</code></td><td>שולח בקשת POST ל-<code class="inline">/Products/Like/5</code>, ו<strong>מחכה</strong> לתשובה. <code class="inline">await</code> עובד רק בתוך פונקציה עם <code class="inline">async</code>.</td></tr>
+        <tr><td><code class="inline">response.ok</code></td><td><code class="inline">true</code> אם השרת הצליח.</td></tr>
+        <tr><td><code class="inline">await response.json()</code></td><td>הופך את ה-JSON שחזר לאובייקט: <code class="inline">data.likes</code>.</td></tr>
+        <tr><td><code class="inline">.textContent = data.likes</code></td><td>מעדכן רק את המספר על הכפתור. שאר העמוד לא זז.</td></tr>
+    </table>
+    <div class="checkpoint">לחצו על ❤️ ליד מוצר. המספר עולה מיד, בלי שהעמוד נטען מחדש. רעננו את העמוד: המספר נשאר, כי הוא שמור במסד הנתונים.</div>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. רואים את הבקשה בעיניים</h2>
+    <p>בדפדפן, <span class="keyboard">F12</span> ← לשונית <strong>Network</strong>. לחצו על לייק. תופיע שורה חדשה, <code class="inline">Like/5</code> (או מספר אחר). לחצו עליה, ובלשונית <strong>Response</strong> תראו את ה-JSON שהשרת החזיר.</p>
+
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>לחיצה לא עושה כלום:</strong> F12 ← Console. "Cannot read properties of null (reading 'value')" אומר שחסר <code class="inline">@Html.AntiForgeryToken()</code> בעמוד.</li>
+            <li><strong>ב-Network רואים 400:</strong> שדה ההגנה לא נשלח, או שהשם של הכותרת לא בדיוק <code class="inline">RequestVerificationToken</code>.</li>
+            <li><strong>ב-Network רואים 404:</strong> הכתובת ב-fetch לא נכונה. בדקו את שם ה-Controller וה-Action.</li>
+            <li><strong>המספר עולה, אבל אחרי רענון חוזר:</strong> חסר <code class="inline">_context.SaveChanges();</code>.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>אחרי לחיצה, הפכו את הכפתור ל"מלא" (<code class="inline">btn-danger</code> במקום <code class="inline">btn-outline-danger</code>). רמז: <code class="inline">btn.classList.replace(...)</code>.</li>
+            <li>מיינו את רשימת המוצרים לפי מספר הלייקים, מהגבוה לנמוך (מתקדם ב).</li>
+            <li>בונוס: אפשרו לייק רק למשתמשים מחוברים (<code class="inline">[Authorize]</code>, מדריך 17). מה מחזיר השרת למי שלא מחובר? בדקו ב-Network.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>Action יכול להחזיר JSON עם <code class="inline">return Json(...)</code>, במקום עמוד.</li>
+            <li><code class="inline">fetch</code> שולח בקשה מתוך JavaScript, ו-<code class="inline">await response.json()</code> קורא את התשובה.</li>
+            <li>גם בקשות מ-JavaScript שמשנות מידע צריכות POST ושדה הגנה.</li>
+            <li>F12 ← Network מראה כל בקשה ואת התשובה שלה.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

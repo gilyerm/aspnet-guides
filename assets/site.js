@@ -50,11 +50,11 @@
         { num: '17', slug: '17-users', section: 'users', title: 'עבודה עם משתמשים', desc: 'עמודים למחוברים בלבד, המשתמש המחובר ותפקידים', ready: true,
           keywords: 'Authorize Roles מנהל Admin User.Identity Login' },
 
-        { num: 'א', slug: 'adv-a-partial-views', section: 'advanced', title: 'Partial Views', desc: 'חלקי עמוד שחוזרים על עצמם' },
-        { num: 'ב', slug: 'adv-b-search', section: 'advanced', title: 'חיפוש וסינון', desc: 'הצגת חלק מהנתונים עם LINQ', keywords: 'LINQ Where OrderBy' },
-        { num: 'ג', slug: 'adv-c-identity', section: 'advanced', title: 'התאמת ההרשמה', desc: 'שדות נוספים למשתמש ודפי הרשמה בעברית', keywords: 'Identity ApplicationUser Scaffold' },
-        { num: 'ד', slug: 'adv-d-fetch', section: 'advanced', title: 'JS שמדבר עם השרת', desc: 'עדכון חלק מהעמוד בלי לטעון מחדש', keywords: 'fetch JSON AJAX' },
-        { num: 'ה', slug: 'adv-e-cart', section: 'advanced', title: 'עגלת קניות', desc: 'הוספה לעגלה, עמוד עגלה ומחיקה', keywords: 'Session חנות' },
+        { num: 'א', slug: 'adv-a-partial-views', section: 'advanced', title: 'Partial Views', desc: 'חלקי עמוד שחוזרים על עצמם', ready: true },
+        { num: 'ב', slug: 'adv-b-search', section: 'advanced', title: 'חיפוש וסינון', desc: 'הצגת חלק מהנתונים עם LINQ', ready: true, keywords: 'LINQ Where OrderBy' },
+        { num: 'ג', slug: 'adv-c-identity', section: 'advanced', title: 'התאמת ההרשמה', desc: 'שדות נוספים למשתמש ודפי הרשמה בעברית', ready: true, keywords: 'Identity ApplicationUser Scaffold' },
+        { num: 'ד', slug: 'adv-d-fetch', section: 'advanced', title: 'JS שמדבר עם השרת', desc: 'עדכון חלק מהעמוד בלי לטעון מחדש', ready: true, keywords: 'fetch JSON AJAX' },
+        { num: 'ה', slug: 'adv-e-cart', section: 'advanced', title: 'עגלת קניות', desc: 'הוספה לעגלה, עמוד עגלה ומחיקה', ready: true, keywords: 'Session חנות' },
 
         { num: '🛠️', slug: 'tool-errors', section: 'tools', title: 'קריאת שגיאות ושגיאות נפוצות', desc: 'איך מבינים מה השתבש, ואיך מתקנים', ready: true, keywords: 'Error שגיאה Exception Clean Rebuild' },
         { num: '🛠️', slug: 'tool-debug', section: 'tools', title: 'דיבאג עם Breakpoints', desc: 'עוצרים את הקוד ובודקים ערכים', ready: true, keywords: 'Breakpoint F10 F11 Watch' },

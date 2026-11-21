@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מתקדם ה: עגלת קניות</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="adv-e-cart">
+<main>
+    <h1>מתקדם ה: עגלת קניות</h1>
+    <div class="subtitle">מיני-פרויקט: הוספה לעגלה, עמוד עגלה עם סכום, ומחיקה ממנה</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> עגלת קניות היא חלק מכמעט כל חנות. נבנה עגלה שזוכרת מה המשתמש הוסיף, בזמן שהוא מסתובב באתר, ומציגה את הסכום לתשלום.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מדריך 13 (מסד נתונים) הוא <strong>תנאי מקדים</strong>: צריך טבלת מוצרים. זה מדריך ארוך יחסית, שמשלב הרבה ממה שלמדנו. כדאי לעשות Commit לפני שמתחילים.
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Session</span>
+        "זיכרון" קטן שהשרת שומר <strong>לכל מבקר בנפרד</strong>, כל עוד הוא גולש באתר. מתאים לעגלה: כל משתמש רואה רק את העגלה שלו.
+        <span class="example">חשוב לדעת: ה-Session נמחק כשסוגרים את הדפדפן, או אחרי כ-20 דקות בלי פעילות. בחנות אמיתית, כשמשתמש מזמין, שומרים את ההזמנה במסד נתונים.</span>
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. מפעילים Session</h2>
+    <p>ב-<code class="inline">Program.cs</code> שני שינויים:</p>
+    <ul class="step-list">
+        <li>לפני השורה <code class="inline">var app = builder.Build();</code>, הוסיפו:
+<pre class="code-block">builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();</pre>
+        </li>
+        <li>אחרי השורה <code class="inline">app.UseRouting();</code>, הוסיפו:
+<pre class="code-block">app.UseSession();</pre>
+            (אם אין אצלכם <code class="inline">app.UseRouting();</code>, שימו את השורה לפני <code class="inline">app.UseAuthorization();</code>.)
+        </li>
+    </ul>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. מודל של פריט בעגלה</h2>
+    <p>קליק ימני על <strong>Models</strong> ← Add ← Class ← <code class="inline">CartItem.cs</code>, ובתוך המחלקה:</p>
+<pre class="code-block">public int ProductId { get; set; }
+public string Name { get; set; } = "";
+public decimal Price { get; set; }
+public int Quantity { get; set; }
+
+public decimal Total =&gt; Price * Quantity;</pre>
+    <table class="simple">
+        <tr><th>מה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">Quantity</code></td><td>כמה יחידות מהמוצר בעגלה.</td></tr>
+        <tr><td><code class="inline">Total =&gt; Price * Quantity</code></td><td>Property שמחושב לבד: מחיר כפול כמות. אין צורך לשמור אותו.</td></tr>
+    </table>
+    <div class="explanation">
+        <strong>💡 בלי DbSet ובלי Migration!</strong> <code class="inline">CartItem</code> הוא מודל שלא נשמר במסד הנתונים, רק ב-Session. מודל לא חייב להיות טבלה.
+    </div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. CartController</h2>
+    <p>צרו Controller חדש (Controllers ← Add ← Controller ← MVC Controller - Empty ← <code class="inline">CartController.cs</code>), והחליפו את כל מה שבתוך המחלקה ב:</p>
+<pre class="code-block">private readonly ApplicationDbContext _context;
+
+public CartController(ApplicationDbContext context)
+{
+    _context = context;
+}
+
+// קריאת העגלה מה-Session
+private List&lt;CartItem&gt; GetCart()
+{
+    var json = HttpContext.Session.GetString("Cart");
+    if (json == null)
+    {
+        return new List&lt;CartItem&gt;();
+    }
+    return JsonSerializer.Deserialize&lt;List&lt;CartItem&gt;&gt;(json) ?? new List&lt;CartItem&gt;();
+}
+
+// שמירת העגלה ב-Session
+private void SaveCart(List&lt;CartItem&gt; cart)
+{
+    HttpContext.Session.SetString("Cart", JsonSerializer.Serialize(cart));
+}
+
+// עמוד העגלה
+public IActionResult Index()
+{
+    return View(GetCart());
+}
+
+// הוספת מוצר
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Add(int id)
+{
+    var product = _context.Products.Find(id);
+    if (product == null)
+    {
+        return NotFound();
+    }
+
+    var cart = GetCart();
+    var item = cart.FirstOrDefault(c =&gt; c.ProductId == id);
+    if (item == null)
+    {
+        cart.Add(new CartItem { ProductId = product.Id, Name = product.Name, Price = product.Price, Quantity = 1 });
+    }
+    else
+    {
+        item.Quantity++;
+    }
+
+    SaveCart(cart);
+    return RedirectToAction("Index");
+}
+
+// הסרת מוצר
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Remove(int id)
+{
+    var cart = GetCart();
+    cart.RemoveAll(c =&gt; c.ProductId == id);
+    SaveCart(cart);
+    return RedirectToAction("Index");
+}
+
+// ריקון העגלה
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Clear()
+{
+    SaveCart(new List&lt;CartItem&gt;());
+    return RedirectToAction("Index");
+}</pre>
+    <p>בשמות שיסומנו באדום (<code class="inline">ApplicationDbContext</code>, <code class="inline">CartItem</code>, <code class="inline">JsonSerializer</code>), לחצו <span class="keyboard">Ctrl+.</span> והוסיפו את ה-<code class="inline">using</code>.</p>
+
+    <div class="concept">
+        <span class="concept-title">📖 למה JsonSerializer?</span>
+        Session יודע לשמור רק טקסט. לכן הופכים את רשימת הפריטים לטקסט JSON (<code class="inline">Serialize</code>) כששומרים, ובחזרה לרשימה (<code class="inline">Deserialize</code>) כשקוראים. את שתי הפעולות עטפנו בפונקציות <code class="inline">GetCart</code> ו-<code class="inline">SaveCart</code>, כדי לא לכתוב את זה בכל Action.
+    </div>
+
+    <table class="simple">
+        <tr><th>Action</th><th>מה הוא עושה</th></tr>
+        <tr><td><code class="inline">Add</code></td><td>אם המוצר כבר בעגלה, מעלה את הכמות. אחרת, מוסיף אותו עם כמות 1.</td></tr>
+        <tr><td><code class="inline">Remove</code></td><td>מוחק את המוצר מהעגלה (<code class="inline">RemoveAll</code> מוחק את כל הפריטים שעונים על התנאי).</td></tr>
+        <tr><td><code class="inline">Clear</code></td><td>שומר עגלה ריקה.</td></tr>
+    </table>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. עמוד העגלה</h2>
+    <p>קליק ימני על <code class="inline">Index</code> ב-CartController ← Add View ← Razor View - Empty ← <code class="inline">Index.cshtml</code>:</p>
+<pre class="code-block">@model List&lt;CartItem&gt;
+@{
+    ViewData["Title"] = "העגלה שלי";
+}
+
+&lt;h1&gt;🛒 העגלה שלי&lt;/h1&gt;
+
+@if (Model.Count == 0)
+{
+    &lt;div class="alert alert-info"&gt;העגלה ריקה.&lt;/div&gt;
+    &lt;a asp-controller="Products" asp-action="Index" class="btn btn-primary"&gt;למוצרים&lt;/a&gt;
+}
+else
+{
+    &lt;table class="table"&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;מוצר&lt;/th&gt;
+                &lt;th&gt;מחיר&lt;/th&gt;
+                &lt;th&gt;כמות&lt;/th&gt;
+                &lt;th&gt;סה"כ&lt;/th&gt;
+                &lt;th&gt;&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            @foreach (var item in Model)
+            {
+                &lt;tr&gt;
+                    &lt;td&gt;@item.Name&lt;/td&gt;
+                    &lt;td&gt;@item.Price ₪&lt;/td&gt;
+                    &lt;td&gt;@item.Quantity&lt;/td&gt;
+                    &lt;td&gt;@item.Total ₪&lt;/td&gt;
+                    &lt;td&gt;
+                        &lt;form asp-action="Remove" asp-route-id="@item.ProductId" method="post"&gt;
+                            &lt;button type="submit" class="btn btn-sm btn-outline-danger"&gt;הסרה&lt;/button&gt;
+                        &lt;/form&gt;
+                    &lt;/td&gt;
+                &lt;/tr&gt;
+            }
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;h4&gt;לתשלום: @Model.Sum(i =&gt; i.Total) ₪&lt;/h4&gt;
+
+    &lt;form asp-action="Clear" method="post" class="mt-3"&gt;
+        &lt;button type="submit" class="btn btn-secondary"&gt;ריקון העגלה&lt;/button&gt;
+    &lt;/form&gt;
+}</pre>
+    <p><code class="inline">Model.Sum(i =&gt; i.Total)</code> הוא LINQ: סכום ה-Total של כל הפריטים.</p>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. כפתור "הוספה לעגלה"</h2>
+    <p>ברשימת המוצרים (<code class="inline">Views/Products/Index.cshtml</code>) או בעמוד הפרטים, הוסיפו ליד כל מוצר:</p>
+<pre class="code-block">&lt;form asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id" method="post"&gt;
+    &lt;button type="submit" class="btn btn-sm btn-success"&gt;הוספה לעגלה 🛒&lt;/button&gt;
+&lt;/form&gt;</pre>
+    <p class="change-note">בעמוד הפרטים (<code class="inline">Details.cshtml</code>) כתבו <code class="inline">@Model.Id</code> במקום <code class="inline">@product.Id</code>.</p>
+    <p>וקישור לעגלה בתפריט (<code class="inline">_Layout.cshtml</code>, מדריך 6):</p>
+<pre class="code-block">&lt;li class="nav-item"&gt;
+    &lt;a class="nav-link text-dark" asp-controller="Cart" asp-action="Index"&gt;🛒 העגלה&lt;/a&gt;
+&lt;/li&gt;</pre>
+    <div class="checkpoint">הוסיפו כמה מוצרים לעגלה, ומוצר אחד פעמיים. בעגלה רואים כל מוצר עם הכמות, הסכום של כל שורה והסכום הכולל. נסו להסיר מוצר ולרוקן את העגלה.</div>
+
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>"Session has not been configured for this application":</strong> חסר <code class="inline">AddSession</code> או <code class="inline">app.UseSession()</code> ב-<code class="inline">Program.cs</code> (סעיף 1).</li>
+            <li><strong>העגלה תמיד ריקה:</strong> בדקו ש-<code class="inline">app.UseSession()</code> נמצא <strong>אחרי</strong> <code class="inline">app.UseRouting()</code>, ושאחרי כל שינוי קוראים ל-<code class="inline">SaveCart(cart)</code>.</li>
+            <li><strong>"GetString" מסומן באדום:</strong> <span class="keyboard">Ctrl+.</span> יוסיף <code class="inline">using Microsoft.AspNetCore.Http;</code>.</li>
+            <li><strong>אחרי זמן מה העגלה התרוקנה:</strong> זה צפוי. ה-Session נמחק אחרי כ-20 דקות בלי פעילות, או כשסוגרים את הדפדפן.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>הוסיפו בעגלה כפתורי <code class="inline">+</code> ו-<code class="inline">−</code> ליד הכמות (רמז: עוד שני Actions, כמו Add ו-Remove, ש<strong>משנים</strong> את <code class="inline">Quantity</code>).</li>
+            <li>הציגו בתפריט כמה פריטים יש בעגלה, למשל "🛒 העגלה (3)".</li>
+            <li>אתגר: כפתור "הזמנה" ששומר את ההזמנה במסד הנתונים. צריך שני מודלים חדשים, <code class="inline">Order</code> (עם המשתמש והתאריך) ו-<code class="inline">OrderItem</code> (מוצר, כמות ומחיר), עם קשר אחד-לרבים ביניהם (מדריך 14). אחרי ההזמנה מרוקנים את העגלה.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>Session שומר מידע לכל מבקר בנפרד, כל עוד הוא גולש. מפעילים אותו ב-<code class="inline">Program.cs</code>.</li>
+            <li>כדי לשמור רשימה ב-Session, הופכים אותה ל-JSON וחזרה.</li>
+            <li>מודל לא חייב להיות טבלה: <code class="inline">CartItem</code> חי רק ב-Session.</li>
+            <li>כל פעולה שמשנה את העגלה היא POST עם הגנה, ואחריה Redirect.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

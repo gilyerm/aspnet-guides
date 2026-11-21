@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מתקדם ב: חיפוש וסינון</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="adv-b-search">
+<main>
+    <h1>מתקדם ב: חיפוש וסינון</h1>
+    <div class="subtitle">תיבת חיפוש, מיון לפי מחיר וסינון לפי קטגוריה, עם LINQ</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> כשיש עשרות מוצרים, צריך דרך למצוא את מה שמחפשים. נוסיף לרשימת המוצרים חיפוש לפי שם, מיון, וסינון לפי קטגוריה.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מדריך 13 (מסד נתונים) הוא <strong>תנאי מקדים</strong>. לסינון לפי קטגוריה צריך גם את מדריך 14.
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: LINQ</span>
+        דרך לכתוב ב-C# "שאלות" על רשימות ועל מסד נתונים: "תביא רק את מה שמתאים", "תמיין לפי...". כבר השתמשנו בו: <code class="inline">FirstOrDefault</code> ו-<code class="inline">Include</code> הם LINQ.
+    </div>
+    <table class="simple">
+        <tr><th>פעולה</th><th>מה היא עושה</th><th>דוגמה</th></tr>
+        <tr><td><code class="inline">Where</code></td><td>מסננת: רק מה שעונה על התנאי</td><td><code class="inline">Where(p =&gt; p.Price &lt; 20)</code></td></tr>
+        <tr><td><code class="inline">OrderBy</code></td><td>ממיינת מהקטן לגדול</td><td><code class="inline">OrderBy(p =&gt; p.Price)</code></td></tr>
+        <tr><td><code class="inline">OrderByDescending</code></td><td>ממיינת מהגדול לקטן</td><td><code class="inline">OrderByDescending(p =&gt; p.Price)</code></td></tr>
+        <tr><td><code class="inline">Take</code></td><td>רק הראשונים</td><td><code class="inline">Take(5)</code></td></tr>
+        <tr><td><code class="inline">Count</code></td><td>כמה יש</td><td><code class="inline">Count()</code></td></tr>
+        <tr><td><code class="inline">Contains</code></td><td>(על טקסט) האם מכיל</td><td><code class="inline">p.Name.Contains("עט")</code></td></tr>
+    </table>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. ה-Controller</h2>
+    <p>ב-<code class="inline">ProductsController</code>, החליפו את ה-<code class="inline">Index</code> ב:</p>
+<pre class="code-block">public IActionResult Index(string? search, string? sort, int? categoryId)
+{
+    var products = _context.Products.Include(p =&gt; p.Category).AsQueryable();
+
+    // חיפוש לפי שם
+    if (!string.IsNullOrEmpty(search))
+    {
+        products = products.Where(p =&gt; p.Name.Contains(search));
+    }
+
+    // סינון לפי קטגוריה
+    if (categoryId != null)
+    {
+        products = products.Where(p =&gt; p.CategoryId == categoryId);
+    }
+
+    // מיון
+    if (sort == "price")
+    {
+        products = products.OrderBy(p =&gt; p.Price);
+    }
+    else if (sort == "price_desc")
+    {
+        products = products.OrderByDescending(p =&gt; p.Price);
+    }
+    else
+    {
+        products = products.OrderBy(p =&gt; p.Name);
+    }
+
+    ViewBag.Search = search;
+    ViewBag.Categories = _context.Categories.ToList();
+    return View(products.ToList());
+}</pre>
+    <p class="change-note">לא עשיתם את מדריך 14? מחקו את <code class="inline">.Include(p =&gt; p.Category)</code>, את בלוק "סינון לפי קטגוריה", את <code class="inline">int? categoryId</code> ואת שורת <code class="inline">ViewBag.Categories</code>.</p>
+
+    <table class="simple">
+        <tr><th>מה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">Index(string? search, ...)</code></td><td>ה-Action מקבל את החיפוש מהכתובת. למשל <code class="inline">/Products?search=עט&amp;sort=price</code>. אם אין בכתובת, הערך יהיה <code class="inline">null</code>.</td></tr>
+        <tr><td><code class="inline">AsQueryable()</code></td><td>"עוד לא להביא כלום, רק להתחיל לבנות שאלה". כל <code class="inline">Where</code> ו-<code class="inline">OrderBy</code> מוסיפים לשאלה.</td></tr>
+        <tr><td><code class="inline">products = products.Where(...)</code></td><td>מוסיפים תנאי, רק אם המשתמש באמת חיפש.</td></tr>
+        <tr><td><code class="inline">ToList()</code> בסוף</td><td>רק כאן השאלה נשלחת למסד הנתונים, עם כל התנאים ביחד.</td></tr>
+        <tr><td><code class="inline">ViewBag.Search</code></td><td>מחזירים את מילת החיפוש ל-View, כדי שתישאר בתיבה.</td></tr>
+    </table>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. תיבת החיפוש</h2>
+    <p>ב-<code class="inline">Views/Products/Index.cshtml</code>, מעל הרשימה:</p>
+<pre class="code-block">&lt;form asp-action="Index" method="get" class="row g-2 mb-3"&gt;
+    &lt;div class="col-md-6"&gt;
+        &lt;input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="חיפוש מוצר..." /&gt;
+    &lt;/div&gt;
+    &lt;div class="col-md-auto"&gt;
+        &lt;button type="submit" class="btn btn-primary"&gt;חיפוש&lt;/button&gt;
+        &lt;a asp-action="Index" class="btn btn-outline-secondary"&gt;ניקוי&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/form&gt;</pre>
+    <div class="concept">
+        <span class="concept-title">📖 למה method="get"?</span>
+        בטופס GET, השדות נכנסים <strong>לכתובת</strong> (<code class="inline">?search=עט</code>), ולא נשלחים בנפרד כמו ב-POST. זה מתאים לחיפוש: אפשר לשמור את הכתובת או לשלוח אותה לחבר, ולקבל את אותן תוצאות. כאן לא משנים שום מידע, אז אין צורך ב-POST.
+    </div>
+    <div class="checkpoint">חפשו חלק משם של מוצר. מופיעים רק המוצרים המתאימים, והכתובת בדפדפן מסתיימת ב-<code class="inline">?search=...</code>.</div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. קישורי מיון וסינון</h2>
+    <p>מתחת לטופס, קישורים למיון. <code class="inline">asp-route-sort</code> מוסיף <code class="inline">?sort=...</code> לכתובת, ו-<code class="inline">asp-route-search</code> שומר את החיפוש הנוכחי:</p>
+<pre class="code-block">&lt;div class="mb-3"&gt;
+    מיון:
+    &lt;a asp-action="Index" asp-route-sort="name" asp-route-search="@ViewBag.Search"&gt;לפי שם&lt;/a&gt; |
+    &lt;a asp-action="Index" asp-route-sort="price" asp-route-search="@ViewBag.Search"&gt;מחיר: מהזול&lt;/a&gt; |
+    &lt;a asp-action="Index" asp-route-sort="price_desc" asp-route-search="@ViewBag.Search"&gt;מחיר: מהיקר&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;div class="mb-3"&gt;
+    קטגוריה:
+    &lt;a asp-action="Index" class="btn btn-sm btn-outline-secondary"&gt;הכול&lt;/a&gt;
+    @foreach (var category in (List&lt;Category&gt;)ViewBag.Categories)
+    {
+        &lt;a asp-action="Index" asp-route-categoryId="@category.Id" class="btn btn-sm btn-outline-primary"&gt;@category.Name&lt;/a&gt;
+    }
+&lt;/div&gt;
+
+&lt;p class="text-muted"&gt;נמצאו @Model.Count מוצרים&lt;/p&gt;</pre>
+    <div class="checkpoint">לחיצה על "מחיר: מהזול" ממיינת, לחיצה על קטגוריה מסננת, ושורת הספירה מתעדכנת.</div>
+
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>החיפוש לא מוצא כלום:</strong> ה-<code class="inline">name="search"</code> בתיבה חייב להיות זהה לשם הפרמטר ב-Action (<code class="inline">string? search</code>).</li>
+            <li><strong>חיפוש באנגלית רגיש לאותיות גדולות?</strong> ב-SQL Server בדרך כלל לא: <code class="inline">pen</code> ימצא גם <code class="inline">Pen</code>.</li>
+            <li><strong>שגיאה על <code class="inline">ViewBag.Categories</code> בלולאה:</strong> שכחתם את השורה <code class="inline">ViewBag.Categories = ...</code> ב-Action.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>הוסיפו לטופס שני שדות: מחיר מינימום ומחיר מקסימום, וסננו לפיהם (<code class="inline">decimal? minPrice</code>, <code class="inline">Where(p =&gt; p.Price &gt;= minPrice)</code>).</li>
+            <li>כשאין תוצאות, הציגו "לא נמצאו מוצרים" במקום רשימה ריקה.</li>
+            <li>שמרו גם את הקטגוריה הנבחרת כשממיינים (רמז: <code class="inline">asp-route-categoryId</code> בקישורי המיון, ו-<code class="inline">ViewBag.CategoryId</code>).</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>LINQ: <code class="inline">Where</code> מסנן, <code class="inline">OrderBy</code> ממיין, ו-<code class="inline">ToList</code> מביא את התוצאה.</li>
+            <li>בונים את השאלה שלב אחרי שלב, ומוסיפים תנאי רק אם המשתמש ביקש אותו.</li>
+            <li>חיפוש עושים בטופס GET, והפרמטרים מגיעים ל-Action מהכתובת.</li>
+            <li><code class="inline">asp-route-X</code> מוסיף פרמטרים לקישור.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>
