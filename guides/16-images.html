@@ -76,7 +76,15 @@ public ProductsController(ApplicationDbContext context, IWebHostEnvironment env)
 }</pre>
     <p><code class="inline">_env.WebRootPath</code> הוא הנתיב המלא לתיקייה <code class="inline">wwwroot</code> במחשב.</p>
 
-    <h3>שלב ב: Create של ה-POST</h3>
+    <h3>שלב ב: מאפשרים להציג קבצים שהועלו</h3>
+    <p>פתחו את <code class="inline">Program.cs</code>, ומיד <strong>לפני</strong> השורה <code class="inline">app.UseRouting();</code> הוסיפו:</p>
+<pre class="code-block">app.UseStaticFiles();</pre>
+    <div class="concept">
+        <span class="concept-title">📖 למה צריך את זה?</span>
+        בפרויקט יש כבר שורה בשם <code class="inline">app.MapStaticAssets();</code>, שמגישה לדפדפן את הקבצים שב-<code class="inline">wwwroot</code>. אבל היא מכירה רק קבצים שהיו קיימים <strong>כשהפרויקט נבנה</strong>. תמונה שמשתמש מעלה בזמן שהאתר רץ היא קובץ חדש, ובלי <code class="inline">UseStaticFiles</code> הדפדפן יקבל עליה 404.
+    </div>
+
+    <h3>שלב ג: Create של ה-POST</h3>
     <p>החליפו את ה-<code class="inline">Create</code> עם ה-<code class="inline">[HttpPost]</code> ב:</p>
 <pre class="code-block">[HttpPost]
 [ValidateAntiForgeryToken]
@@ -167,7 +175,7 @@ public IActionResult Create(Product product, IFormFile? imageFile)
         <h3>🔧 אם זה לא עובד</h3>
         <ul>
             <li><strong>המוצר נשמר, אבל בלי תמונה (<code class="inline">imageFile</code> תמיד null):</strong> חסר <code class="inline">enctype="multipart/form-data"</code> ב-<code class="inline">&lt;form&gt;</code>, או שה-<code class="inline">name</code> של השדה לא זהה לשם הפרמטר (<code class="inline">imageFile</code>).</li>
-            <li><strong>התמונה לא מוצגת (ריבוע שבור):</strong> F12 ← Console תראה שגיאה 404 עם הכתובת. בדקו שהקובץ באמת קיים ב-<code class="inline">wwwroot/images/products</code>, ושהכתובת ב-<code class="inline">ImageUrl</code> מתחילה ב-<code class="inline">/images/</code> (בלי <code class="inline">wwwroot</code>).</li>
+            <li><strong>התמונה לא מוצגת (ריבוע שבור):</strong> F12 ← Console תראה שגיאה 404 עם הכתובת. קודם כול, ודאו שהוספתם <code class="inline">app.UseStaticFiles();</code> ב-<code class="inline">Program.cs</code> (סעיף 3, שלב ב). אחר כך בדקו שהקובץ באמת קיים ב-<code class="inline">wwwroot/images/products</code>, ושהכתובת ב-<code class="inline">ImageUrl</code> מתחילה ב-<code class="inline">/images/</code> (בלי <code class="inline">wwwroot</code>).</li>
             <li><strong>הודעות השגיאה על התמונה לא מופיעות:</strong> חסר <code class="inline">&lt;div asp-validation-summary="ModelOnly" class="text-danger"&gt;&lt;/div&gt;</code> בטופס (מדריך 12).</li>
             <li><strong>"IWebHostEnvironment could not be found":</strong> <span class="keyboard">Ctrl+.</span> על השם יוסיף את ה-<code class="inline">using</code> החסר.</li>
         </ul>

@@ -286,6 +286,7 @@ public IActionResult Index(string? search)
     <input type="file" name="imageFile" class="form-control" accept="image/*" />
     ...
 </form>''')],
+            change='ב-<code class="inline">Program.cs</code> צריך גם <code class="inline">app.UseStaticFiles();</code> לפני <code class="inline">app.UseRouting();</code>, אחרת תמונות שהועלו לא יוצגו.',
             guide=G('16-images', 'מדריך 16 (כולל הקוד המלא לשמירה ב-Controller)')),
 
     snippet('נתונים התחלתיים (Seed)',
@@ -305,7 +306,7 @@ using (var scope = app.Services.CreateScope())
         db.SaveChanges();
     }
 }''')],
-            change='החליפו את המוצרים בנתונים שלכם. אם עשיתם את מדריך 17, אפשר לשים את זה באותו בלוק <code class="inline">using</code> של יצירת המנהל.',
+            change='החליפו את המוצרים בנתונים שלכם. <code class="inline">Product</code> יסומן באדום: <span class="keyboard">Ctrl+.</span> יוסיף בראש <code class="inline">Program.cs</code> את ה-<code class="inline">using</code> של התיקייה Models. אם עשיתם את מדריך 17, אפשר לשים את זה באותו בלוק <code class="inline">using</code> של יצירת המנהל.',
             star=True),
 
     snippet('סינון לפי קטגוריה',

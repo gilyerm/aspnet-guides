@@ -294,6 +294,7 @@ return RedirectToAction(&quot;Index&quot;);</pre>
     &lt;input type=&quot;file&quot; name=&quot;imageFile&quot; class=&quot;form-control&quot; accept=&quot;image/*&quot; /&gt;
     ...
 &lt;/form&gt;</pre>
+<p class="change-note">ב-<code class="inline">Program.cs</code> צריך גם <code class="inline">app.UseStaticFiles();</code> לפני <code class="inline">app.UseRouting();</code>, אחרת תמונות שהועלו לא יוצגו.</p>
 <p class="guide-link">הסבר מלא: <a href="16-images.html">מדריך 16 (כולל הקוד המלא לשמירה ב-Controller)</a></p>
 </div>
 <div class="snippet">
@@ -314,7 +315,7 @@ return RedirectToAction(&quot;Index&quot;);</pre>
         db.SaveChanges();
     }
 }</pre>
-<p class="change-note">החליפו את המוצרים בנתונים שלכם. אם עשיתם את מדריך 17, אפשר לשים את זה באותו בלוק <code class="inline">using</code> של יצירת המנהל.</p>
+<p class="change-note">החליפו את המוצרים בנתונים שלכם. <code class="inline">Product</code> יסומן באדום: <span class="keyboard">Ctrl+.</span> יוסיף בראש <code class="inline">Program.cs</code> את ה-<code class="inline">using</code> של התיקייה Models. אם עשיתם את מדריך 17, אפשר לשים את זה באותו בלוק <code class="inline">using</code> של יצירת המנהל.</p>
 </div>
 <div class="snippet">
 <h3>סינון לפי קטגוריה</h3>

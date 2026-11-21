@@ -163,6 +163,7 @@ else
             <li><strong>"No service for type RoleManager":</strong> שכחתם את <code class="inline">.AddRoles&lt;IdentityRole&gt;()</code> ב-<code class="inline">Program.cs</code> (שלב א).</li>
             <li><strong>קווים אדומים על <code class="inline">await</code> ב-Program.cs:</strong> ודאו שהדבקתם את הקוד אחרי <code class="inline">var app = builder.Build();</code>, ולא בתוך פונקציה אחרת.</li>
             <li><strong>[Authorize] לא חוסם כלום:</strong> בדקו שהוא מעל ה-Action או ה-Controller הנכון, ושלא שמתם בטעות <code class="inline">[AllowAnonymous]</code>.</li>
+            <li><strong>האתר קורס מיד בהפעלה, עם שגיאה על מסד הנתונים (למשל "Cannot open database"):</strong> הקוד שיוצר את המנהל רץ בהפעלה, ומסד הנתונים עוד לא קיים. הריצו <code class="inline">Update-Database</code> ב-Package Manager Console, והפעילו שוב.</li>
             <li><strong>במחשב אחר המשתמש לא מנהל:</strong> מסד הנתונים שם חדש וריק (מדריך 13). הירשמו שם עם אותו אימייל, והקוד ייתן לו את התפקיד בהפעלה הבאה.</li>
         </ul>
     </div>
