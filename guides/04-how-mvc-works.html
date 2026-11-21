@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 4: איך אתר MVC עובד</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="04-how-mvc-works">
+<main>
+    <h1>מדריך 4: איך אתר MVC עובד</h1>
+    <div class="subtitle">התמונה הכללית: מה קורה מהרגע שמקלידים כתובת ועד שהעמוד מופיע</div>
+
+    <div class="explanation">
+        <strong>💡 למה המדריך הזה חשוב?</strong> בפרויקט יש הרבה תיקיות וקבצים, וקל ללכת לאיבוד. אחרי המדריך הזה תדעו איזה קובץ אחראי על מה, ותבינו למה כשמשנים קובץ מסוים, משתנה עמוד מסוים באתר. כמעט כל מה שנעשה בהמשך נשען על ההבנה הזאת.
+        <br><br>
+        <strong>מה צריך לפני:</strong> פרויקט שיצרתם במדריך 1.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. שרת ולקוח</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: שרת ולקוח</span>
+        <strong>הלקוח</strong> הוא הדפדפן (Chrome, Edge) שמבקש עמוד. <strong>השרת</strong> הוא התוכנה שמקבלת את הבקשה, מכינה את העמוד ושולחת אותו בחזרה. האתר שאנחנו בונים ב-Visual Studio הוא השרת.
+        <span class="example">דוגמה: כשאתם נכנסים ליוטיוב, הדפדפן שלכם הוא הלקוח, והמחשבים של גוגל הם השרת. אצלנו, כשמריצים את האתר, גם הלקוח וגם השרת נמצאים על אותו מחשב (זה ה-localhost ממדריך 2).</span>
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: בקשה (Request)</span>
+        ההודעה שהדפדפן שולח לשרת: "תביא לי את העמוד בכתובת הזאת". כל לחיצה על קישור, כל הקלדה של כתובת וכל שליחה של טופס היא בקשה.
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. שלושת החלקים: Model, View, Controller</h2>
+    <p>MVC הם ראשי תיבות של שלושת החלקים שמהם בנוי האתר. לכל חלק יש תיקייה משלו בפרויקט:</p>
+
+    <table class="simple">
+        <tr><th>חלק</th><th>תיקייה</th><th>מה הוא עושה</th><th>במסעדה</th></tr>
+        <tr><td><strong>Controller</strong><br>(בקר)</td><td><code class="inline">Controllers</code></td><td>מקבל את הבקשה, מחליט מה לעשות, ובוחר איזה עמוד להחזיר.</td><td>המלצר: מקבל את ההזמנה ומביא את המנה.</td></tr>
+        <tr><td><strong>Model</strong><br>(מודל)</td><td><code class="inline">Models</code></td><td>המידע עצמו: מוצרים, משתמשים, הזמנות. בדרך כלל מגיע ממסד הנתונים.</td><td>המצרכים במטבח.</td></tr>
+        <tr><td><strong>View</strong><br>(תצוגה)</td><td><code class="inline">Views</code></td><td>איך העמוד נראה: קובץ HTML (עם סיומת cshtml) שהמשתמש רואה.</td><td>הצלחת המוגשת: איך המנה נראית.</td></tr>
+    </table>
+
+    <p>ככה זה נראה כשמישהו נכנס לעמוד:</p>
+    <div class="flow">
+        <div class="step browser"><b>1. דפדפן</b><span>מבקש כתובת</span></div>
+        <div class="arrow">←</div>
+        <div class="step"><b>2. Controller</b><span>מקבל את הבקשה</span></div>
+        <div class="arrow">←</div>
+        <div class="step"><b>3. Model</b><span>מביא מידע (אם צריך)</span></div>
+        <div class="arrow">←</div>
+        <div class="step"><b>4. View</b><span>בונה את העמוד</span></div>
+        <div class="arrow">←</div>
+        <div class="step browser"><b>5. דפדפן</b><span>מציג את העמוד</span></div>
+    </div>
+
+    <div class="explanation">
+        <strong>💡 בינתיים בלי Model:</strong> בעמודים הפשוטים (כמו דף הבית) ה-Controller לא צריך שום מידע, ופשוט מחזיר View. את ה-Model נכיר במדריך 10.
+    </div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. איך הכתובת קובעת איזה קוד ירוץ</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Action (פעולה)</span>
+        פונקציה בתוך Controller שמטפלת בבקשה אחת. לכל עמוד באתר יש בדרך כלל Action משלו.
+        <span class="example">דוגמה: ב-<code class="inline">HomeController</code> יש Action בשם <code class="inline">Privacy</code>, והוא אחראי על עמוד הפרטיות.</span>
+    </div>
+
+    <p>הכתובת בדפדפן אומרת לאתר לאיזה Controller ולאיזה Action ללכת. החלק הראשון אחרי שם האתר הוא שם ה-Controller, והחלק השני הוא שם ה-Action:</p>
+
+    <div class="flow" dir="ltr">
+        <div class="step browser"><b>localhost:7123</b><span>שם האתר</span></div>
+        <div class="arrow">/</div>
+        <div class="step"><b>Home</b><span>שם ה-Controller<br>(HomeController)</span></div>
+        <div class="arrow">/</div>
+        <div class="step"><b>Privacy</b><span>שם ה-Action</span></div>
+    </div>
+
+    <table class="simple">
+        <tr><th>כתובת</th><th>Controller</th><th>Action</th><th>הקובץ שמוצג</th></tr>
+        <tr><td><code class="inline">/Home/Privacy</code></td><td>HomeController</td><td>Privacy</td><td><code class="inline">Views/Home/Privacy.cshtml</code></td></tr>
+        <tr><td><code class="inline">/Home/Index</code></td><td>HomeController</td><td>Index</td><td><code class="inline">Views/Home/Index.cshtml</code></td></tr>
+        <tr><td><code class="inline">/Home</code></td><td>HomeController</td><td>Index (ברירת מחדל)</td><td><code class="inline">Views/Home/Index.cshtml</code></td></tr>
+        <tr><td><code class="inline">/</code> (בלי כלום)</td><td>HomeController (ברירת מחדל)</td><td>Index (ברירת מחדל)</td><td><code class="inline">Views/Home/Index.cshtml</code></td></tr>
+    </table>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: ניתוב (Routing)</span>
+        הכלל שקובע איך כתובת מתורגמת ל-Controller ול-Action. הוא כתוב בקובץ <code class="inline">Program.cs</code>, ונראה כך:
+        <pre class="code-block">pattern: "{controller=Home}/{action=Index}/{id?}"</pre>
+        <span class="example">בעברית: "החלק הראשון הוא ה-Controller (ואם אין, Home). החלק השני הוא ה-Action (ואם אין, Index). החלק השלישי הוא מספר מזהה, והוא לא חובה." את ה-id נפגוש כשנרצה להציג פריט מסוים, למשל <code class="inline">/Products/Details/5</code>.</span>
+    </div>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. מסתכלים על הקוד</h2>
+    <p>פתחו את הקובץ <code class="inline">Controllers/HomeController.cs</code>. חוץ מכמה שורות נוספות, תמצאו בו קוד כזה:</p>
+    <pre class="code-block">public class HomeController : Controller
+{
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    public IActionResult Privacy()
+    {
+        return View();
+    }
+}</pre>
+
+    <table class="simple">
+        <tr><th>השורה</th><th>מה היא אומרת</th></tr>
+        <tr><td><code class="inline">public class HomeController : Controller</code></td><td>"זו מחלקה בשם HomeController, והיא Controller". השם חייב להסתיים במילה <strong>Controller</strong>.</td></tr>
+        <tr><td><code class="inline">public IActionResult Index()</code></td><td>Action בשם Index. <code class="inline">IActionResult</code> אומר "הפונקציה הזאת מחזירה תשובה לדפדפן".</td></tr>
+        <tr><td><code class="inline">return View();</code></td><td>"תחזיר את ה-View שיש לו אותו שם כמו ה-Action". ב-Action בשם Index, זה הקובץ <code class="inline">Index.cshtml</code>.</td></tr>
+    </table>
+
+    <div class="explanation">
+        <strong>💡 איפה מחפשים את ה-View?</strong> <code class="inline">return View()</code> מחפש קובץ בשם ה-Action, בתוך תיקייה בשם ה-Controller (בלי המילה Controller). ל-<code class="inline">HomeController</code> וה-Action <code class="inline">Privacy</code>, זה <code class="inline">Views/Home/Privacy.cshtml</code>. אם הקובץ לא שם, הוא מחפש גם בתיקייה <code class="inline">Views/Shared</code>.
+    </div>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. בואו ננסה</h2>
+    <ul class="step-list">
+        <li>פתחו את הקובץ <code class="inline">Views/Home/Privacy.cshtml</code>.</li>
+        <li>מתחת לשורה עם <code class="inline">&lt;h1&gt;</code>, הוסיפו שורה משלכם:
+            <pre class="code-block">&lt;p&gt;את העמוד הזה הציג ה-Action בשם Privacy!&lt;/p&gt;</pre>
+        </li>
+        <li>הריצו את האתר, והוסיפו בסוף הכתובת בדפדפן <code class="inline">/Home/Privacy</code>. לדוגמה: <code class="inline">https://localhost:7123/Home/Privacy</code>.</li>
+    </ul>
+    <div class="checkpoint">העמוד מציג את השורה שהוספתם. עכשיו נסו כתובת שלא קיימת, למשל <code class="inline">/Home/Banana</code>. תקבלו שגיאה 404 ("העמוד לא נמצא"), כי ב-HomeController אין Action בשם Banana.</div>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>שגיאה 404 (This localhost page can't be found):</strong> אין Controller או Action בשם שבכתובת. בדקו שאין טעות כתיב בכתובת.</li>
+            <li><strong>שגיאה "The view 'X' was not found":</strong> ה-Action קיים, אבל אין קובץ View מתאים. השגיאה מפרטת את כל המקומות שבהם האתר חיפש את הקובץ. בדקו ששם הקובץ זהה לשם ה-Action, ושהוא בתיקייה הנכונה.</li>
+            <li><strong>השינוי לא מופיע:</strong> שמרתם את הקובץ (<span class="keyboard">Ctrl+S</span>)? אם כן, רעננו את הדפדפן, או עצרו את האתר והריצו מחדש.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <p>בלי להריץ, ענו על השאלות. אחר כך בדקו בעצמכם:</p>
+        <ol>
+            <li>איזה קובץ View יוצג בכתובת <code class="inline">/Home</code>?</li>
+            <li>בכתובת <code class="inline">/Products/Details/5</code>, מה שם ה-Controller, מה שם ה-Action, ומה ה-id?</li>
+            <li>אם תשנו את שם הקובץ <code class="inline">Privacy.cshtml</code> ל-<code class="inline">Privacy2.cshtml</code>, מה יקרה כשתיכנסו ל-<code class="inline">/Home/Privacy</code>? (אחרי שבדקתם, החזירו את השם המקורי!)</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li><strong>Controller</strong> מקבל את הבקשה, <strong>Model</strong> הוא המידע, ו-<strong>View</strong> הוא איך העמוד נראה.</li>
+            <li>הכתובת <code class="inline">/Home/Privacy</code> מריצה את ה-Action בשם <code class="inline">Privacy</code> ב-<code class="inline">HomeController</code>.</li>
+            <li><code class="inline">return View()</code> מציג את הקובץ <code class="inline">Views/שם-ה-Controller/שם-ה-Action.cshtml</code>.</li>
+            <li>כתובת בלי Controller או Action מגיעה ל-Home ול-Index.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

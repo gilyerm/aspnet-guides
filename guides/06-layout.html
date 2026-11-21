@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 6: Layout ותפריט</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="06-layout">
+<main>
+    <h1>מדריך 6: Layout ותפריט</h1>
+    <div class="subtitle">הקובץ שעוטף את כל העמודים באתר, ואיך משנים את התפריט העליון</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> שמתם לב שבכל עמוד באתר יש אותו תפריט למעלה ואותה שורה למטה, אף על פי שבקבצי ה-View לא כתבנו אותם? הם מגיעים מקובץ אחד שעוטף את כל העמודים. במדריך הזה נכיר אותו, ונלמד לשנות את התפריט.
+        <br><br>
+        <strong>מה צריך לפני:</strong> פרויקט שיצרתם במדריך 1. מומלץ לקרוא קודם את מדריך 5 (מה זה cshtml).
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. מה זה Layout?</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Layout (תבנית עמוד)</span>
+        קובץ אחד שמכיל את כל מה שחוזר בכל העמודים: התפריט העליון, השורה התחתונה, קבצי העיצוב. כל עמוד באתר "נכנס" לתוך האמצע שלו.
+        <span class="example">דוגמה: כמו מסגרת של תמונה. המסגרת (Layout) תמיד אותו דבר, ובפנים מחליפים תמונות (העמודים). רוצים לשנות את המסגרת? משנים פעם אחת, וזה משתנה בכל העמודים.</span>
+    </div>
+
+    <p>ה-Layout נמצא בקובץ <code class="inline">Views/Shared/_Layout.cshtml</code>. פתחו אותו. הוא ארוך, אבל המבנה שלו פשוט:</p>
+
+    <pre class="code-block">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;title&gt;@ViewData["Title"] - MyProject&lt;/title&gt;
+    &lt;link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /&gt;
+    &lt;link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /&gt;
+    ...
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;nav class="navbar ..."&gt;
+            ... התפריט העליון ...
+        &lt;/nav&gt;
+    &lt;/header&gt;
+
+    &lt;div class="container"&gt;
+        &lt;main role="main" class="pb-3"&gt;
+            @RenderBody()
+        &lt;/main&gt;
+    &lt;/div&gt;
+
+    &lt;footer class="border-top footer text-muted"&gt;
+        ... השורה התחתונה ...
+    &lt;/footer&gt;
+
+    &lt;script src="~/js/site.js" asp-append-version="true"&gt;&lt;/script&gt;
+    @await RenderSectionAsync("Scripts", required: false)
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    <p style="color: var(--muted);">(זה קיצור. בקובץ האמיתי יש עוד שורות, ובמקום MyProject מופיע השם של הפרויקט שלכם.)</p>
+
+    <table class="simple">
+        <tr><th>החלק</th><th>מה הוא עושה</th></tr>
+        <tr><td><code class="inline">@ViewData["Title"]</code></td><td>כאן נכנסת הכותרת שכל עמוד מגדיר לעצמו (ראינו אותה במדריך 5). היא מופיעה בלשונית של הדפדפן.</td></tr>
+        <tr><td><code class="inline">&lt;nav&gt;</code></td><td>התפריט העליון.</td></tr>
+        <tr><td><code class="inline">@RenderBody()</code></td><td><strong>הכי חשוב:</strong> "כאן תיכנס התוכן של העמוד הנוכחי". כשנכנסים לדף הבית, במקום הזה מופיע התוכן של <code class="inline">Index.cshtml</code>.</td></tr>
+        <tr><td><code class="inline">&lt;footer&gt;</code></td><td>השורה התחתונה.</td></tr>
+        <tr><td><code class="inline">@await RenderSectionAsync("Scripts", ...)</code></td><td>מקום שבו עמוד יכול להוסיף JavaScript משלו. נשתמש בזה במדריך 8.</td></tr>
+    </table>
+
+    <div class="warning">
+        <strong>⚠️ אל תמחקו את <code class="inline">@RenderBody()</code>!</strong> בלעדיו אף עמוד לא יוצג, ותקבלו שגיאה.
+    </div>
+
+    <div class="explanation">
+        <strong>💡 איך כל עמוד יודע להשתמש ב-Layout?</strong> בתיקייה <code class="inline">Views</code> יש קובץ קטן בשם <code class="inline">_ViewStart.cshtml</code>, ובו השורה <code class="inline">Layout = "_Layout";</code>. היא אומרת לכל העמודים להשתמש ב-Layout הזה, אז אין צורך לכתוב את זה בכל עמוד.
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. שינוי שם האתר בתפריט</h2>
+    <p>בצד של התפריט העליון מופיע שם הפרויקט. בואו נחליף אותו בשם יפה יותר:</p>
+    <ul class="step-list">
+        <li>ב-<code class="inline">_Layout.cshtml</code>, חפשו (<span class="keyboard">Ctrl+F</span>) את המילה <code class="inline">navbar-brand</code>. תמצאו שורה כזאת:
+<pre class="code-block">&lt;a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"&gt;MyProject&lt;/a&gt;</pre>
+        </li>
+        <li>החליפו רק את הטקסט שבין <code class="inline">&gt;</code> ל-<code class="inline">&lt;/a&gt;</code> (שם הפרויקט) בשם שאתם רוצים, למשל <code class="inline">האתר שלי</code>.</li>
+        <li>אותו דבר עשו בשורה עם <code class="inline">&lt;title&gt;</code> למעלה: החליפו את שם הפרויקט בשם החדש.</li>
+        <li>שמרו והריצו.</li>
+    </ul>
+    <div class="checkpoint">השם החדש מופיע בתפריט וגם בלשונית של הדפדפן, <strong>בכל העמודים</strong>. נסו לעבור לעמוד Privacy, והשם עדיין שם.</div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. קישורים בתפריט</h2>
+    <p>חפשו ב-<code class="inline">_Layout.cshtml</code> את המילה <code class="inline">nav-item</code>. תמצאו את הקישורים של התפריט. כל קישור נראה כך:</p>
+<pre class="code-block">&lt;li class="nav-item"&gt;
+    &lt;a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy"&gt;Privacy&lt;/a&gt;
+&lt;/li&gt;</pre>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Tag Helper (asp-controller, asp-action)</span>
+        במקום לכתוב את הכתובת בעצמכם (<code class="inline">href="/Home/Privacy"</code>), כותבים לאיזה Controller ולאיזה Action הקישור מוביל, והאתר בונה את הכתובת לבד.
+        <span class="example">דוגמה: <code class="inline">asp-controller="Home" asp-action="Privacy"</code> הופך בדפדפן ל-<code class="inline">href="/Home/Privacy"</code>. היתרון: אם משהו בכתובות ישתנה, הקישורים יתעדכנו לבד. שימו לב: כותבים <code class="inline">Home</code> ולא <code class="inline">HomeController</code>.</span>
+    </div>
+
+    <h3>תרגום הקישורים לעברית</h3>
+    <p>הטקסט שבין <code class="inline">&gt;</code> ל-<code class="inline">&lt;/a&gt;</code> הוא מה שרואים בתפריט. החליפו את <code class="inline">Home</code> ב-<code class="inline">דף הבית</code>, ואת <code class="inline">Privacy</code> ב-<code class="inline">פרטיות</code>. <strong>אל תשנו</strong> את מה שכתוב בתוך <code class="inline">asp-controller</code> ו-<code class="inline">asp-action</code>, אלה השמות של ה-Controller וה-Action בקוד.</p>
+
+    <h3>הוספת קישור חדש</h3>
+    <p>כדי להוסיף קישור, מעתיקים בלוק <code class="inline">&lt;li&gt;</code> שלם ומשנים בו שלושה דברים: את ה-Controller, את ה-Action ואת הטקסט:</p>
+<pre class="code-block">&lt;li class="nav-item"&gt;
+    &lt;a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About"&gt;אודות&lt;/a&gt;
+&lt;/li&gt;</pre>
+    <div class="warning">
+        <strong>⚠️ שימו לב:</strong> הקישור הזה יוביל לשגיאה 404, כי עוד אין עמוד בשם About. במדריך 7 ניצור אותו, וכשתחזרו לכאן הקישור כבר יעבוד.
+    </div>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. הכפתורים Register ו-Login</h2>
+    <p>בתפריט יש גם קישורים להרשמה ולהתחברות. הם לא כתובים ישירות ב-Layout, אלא בקובץ נפרד שה-Layout מכניס בשורה הזאת:</p>
+    <pre class="code-block">&lt;partial name="_LoginPartial" /&gt;</pre>
+    <p>הקובץ עצמו הוא <code class="inline">Views/Shared/_LoginPartial.cshtml</code>. אל תמחקו את השורה הזאת, אחרת לא יהיה איך להירשם ולהתחבר. אפשר לתרגם לעברית את הטקסטים בתוך <code class="inline">_LoginPartial.cshtml</code> בדיוק כמו בתפריט (למשל <code class="inline">Register</code> ל-<code class="inline">הרשמה</code>).</p>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. השורה התחתונה (Footer)</h2>
+    <p>חפשו <code class="inline">&lt;footer</code>. בתוכו יש שורה עם <code class="inline">&amp;copy;</code> (הסימן ©) ושם הפרויקט. החליפו את הטקסט במשהו משלכם, למשל:</p>
+    <pre class="code-block">&amp;copy; 2026 - האתר של דנה</pre>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>שגיאה "RenderBody has not been called":</strong> מחקתם בטעות את <code class="inline">@RenderBody()</code>. החזירו אותו (<span class="keyboard">Ctrl+Z</span> עוזר).</li>
+            <li><strong>קישור בתפריט מוביל ל-404:</strong> בדקו שהשמות ב-<code class="inline">asp-controller</code> וב-<code class="inline">asp-action</code> נכונים, בלי המילה Controller, ושה-Action קיים.</li>
+            <li><strong>התפריט נראה שבור או לא במקום:</strong> כנראה נמחק או נוסף בטעות תג (<code class="inline">&lt;li&gt;</code>, <code class="inline">&lt;/a&gt;</code>). בדקו שלכל תג פותח יש תג סוגר. <span class="keyboard">Ctrl+K</span> ואז <span class="keyboard">Ctrl+D</span> מסדר את הקוד ועוזר לראות.</li>
+            <li><strong>הקישורים להרשמה והתחברות נעלמו:</strong> בדקו שהשורה <code class="inline">&lt;partial name="_LoginPartial" /&gt;</code> עדיין קיימת.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>תרגמו לעברית את כל הטקסטים בתפריט, כולל Register ו-Login (בקובץ <code class="inline">_LoginPartial.cshtml</code>).</li>
+            <li>שנו את שם האתר בתפריט, בלשונית ובשורה התחתונה.</li>
+            <li>בונוס: בדף הבית (<code class="inline">Index.cshtml</code>) שנו את <code class="inline">ViewData["Title"]</code>, ובדקו מה השתנה בלשונית של הדפדפן.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li><code class="inline">Views/Shared/_Layout.cshtml</code> עוטף את כל העמודים: תפריט, תוכן ושורה תחתונה.</li>
+            <li><code class="inline">@RenderBody()</code> הוא המקום שבו נכנס התוכן של כל עמוד.</li>
+            <li>קישור בתפריט נכתב עם <code class="inline">asp-controller</code> ו-<code class="inline">asp-action</code>, והטקסט שלו הוא מה שבין התגים.</li>
+            <li>Register ו-Login נמצאים בקובץ נפרד, <code class="inline">_LoginPartial.cshtml</code>.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

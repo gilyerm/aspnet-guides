@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 5: מה זה cshtml?</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="05-cshtml">
+<main>
+    <h1>מדריך 5: מה זה cshtml?</h1>
+    <div class="subtitle">איך כותבים HTML שמשולב בו קוד C#: הסימן @ ותחביר Razor</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> כל העמודים באתר שלנו הם קבצים עם הסיומת <code class="inline">.cshtml</code>. אלה קבצי HTML רגילים, עם תוספת אחת: אפשר לכתוב בתוכם גם קוד C#. ככה העמוד יכול להשתנות: להציג את שם המשתמש, רשימה של מוצרים, או "בוקר טוב" רק בבוקר.
+        <br><br>
+        <strong>מה צריך לפני:</strong> פרויקט שיצרתם במדריך 1. מומלץ לקרוא קודם את מדריך 4.
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Razor</span>
+        השם של "השפה" שבה כותבים קבצי cshtml: HTML ועוד C#. השם cshtml בא מ-<strong>CS</strong> (קיצור של C#) ועוד <strong>HTML</strong>.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. הסימן @ פותח קוד C#</h2>
+    <p>בכל מקום בקובץ cshtml, הסימן <code class="inline">@</code> אומר: "מכאן זה כבר לא HTML, זה קוד C#". התוצאה של הקוד נכתבת לתוך העמוד.</p>
+
+    <table class="simple">
+        <tr><th>מה כותבים בקובץ</th><th>מה רואים בדפדפן</th></tr>
+        <tr><td dir="ltr" style="text-align:left"><code class="inline">&lt;p&gt;היום: @DateTime.Now&lt;/p&gt;</code></td><td>היום: (התאריך והשעה של עכשיו)</td></tr>
+        <tr><td dir="ltr" style="text-align:left"><code class="inline">&lt;p&gt;2 ועוד 3 זה @(2 + 3)&lt;/p&gt;</code></td><td>2 ועוד 3 זה 5</td></tr>
+    </table>
+
+    <div class="explanation">
+        <strong>💡 מתי צריך סוגריים?</strong> כשיש רק שם אחד (כמו <code class="inline">@DateTime.Now</code>) לא צריך. כשיש חישוב או רווחים (כמו <code class="inline">@(2 + 3)</code>) עוטפים בסוגריים, כדי ש-Razor ידע איפה הקוד נגמר.
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. בלוק קוד: ‎@{ ... }</h2>
+    <p>כשרוצים לכתוב כמה שורות C# (למשל להגדיר משתנים), פותחים בלוק עם <code class="inline">@{</code> וסוגרים עם <code class="inline">}</code>. הקוד בבלוק רץ, אבל לא מוצג בעמוד. אחר כך אפשר להציג את המשתנים עם <code class="inline">@</code>:</p>
+    <pre class="code-block">@{
+    var name = "דנה";
+    var age = 16;
+}
+
+&lt;p&gt;שלום @name, את בת @age.&lt;/p&gt;</pre>
+    <p>בדפדפן יופיע: <strong>שלום דנה, את בת 16.</strong></p>
+
+    <div class="warning">
+        <strong>⚠️ טעות נפוצה:</strong> אם תשכחו את ה-<code class="inline">@</code> ותכתבו <code class="inline">&lt;p&gt;שלום name&lt;/p&gt;</code>, יופיע בדפדפן המילה "name" עצמה, ולא "דנה". בלי <code class="inline">@</code>, זה סתם טקסט.
+    </div>
+
+    <h3>ViewData["Title"]: כבר ראיתם אחד כזה</h3>
+    <p>בראש כמעט כל קובץ cshtml בפרויקט יש בלוק כזה:</p>
+    <pre class="code-block">@{
+    ViewData["Title"] = "Home Page";
+}</pre>
+    <p>הוא שומר את הכותרת של העמוד, והיא מוצגת בלשונית של הדפדפן. נראה בדיוק איך במדריך 6.</p>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. תנאים: ‎@if</h2>
+    <p>אפשר להציג חלק מהעמוד רק כשתנאי מתקיים. כותבים <code class="inline">@if</code>, ובתוך הסוגריים המסולסלים כותבים HTML רגיל:</p>
+    <pre class="code-block">@{
+    var hour = DateTime.Now.Hour;
+}
+
+@if (hour &lt; 12)
+{
+    &lt;p&gt;בוקר טוב! ☀️&lt;/p&gt;
+}
+else
+{
+    &lt;p&gt;שלום! 🌙&lt;/p&gt;
+}</pre>
+    <p><code class="inline">DateTime.Now.Hour</code> נותן את השעה הנוכחית (מספר בין 0 ל-23). לפני 12 בצהריים יוצג "בוקר טוב", ואחרי זה "שלום".</p>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. לולאות: ‎@foreach</h2>
+    <p>לולאה מאפשרת להציג רשימה שלמה בלי לכתוב כל פריט ביד. זה מה שנשתמש בו בהמשך כדי להציג מוצרים ממסד הנתונים.</p>
+    <pre class="code-block">@{
+    var hobbies = new List&lt;string&gt; { "כדורגל", "ציור", "תכנות" };
+}
+
+&lt;ul&gt;
+    @foreach (var hobby in hobbies)
+    {
+        &lt;li&gt;@hobby&lt;/li&gt;
+    }
+&lt;/ul&gt;</pre>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: List</span>
+        רשימה של פריטים מאותו סוג. <code class="inline">List&lt;string&gt;</code> היא רשימה של מחרוזות (טקסטים).
+        <span class="example">הלולאה <code class="inline">foreach</code> עוברת על הרשימה פריט אחרי פריט. בכל סיבוב, המשתנה <code class="inline">hobby</code> מחזיק פריט אחד, והשורה <code class="inline">&lt;li&gt;@hobby&lt;/li&gt;</code> יוצרת שורה ברשימה.</span>
+    </div>
+
+    <p>בדפדפן תופיע רשימה עם שלוש שורות: כדורגל, ציור, תכנות.</p>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. בואו ננסה: דף בית משלכם</h2>
+    <ul class="step-list">
+        <li>פתחו את הקובץ <code class="inline">Views/Home/Index.cshtml</code>.</li>
+        <li>מחקו את כל התוכן שלו (<span class="keyboard">Ctrl+A</span> ואז <span class="keyboard">Delete</span>), והדביקו במקומו את הקוד הבא:
+<pre class="code-block">@{
+    ViewData["Title"] = "דף הבית";
+    var myName = "דנה";
+    var hour = DateTime.Now.Hour;
+    var hobbies = new List&lt;string&gt; { "כדורגל", "ציור", "תכנות" };
+}
+
+&lt;div class="text-center"&gt;
+    @if (hour &lt; 12)
+    {
+        &lt;h1&gt;בוקר טוב! ☀️&lt;/h1&gt;
+    }
+    else
+    {
+        &lt;h1&gt;שלום! 🌙&lt;/h1&gt;
+    }
+
+    &lt;p&gt;קוראים לי @myName, ואלה התחביבים שלי:&lt;/p&gt;
+
+    &lt;ul class="list-unstyled"&gt;
+        @foreach (var hobby in hobbies)
+        {
+            &lt;li&gt;@hobby&lt;/li&gt;
+        }
+    &lt;/ul&gt;
+
+    &lt;p&gt;השעה עכשיו: @DateTime.Now.ToString("HH:mm")&lt;/p&gt;
+&lt;/div&gt;</pre>
+        </li>
+        <li>שנו את <code class="inline">"דנה"</code> לשם שלכם, ואת התחביבים לתחביבים שלכם. שימו לב לשמור על המירכאות (<code class="inline">"</code>) סביב כל טקסט.</li>
+        <li>הריצו את האתר.</li>
+    </ul>
+    <div class="checkpoint">דף הבית מציג ברכה לפי השעה, את השם שלכם, את רשימת התחביבים ואת השעה הנוכחית.</div>
+
+    <!-- ===================== 6 ===================== -->
+    <h2>6. מה הדפדפן באמת מקבל?</h2>
+    <p>בדפדפן, לחצו <span class="keyboard">Ctrl+U</span> (הצגת קוד המקור של העמוד). חפשו את הרשימה שיצרתם.</p>
+    <div class="checkpoint">אין שם שום <code class="inline">@foreach</code> ושום <code class="inline">@myName</code>! יש רק HTML רגיל, עם שלוש שורות <code class="inline">&lt;li&gt;</code> והשם שלכם.</div>
+    <div class="concept">
+        <span class="concept-title">📖 למה זה ככה?</span>
+        קוד ה-C# רץ <strong>על השרת</strong>, לפני שהעמוד נשלח. השרת מחשב הכול, ושולח לדפדפן רק את התוצאה: HTML נקי. הדפדפן בכלל לא יודע שהיה שם C#.
+        <span class="example">דוגמה: כמו מורה שבודקת מבחן ומחזירה רק את הציון. התלמיד רואה את התוצאה, לא את כל החישובים שהיא עשתה.</span>
+    </div>
+
+    <!-- ===================== 7 ===================== -->
+    <h2>7. עוד כמה דברים קטנים</h2>
+    <table class="simple">
+        <tr><th>מה</th><th>איך</th></tr>
+        <tr><td>הערה שלא נשלחת לדפדפן</td><td><code class="inline">@* זו הערה *@</code>. הערת HTML רגילה (<code class="inline">&lt;!-- --&gt;</code>) כן נשלחת, ואפשר לראות אותה ב-Ctrl+U.</td></tr>
+        <tr><td>לכתוב את הסימן @ עצמו כטקסט</td><td>כותבים פעמיים: <code class="inline">@@</code></td></tr>
+        <tr><td>@ צמוד לאות לפניו</td><td>Razor עלול לחשוב שזו כתובת אימייל, ולא יריץ את הקוד. שימו רווח לפני ה-@.</td></tr>
+    </table>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>הרבה קווים אדומים פתאום:</strong> כנראה חסר סוגר מסולסל <code class="inline">}</code>. לכל <code class="inline">{</code> צריך <code class="inline">}</code> מתאים. Visual Studio מסמנת את הזוג כשעומדים על אחד מהם.</li>
+            <li><strong>רואים בדפדפן את שם המשתנה במקום הערך:</strong> חסר <code class="inline">@</code> לפני המשתנה.</li>
+            <li><strong>שגיאה "The name 'X' does not exist in the current context":</strong> המשתנה לא הוגדר, או שיש טעות כתיב. ב-C# יש הבדל בין אותיות גדולות לקטנות: <code class="inline">myName</code> ו-<code class="inline">MyName</code> הם שני משתנים שונים!</li>
+            <li><strong>חסרה נקודה-פסיק:</strong> בתוך בלוק <code class="inline">@{ }</code>, כל שורה מסתיימת ב-<code class="inline">;</code>. אבל אחרי <code class="inline">@name</code> בתוך ה-HTML לא שמים <code class="inline">;</code>.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>הוסיפו לדף הבית משתנה בשם <code class="inline">birthYear</code> עם שנת הלידה שלכם, והציגו "בעוד 10 שנים תהיו בני..." עם חישוב. (רמז: <code class="inline">@(DateTime.Now.Year - birthYear + 10)</code>)</li>
+            <li>הוסיפו תנאי שלישי: אם השעה אחרי 18, יופיע "ערב טוב". (רמז: <code class="inline">else if</code>)</li>
+            <li>צרו רשימה שנייה, של מקומות שהייתם בהם, והציגו אותה עם <code class="inline">@foreach</code>.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>קובץ cshtml הוא HTML שאפשר לכתוב בו גם C#, בעזרת הסימן <code class="inline">@</code>.</li>
+            <li><code class="inline">@{ }</code> לכמה שורות קוד, <code class="inline">@if</code> לתנאים ו-<code class="inline">@foreach</code> לרשימות.</li>
+            <li>הקוד רץ על השרת, והדפדפן מקבל רק HTML רגיל.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

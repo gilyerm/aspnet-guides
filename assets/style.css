@@ -365,3 +365,14 @@ main h2[id] { scroll-margin-top: 4.5rem; }
     .toc ul { columns: 1; }
     main { padding-top: 1.2rem; }
 }
+
+/* ---------- Flow diagram ---------- */
+.flow { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 0.4rem; margin: 1.5rem 0; }
+.flow .step { background: white; border: 2px solid var(--purple); border-radius: 10px; padding: 0.7rem 0.9rem; text-align: center; min-width: 120px; flex: 1 1 120px; max-width: 170px; }
+.flow .step b { display: block; color: var(--purple); font-size: 1.05rem; }
+.flow .step span { font-size: 0.9rem; color: var(--muted); }
+.flow .arrow { align-self: center; font-size: 1.5rem; color: var(--purple); }
+.flow .step.browser { border-color: #0ea5e9; }
+.flow .step.browser b { color: #0369a1; }
+.flow[dir="ltr"] .step span { direction: rtl; display: block; }
+.toc ul { list-style: none; padding-inline-start: 0.3rem; }

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 8: CSS ו-JS</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="08-css-js">
+<main>
+    <h1>מדריך 8: CSS ו-JS</h1>
+    <div class="subtitle">איפה שמים קבצי עיצוב וסקריפטים, איך מקשרים אותם נכון, ואיך הופכים את האתר לעברית מימין לשמאל</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> כבר יודעים לכתוב CSS ו-JavaScript. כאן נלמד איפה הם נמצאים בפרויקט ASP.NET, ואיך מחברים אותם לעמודים: לכל האתר, או רק לעמוד אחד.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מדריך 6 (Layout ותפריט). הוא <strong>תנאי מקדים</strong>, כי כל הקישורים לקבצים עוברים דרך ה-Layout. לתרגול כדאי שיהיה לכם גם עמוד "אודות" ממדריך 7.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. התיקייה wwwroot</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: קבצים סטטיים</span>
+        קבצים שהדפדפן מקבל כמו שהם, בלי שהשרת משנה בהם משהו: CSS, JavaScript, תמונות. בפרויקט שלנו, כל הקבצים האלה גרים בתיקייה <code class="inline">wwwroot</code>.
+        <span class="example">דוגמה: קובץ cshtml עובר "עיבוד" בשרת (ה-C# שבו רץ). קובץ CSS נשלח לדפדפן בדיוק כמו שהוא.</span>
+    </div>
+    <table class="simple">
+        <tr><th>תיקייה</th><th>מה יש בה</th></tr>
+        <tr><td><code class="inline">wwwroot/css</code></td><td>קבצי העיצוב שלכם. כבר יש בה <code class="inline">site.css</code>.</td></tr>
+        <tr><td><code class="inline">wwwroot/js</code></td><td>קבצי ה-JavaScript שלכם. כבר יש בה <code class="inline">site.js</code>.</td></tr>
+        <tr><td><code class="inline">wwwroot/lib</code></td><td>ספריות מוכנות (כמו Bootstrap). <strong>לא נוגעים.</strong></td></tr>
+        <tr><td><code class="inline">wwwroot/images</code></td><td>לא קיימת עדיין. אם יש לכם תמונות, צרו אותה (קליק ימני על wwwroot ← Add ← New Folder).</td></tr>
+    </table>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: הסימן ~/</span>
+        בקבצי cshtml, <code class="inline">~/</code> פירושו "התיקייה wwwroot".
+        <span class="example">דוגמה: <code class="inline">~/css/site.css</code> הוא הקובץ <code class="inline">wwwroot/css/site.css</code>, ו-<code class="inline">~/images/logo.png</code> הוא <code class="inline">wwwroot/images/logo.png</code>.</span>
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. CSS לכל האתר</h2>
+    <p>הקובץ <code class="inline">wwwroot/css/site.css</code> כבר מקושר לכל העמודים, דרך השורה הזאת ב-<code class="inline">_Layout.cshtml</code>:</p>
+    <pre class="code-block">&lt;link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /&gt;</pre>
+    <p>אז כל מה שתכתבו ב-<code class="inline">site.css</code> ישפיע על כל האתר. נסו: פתחו את <code class="inline">site.css</code>, והוסיפו בסוף הקובץ:</p>
+<pre class="code-block">h1 {
+    color: darkblue;
+}</pre>
+    <div class="checkpoint">הריצו את האתר. כל הכותרות הראשיות (<code class="inline">h1</code>) בכל העמודים כחולות.</div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. CSS לעמוד אחד בלבד</h2>
+    <p>לפעמים רוצים עיצוב רק לעמוד מסוים. בשביל זה צריך שני דברים: "מקום שמור" ב-Layout, וקישור מהעמוד.</p>
+
+    <h3>שלב 1: מקום שמור ב-Layout (פעם אחת)</h3>
+    <p>ב-<code class="inline">_Layout.cshtml</code>, מצאו את השורה של <code class="inline">site.css</code> (מסעיף 2), והוסיפו <strong>מתחתיה</strong>, עדיין בתוך ה-<code class="inline">&lt;head&gt;</code>:</p>
+    <pre class="code-block">@await RenderSectionAsync("Styles", required: false)</pre>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Section (אזור)</span>
+        "מקום שמור" ב-Layout, שכל עמוד יכול למלא בתוכן משלו, או להשאיר ריק. <code class="inline">required: false</code> אומר שעמוד לא חייב למלא אותו.
+        <span class="example">דוגמה: ב-Layout כבר יש Section בשם <code class="inline">Scripts</code> (בסוף העמוד). עכשיו הוספנו עוד אחד בשם <code class="inline">Styles</code> (בראש העמוד).</span>
+    </div>
+
+    <h3>שלב 2: יוצרים קובץ CSS</h3>
+    <ul class="step-list">
+        <li>קליק ימני על התיקייה <code class="inline">wwwroot/css</code> ← <strong>Add</strong> ← <strong>New Item</strong>.</li>
+        <li>בשורת החיפוש כתבו <strong>Style Sheet</strong>, בחרו אותו, תנו שם <code class="inline">about.css</code> ולחצו <strong>Add</strong>.</li>
+        <li>כתבו בקובץ:
+<pre class="code-block">body {
+    background-color: lightyellow;
+}</pre>
+        </li>
+    </ul>
+
+    <h3>שלב 3: מקשרים מהעמוד</h3>
+    <p>בסוף הקובץ <code class="inline">Views/Home/About.cshtml</code> הוסיפו:</p>
+<pre class="code-block">@section Styles {
+    &lt;link rel="stylesheet" href="~/css/about.css" asp-append-version="true" /&gt;
+}</pre>
+    <div class="checkpoint">עמוד "אודות" צהוב, וכל שאר העמודים לבנים כרגיל.</div>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. JavaScript</h2>
+    <p>גם כאן יש שתי אפשרויות: לכל האתר (בקובץ <code class="inline">wwwroot/js/site.js</code>, שכבר מקושר ב-Layout), או לעמוד אחד. לעמוד אחד לא צריך להוסיף כלום ב-Layout, כי ה-Section בשם <code class="inline">Scripts</code> כבר קיים שם.</p>
+
+    <ul class="step-list">
+        <li>קליק ימני על <code class="inline">wwwroot/js</code> ← <strong>Add</strong> ← <strong>New Item</strong> ← חפשו <strong>JavaScript File</strong>, ותנו שם <code class="inline">about.js</code>.</li>
+        <li>כתבו בקובץ:
+<pre class="code-block">document.getElementById("helloBtn").addEventListener("click", function () {
+    document.getElementById("message").textContent = "שלום! ה-JavaScript עובד 🎉";
+});</pre>
+        </li>
+        <li>ב-<code class="inline">About.cshtml</code>, הוסיפו כפתור ומקום להודעה (איפשהו באמצע העמוד):
+<pre class="code-block">&lt;button id="helloBtn" class="btn btn-primary"&gt;לחצו עליי&lt;/button&gt;
+&lt;p id="message"&gt;&lt;/p&gt;</pre>
+        </li>
+        <li>ובסוף הקובץ, ליד ה-Section של ה-Styles:
+<pre class="code-block">@section Scripts {
+    &lt;script src="~/js/about.js" asp-append-version="true"&gt;&lt;/script&gt;
+}</pre>
+        </li>
+    </ul>
+    <div class="checkpoint">בעמוד "אודות", לחיצה על הכפתור מציגה את ההודעה.</div>
+
+    <div class="explanation">
+        <strong>💡 למה ה-JavaScript נטען בסוף העמוד?</strong> הדפדפן קורא את העמוד מלמעלה למטה. אם הסקריפט ירוץ לפני שהכפתור נוצר, <code class="inline">getElementById("helloBtn")</code> לא ימצא אותו. ה-Section בשם <code class="inline">Scripts</code> נמצא בסוף ה-Layout, ולכן כשהסקריפט רץ, כל העמוד כבר קיים.
+    </div>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. "שיניתי את ה-CSS וזה לא מתעדכן!"</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: מטמון (Cache)</span>
+        הדפדפן שומר אצלו עותק של קבצי CSS ו-JS, כדי לא להוריד אותם שוב בכל פעם. לפעמים הוא ממשיך להשתמש בעותק הישן גם אחרי ששיניתם את הקובץ.
+    </div>
+    <p>בשביל זה יש <code class="inline">asp-append-version="true"</code> בכל הקישורים שראינו: הוא מוסיף לכתובת של הקובץ "מספר גרסה" שמשתנה כשהקובץ משתנה, וכך הדפדפן יודע שצריך להוריד אותו מחדש. <strong>תמיד הוסיפו אותו לקישורים שלכם.</strong></p>
+    <p>אם עדיין רואים את הגרסה הישנה, לחצו <strong>בדפדפן</strong> על <span class="keyboard">Ctrl+Shift+R</span> (רענון מלא, בלי מטמון).</p>
+
+    <!-- ===================== 6 ===================== -->
+    <h2>6. עברית: האתר מימין לשמאל</h2>
+    <p>הפרויקט נוצר באנגלית, ולכן הכול מסודר משמאל לימין. כדי להפוך את כל האתר לעברית צריך שני שינויים ב-<code class="inline">_Layout.cshtml</code>:</p>
+    <ul class="step-list">
+        <li>בשורה הראשונה אחרי <code class="inline">&lt;!DOCTYPE html&gt;</code>, החליפו את <code class="inline">&lt;html lang="en"&gt;</code> ב:
+            <pre class="code-block">&lt;html lang="he" dir="rtl"&gt;</pre>
+        </li>
+        <li>מצאו את השורה שמקשרת ל-Bootstrap:
+            <pre class="code-block">&lt;link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /&gt;</pre>
+            ושנו בה את <code class="inline">bootstrap.min.css</code> ל-<code class="inline">bootstrap.rtl.min.css</code>:
+            <pre class="code-block">&lt;link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" /&gt;</pre>
+        </li>
+    </ul>
+    <div class="checkpoint">כל האתר מסודר מימין לשמאל: שם האתר בתפריט מימין, הטקסטים מיושרים לימין.</div>
+    <div class="explanation">
+        <strong>💡 מה עשינו?</strong> <code class="inline">dir="rtl"</code> אומר לדפדפן שהעמוד מימין לשמאל. <code class="inline">bootstrap.rtl.min.css</code> היא גרסה של Bootstrap (ספריית העיצוב של האתר, נכיר אותה במדריך 9) שמותאמת לכיוון הזה.
+    </div>
+
+    <!-- ===================== 7 ===================== -->
+    <h2>7. כלי המפתחים בדפדפן (F12)</h2>
+    <p>כשהאתר רץ, לחצו <span class="keyboard">F12</span> בדפדפן. נפתח חלון עם כלים שעוזרים להבין מה קורה בעמוד:</p>
+    <table class="simple">
+        <tr><th>לשונית</th><th>למה היא טובה</th></tr>
+        <tr><td><strong>Elements</strong></td><td>לחצו על החץ הקטן בפינה של החלון, ואז על משהו בעמוד. תראו את ה-HTML שלו, ובצד את כל ה-CSS שמשפיע עליו. אפשר גם לשנות שם ערכים ולראות מיד את התוצאה (השינוי זמני, ונעלם ברענון). מעולה לנסות עיצובים לפני שכותבים אותם בקובץ.</td></tr>
+        <tr><td><strong>Console</strong></td><td>שגיאות JavaScript מופיעות כאן באדום. כפתור שלא עושה כלום? קודם כול מסתכלים כאן.</td></tr>
+    </table>
+    <div class="screenshot">כאן תבוא תמונה של כלי המפתחים, עם הלשוניות Elements ו-Console מסומנות</div>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>העיצוב לא מופיע בכלל:</strong> לחצו F12 ← Console. אם יש שגיאה 404 על הקובץ, השם או הנתיב בקישור לא נכונים. בדקו שהקובץ באמת נמצא ב-<code class="inline">wwwroot/css</code>, ושהשם כתוב בדיוק אותו דבר.</li>
+            <li><strong>שגיאה על <code class="inline">@section Styles</code>:</strong> שכחתם להוסיף את <code class="inline">RenderSectionAsync("Styles", ...)</code> ל-Layout (סעיף 3, שלב 1).</li>
+            <li><strong>הכפתור לא עושה כלום:</strong> F12 ← Console. שגיאה כמו "Cannot read properties of null" אומרת שה-id בקוד ה-JS לא זהה ל-id בכפתור.</li>
+            <li><strong>אחרי המעבר לעברית, העיצוב של האתר נעלם לגמרי:</strong> הקובץ <code class="inline">bootstrap.rtl.min.css</code> לא נמצא. ב-Solution Explorer פתחו את <code class="inline">wwwroot/lib/bootstrap/dist/css</code> ובדקו איך בדיוק קוראים לו שם.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>הפכו את האתר שלכם לעברית מימין לשמאל (סעיף 6).</li>
+            <li>בעזרת F12 ← Elements, מצאו את הצבע של התפריט העליון, ונסו צבעים אחרים ישירות בדפדפן. כשמצאתם צבע שאהבתם, כתבו אותו ב-<code class="inline">site.css</code>.</li>
+            <li>צרו קובץ JavaScript לעמוד "צור קשר" (ממדריך 7), עם כפתור שמציג את השעה הנוכחית כשלוחצים עליו. (רמז: <code class="inline">new Date().toLocaleTimeString()</code>)</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>קבצי CSS, JS ותמונות גרים ב-<code class="inline">wwwroot</code>, ו-<code class="inline">~/</code> מצביע עליה.</li>
+            <li><code class="inline">site.css</code> ו-<code class="inline">site.js</code> משפיעים על כל האתר. לעמוד אחד משתמשים ב-<code class="inline">@section Styles</code> וב-<code class="inline">@section Scripts</code>.</li>
+            <li>תמיד מוסיפים <code class="inline">asp-append-version="true"</code>, כדי שהדפדפן לא יציג גרסה ישנה.</li>
+            <li>עברית: <code class="inline">dir="rtl"</code> ו-<code class="inline">bootstrap.rtl.min.css</code> ב-Layout.</li>
+            <li><span class="keyboard">F12</span> בדפדפן: Elements לעיצוב, Console לשגיאות JavaScript.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

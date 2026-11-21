@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 7: עמודים חדשים</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="07-new-pages">
+<main>
+    <h1>מדריך 7: עמודים חדשים</h1>
+    <div class="subtitle">שתי דרכים להוסיף עמוד לאתר: ב-Controller קיים, או באזור חדש עם Controller משלו</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> עד עכשיו שינינו עמודים שכבר היו קיימים. עכשיו ניצור עמודים חדשים משלנו. יש שתי דרכים, ונלמד את שתיהן.
+        <br><br>
+        <strong>מה צריך לפני:</strong> פרויקט שיצרתם במדריך 1. מומלץ מאוד לקרוא קודם את מדריך 4 (איך אתר MVC עובד), כי כל המדריך הזה מבוסס עליו.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. כללי השמות: הכי חשוב במדריך</h2>
+    <p>רוב השגיאות כשיוצרים עמוד חדש הן <strong>טעות בשם</strong>. השמות של ה-Controller, ה-Action, התיקייה והקובץ חייבים להתאים זה לזה בדיוק:</p>
+    <table class="simple">
+        <tr><th>מה</th><th>הכלל</th><th>דוגמה</th></tr>
+        <tr><td>Controller</td><td>שם באנגלית, מתחיל באות גדולה, <strong>מסתיים ב-Controller</strong></td><td><code class="inline">ProductsController</code></td></tr>
+        <tr><td>תיקיית ה-Views</td><td>שם ה-Controller <strong>בלי</strong> המילה Controller</td><td><code class="inline">Views/Products</code></td></tr>
+        <tr><td>Action</td><td>שם באנגלית, מתחיל באות גדולה</td><td><code class="inline">About</code></td></tr>
+        <tr><td>קובץ ה-View</td><td>בדיוק כמו שם ה-Action, עם <code class="inline">.cshtml</code></td><td><code class="inline">About.cshtml</code></td></tr>
+        <tr><td>הכתובת</td><td>/שם-ה-Controller/שם-ה-Action</td><td><code class="inline">/Products/About</code></td></tr>
+    </table>
+
+    <div class="warning">
+        <strong>⚠️ אותיות גדולות וקטנות:</strong> ב-C# יש הבדל בין <code class="inline">About</code> ל-<code class="inline">about</code>. תמיד מתחילים שמות של Controller ו-Action באות גדולה, ושומרים על אותה כתיבה בכל המקומות.
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. איזו דרך לבחור?</h2>
+    <table class="simple">
+        <tr><th>דרך א: עמוד ב-Controller קיים</th><th>דרך ב: Controller חדש</th></tr>
+        <tr><td>כשהעמוד הוא עוד עמוד כללי באתר.</td><td>כשמתחילים נושא חדש, שיהיו בו כמה עמודים.</td></tr>
+        <tr><td>דוגמאות: אודות, צור קשר, שאלות נפוצות.</td><td>דוגמאות: מוצרים (רשימה, פרטי מוצר, הוספה), הזמנות, ניהול.</td></tr>
+        <tr><td>הכתובת: <code class="inline">/Home/About</code></td><td>הכתובת: <code class="inline">/Products</code>, <code class="inline">/Products/Details</code></td></tr>
+    </table>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. דרך א: עמוד חדש ב-Controller קיים</h2>
+    <p>ניצור עמוד "אודות" ב-<code class="inline">HomeController</code>.</p>
+
+    <h3>שלב 1: מוסיפים Action</h3>
+    <ul class="step-list">
+        <li>פתחו את <code class="inline">Controllers/HomeController.cs</code>.</li>
+        <li>מצאו את ה-Action בשם <code class="inline">Privacy</code>. מיד אחרי הסוגר המסולסל שסוגר אותו (<code class="inline">}</code>), הדביקו את הקוד הבא:
+<pre class="code-block">public IActionResult About()
+{
+    return View();
+}</pre>
+        </li>
+    </ul>
+    <div class="warning">
+        <strong>⚠️ איפה בדיוק?</strong> ה-Action צריך להיות <strong>בתוך</strong> המחלקה <code class="inline">HomeController</code> (בתוך הסוגריים המסולסלים שלה), אבל <strong>מחוץ</strong> ל-Actions האחרים. הכי בטוח: מיד אחרי ה-<code class="inline">}</code> של Privacy.
+    </div>
+
+    <h3>שלב 2: יוצרים View</h3>
+    <ul class="step-list">
+        <li>לחצו קליק ימני <strong>על המילה About</strong> בקוד שהדבקתם, ובחרו <strong>Add View</strong>.</li>
+        <li>בחלון שנפתח בחרו <strong>Razor View - Empty</strong> ולחצו <strong>Add</strong>.</li>
+        <li>בשדה השם ודאו שכתוב <code class="inline">About.cshtml</code>, ולחצו <strong>Add</strong>.</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של חלון Add View עם Razor View - Empty מסומן</div>
+    <div class="explanation">
+        <strong>💡 לא מוצאים Add View בקליק הימני?</strong> אפשר גם כך: ב-Solution Explorer, קליק ימני על התיקייה <code class="inline">Views/Home</code> ← <strong>Add</strong> ← <strong>View</strong>, ואז אותם שלבים.
+    </div>
+
+    <p>הקובץ <code class="inline">Views/Home/About.cshtml</code> נוצר ונפתח. מחקו את מה שיש בו והדביקו:</p>
+<pre class="code-block">@{
+    ViewData["Title"] = "אודות";
+}
+
+&lt;h1&gt;אודות&lt;/h1&gt;
+&lt;p&gt;כאן אפשר לספר על האתר ועל מי שבנה אותו.&lt;/p&gt;</pre>
+
+    <div class="checkpoint">הריצו את האתר והיכנסו לכתובת <code class="inline">/Home/About</code>. העמוד החדש מופיע, עם התפריט וה-Footer (כי הוא נכנס לתוך ה-Layout).</div>
+
+    <h3>שלב 3: קישור בתפריט</h3>
+    <p>ב-<code class="inline">Views/Shared/_Layout.cshtml</code> הוסיפו קישור, כמו שלמדנו במדריך 6:</p>
+<pre class="code-block">&lt;li class="nav-item"&gt;
+    &lt;a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About"&gt;אודות&lt;/a&gt;
+&lt;/li&gt;</pre>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. דרך ב: Controller חדש</h2>
+    <p>ניצור אזור חדש באתר: "מוצרים".</p>
+
+    <h3>שלב 1: יוצרים Controller</h3>
+    <ul class="step-list">
+        <li>ב-Solution Explorer, לחצו קליק ימני על התיקייה <strong>Controllers</strong> ← <strong>Add</strong> ← <strong>Controller</strong>.</li>
+        <li>בחרו <strong>MVC Controller - Empty</strong> ולחצו <strong>Add</strong>.</li>
+        <li>בשדה השם כתבו <code class="inline">ProductsController.cs</code> (חובה שיסתיים ב-<strong>Controller</strong>!) ולחצו <strong>Add</strong>.</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של חלון Add Controller עם MVC Controller - Empty מסומן</div>
+
+    <p>נוצר קובץ חדש, ובו Controller עם Action אחד בשם <code class="inline">Index</code>:</p>
+<pre class="code-block">public class ProductsController : Controller
+{
+    public IActionResult Index()
+    {
+        return View();
+    }
+}</pre>
+
+    <div class="concept">
+        <span class="concept-title">📖 למה דווקא Index?</span>
+        Index הוא ה-Action של ברירת המחדל. בזכותו, הכתובת <code class="inline">/Products</code> (בלי Action) מגיעה ל-<code class="inline">Products/Index</code>. זה בדיוק כמו דף הבית, שהוא <code class="inline">Home/Index</code>.
+    </div>
+
+    <h3>שלב 2: יוצרים View</h3>
+    <ul class="step-list">
+        <li>לחצו קליק ימני על המילה <strong>Index</strong> בקוד של ה-Controller החדש ← <strong>Add View</strong> ← <strong>Razor View - Empty</strong> ← <strong>Add</strong>.</li>
+        <li>ודאו שהשם הוא <code class="inline">Index.cshtml</code> ולחצו <strong>Add</strong>.</li>
+    </ul>
+    <div class="checkpoint">ב-Solution Explorer נוצרה תיקייה חדשה, <code class="inline">Views/Products</code>, ובתוכה <code class="inline">Index.cshtml</code>. Visual Studio יצרה את התיקייה לבד, עם השם הנכון.</div>
+
+    <p>החליפו את תוכן הקובץ ב:</p>
+<pre class="code-block">@{
+    ViewData["Title"] = "מוצרים";
+}
+
+&lt;h1&gt;המוצרים שלנו&lt;/h1&gt;
+&lt;p&gt;בקרוב תופיע כאן רשימת מוצרים.&lt;/p&gt;</pre>
+
+    <div class="checkpoint">היכנסו לכתובת <code class="inline">/Products</code>. העמוד החדש מופיע.</div>
+
+    <h3>שלב 3: עוד עמוד באותו אזור</h3>
+    <p>כדי להוסיף עוד עמוד ל"מוצרים", חוזרים על דרך א, אבל ב-<code class="inline">ProductsController</code>: מוסיפים Action (למשל <code class="inline">Sale</code> לעמוד מבצעים), ויוצרים לו View. הוא יגיע לתיקייה <code class="inline">Views/Products</code>, והכתובת תהיה <code class="inline">/Products/Sale</code>.</p>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>"The view 'About' was not found":</strong> ה-Action קיים, אבל הקובץ לא נמצא איפה שצריך. השגיאה מציגה את המקומות שבהם האתר חיפש. בדקו את שם הקובץ ואת התיקייה שלו מול הטבלה בסעיף 1.</li>
+            <li><strong>שגיאה 404:</strong> האתר לא מצא Controller או Action בשם שבכתובת. בדקו ששם ה-Controller מסתיים ב-Controller, ושה-Action כתוב בדיוק כמו בכתובת.</li>
+            <li><strong>קווים אדומים אחרי שהדבקתם Action:</strong> כנראה הדבקתם אותו במקום הלא נכון (בתוך Action אחר, או מחוץ למחלקה). בדקו את הסוגריים המסולסלים.</li>
+            <li><strong>יצרתם View בתיקייה הלא נכונה:</strong> אפשר לגרור את הקובץ ב-Solution Explorer לתיקייה הנכונה.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>צרו Controller חדש בשם <code class="inline">ContactController</code>, עם עמוד "צור קשר" שבו כתובת אימייל ומספר טלפון (לא אמיתיים).</li>
+            <li>הוסיפו לו קישור בתפריט.</li>
+            <li>הוסיפו ל-<code class="inline">ProductsController</code> עמוד בשם <code class="inline">Sale</code> ("מבצעים"), ובדקו שהוא עובד בכתובת <code class="inline">/Products/Sale</code>.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>עמוד חדש = Action ב-Controller + קובץ View באותו שם, בתיקייה של ה-Controller.</li>
+            <li>דרך א: מוסיפים Action ל-Controller קיים, וקליק ימני ← Add View.</li>
+            <li>דרך ב: קליק ימני על Controllers ← Add ← Controller ← MVC Controller - Empty. השם חייב להסתיים ב-Controller.</li>
+            <li>רוב השגיאות הן טעויות בשמות. השגיאה עצמה אומרת איפה האתר חיפש.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 9: Bootstrap</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="09-bootstrap">
+<main>
+    <h1>מדריך 9: Bootstrap</h1>
+    <div class="subtitle">רכיבים מוכנים שהופכים את האתר ליפה, כמעט בלי לכתוב CSS</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> לעצב אתר מאפס ב-CSS לוקח המון זמן. Bootstrap נותן לנו כפתורים, כרטיסים, טבלאות ופריסה מוכנים. כל מה שצריך זה להוסיף <code class="inline">class</code> מתאים לתגית HTML.
+        <br><br>
+        <strong>מה צריך לפני:</strong> פרויקט שיצרתם במדריך 1. כדאי שיהיה לכם עמוד לתרגול, כמו "אודות" ממדריך 7. אם עשיתם את סעיף העברית במדריך 8, הדוגמאות יוצגו מימין לשמאל.
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Bootstrap</span>
+        ספריית CSS (ומעט JavaScript) עם עיצובים מוכנים. היא <strong>כבר מותקנת</strong> בפרויקט שלכם (בתיקייה <code class="inline">wwwroot/lib/bootstrap</code>) ומקושרת לכל העמודים דרך ה-Layout. אין צורך להתקין כלום.
+        <span class="example">דוגמה: במקום לכתוב 10 שורות CSS לכפתור כחול ועגול, כותבים <code class="inline">&lt;button class="btn btn-primary"&gt;</code> וזהו.</span>
+    </div>
+
+    <div class="explanation">
+        <strong>💡 איך עובדים עם המדריך:</strong> כל דוגמה כאן אפשר להעתיק ולהדביק לעמוד שלכם (למשל ל-<code class="inline">About.cshtml</code>), ולראות את התוצאה. אחר כך משחקים איתה: משנים צבעים, טקסטים ומספרים.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. כפתורים וצבעים</h2>
+<pre class="code-block">&lt;button class="btn btn-primary"&gt;ראשי&lt;/button&gt;
+&lt;button class="btn btn-success"&gt;הצלחה&lt;/button&gt;
+&lt;button class="btn btn-danger"&gt;מחיקה&lt;/button&gt;
+&lt;button class="btn btn-outline-secondary"&gt;ביטול&lt;/button&gt;
+
+&lt;a class="btn btn-primary" asp-controller="Home" asp-action="Index"&gt;קישור שנראה כמו כפתור&lt;/a&gt;</pre>
+
+    <p>כל רכיב ב-Bootstrap מקבל אחד משמות הצבעים האלה:</p>
+    <table class="simple">
+        <tr><th>שם</th><th>צבע</th><th>משתמשים בו ל...</th></tr>
+        <tr><td><code class="inline">primary</code></td><td>כחול</td><td>הפעולה הראשית בעמוד</td></tr>
+        <tr><td><code class="inline">secondary</code></td><td>אפור</td><td>פעולות משניות</td></tr>
+        <tr><td><code class="inline">success</code></td><td>ירוק</td><td>הצלחה, שמירה, אישור</td></tr>
+        <tr><td><code class="inline">danger</code></td><td>אדום</td><td>מחיקה, שגיאה</td></tr>
+        <tr><td><code class="inline">warning</code></td><td>צהוב</td><td>אזהרה</td></tr>
+        <tr><td><code class="inline">info</code></td><td>תכלת</td><td>מידע</td></tr>
+        <tr><td><code class="inline">light</code> / <code class="inline">dark</code></td><td>בהיר / כהה</td><td>רקעים</td></tr>
+    </table>
+    <p>הוספת <code class="inline">outline-</code> (כמו <code class="inline">btn-outline-danger</code>) נותנת כפתור עם מסגרת בלבד, בלי רקע.</p>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. הודעות (Alerts)</h2>
+<pre class="code-block">&lt;div class="alert alert-success"&gt;הפרטים נשמרו בהצלחה!&lt;/div&gt;
+&lt;div class="alert alert-danger"&gt;משהו השתבש, נסו שוב.&lt;/div&gt;
+&lt;div class="alert alert-info"&gt;טיפ: אפשר לחפש מוצרים לפי שם.&lt;/div&gt;</pre>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. רווחים ויישור</h2>
+    <p>במקום לכתוב <code class="inline">margin</code> ו-<code class="inline">padding</code> ב-CSS, יש קלאסים קצרים:</p>
+    <table class="simple">
+        <tr><th>קלאס</th><th>מה הוא עושה</th></tr>
+        <tr><td><code class="inline">m-3</code></td><td>רווח מבחוץ מכל הצדדים (margin). המספר בין 0 ל-5: גדול יותר = רווח גדול יותר.</td></tr>
+        <tr><td><code class="inline">p-3</code></td><td>רווח מבפנים מכל הצדדים (padding).</td></tr>
+        <tr><td><code class="inline">mt-4</code> / <code class="inline">mb-4</code></td><td>רווח רק למעלה (t = top) / רק למטה (b = bottom).</td></tr>
+        <tr><td><code class="inline">text-center</code></td><td>טקסט במרכז.</td></tr>
+        <tr><td><code class="inline">text-primary</code></td><td>טקסט בצבע primary (עובד עם כל שמות הצבעים).</td></tr>
+        <tr><td><code class="inline">bg-light</code></td><td>רקע בצבע light (עובד עם כל שמות הצבעים).</td></tr>
+        <tr><td><code class="inline">rounded</code> / <code class="inline">shadow</code></td><td>פינות מעוגלות / צל.</td></tr>
+    </table>
+<pre class="code-block">&lt;div class="bg-light p-4 mt-4 rounded shadow text-center"&gt;
+    &lt;h2 class="text-primary"&gt;ברוכים הבאים!&lt;/h2&gt;
+    &lt;p&gt;קופסה עם רקע, רווחים, פינות מעוגלות וצל.&lt;/p&gt;
+&lt;/div&gt;</pre>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. כרטיסים (Cards)</h2>
+    <p>כרטיס הוא קופסה עם תמונה, כותרת, טקסט וכפתור. מושלם להצגת מוצר, כתבה או חבר צוות:</p>
+<pre class="code-block">&lt;div class="card" style="width: 18rem;"&gt;
+    &lt;img src="https://placehold.co/300x200" class="card-img-top" alt="תמונה"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h5 class="card-title"&gt;שם המוצר&lt;/h5&gt;
+        &lt;p class="card-text"&gt;תיאור קצר של המוצר.&lt;/p&gt;
+        &lt;a href="#" class="btn btn-primary"&gt;לפרטים&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+    <div class="explanation">
+        <strong>💡 התמונה:</strong> <code class="inline">placehold.co</code> הוא אתר שמחזיר תמונה אפורה בגודל שמבקשים, כדי שיהיה משהו להציג. כשיהיו לכם תמונות משלכם, שימו אותן ב-<code class="inline">wwwroot/images</code> ושנו ל-<code class="inline">src="~/images/שם-התמונה.jpg"</code>.
+    </div>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. פריסה: שורות ועמודות (Grid)</h2>
+    <p>כדי לסדר דברים זה לצד זה (למשל שלושה כרטיסים בשורה), משתמשים ברשת של Bootstrap:</p>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Grid (רשת)</span>
+        כל שורה (<code class="inline">row</code>) מחולקת ל-12 חלקים שווים. כל עמודה (<code class="inline">col-</code>) אומרת כמה חלקים מתוך ה-12 היא תופסת.
+        <span class="example">דוגמה: <code class="inline">col-4</code> תופסת 4 מתוך 12, כלומר שליש. שלוש עמודות של <code class="inline">col-4</code> ממלאות שורה. <code class="inline">col-6</code> היא חצי, ו-<code class="inline">col-12</code> היא כל השורה.</span>
+    </div>
+
+<pre class="code-block">&lt;div class="row"&gt;
+    &lt;div class="col-12 col-md-4 mb-3"&gt;
+        &lt;div class="card p-3"&gt;כרטיס 1&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="col-12 col-md-4 mb-3"&gt;
+        &lt;div class="card p-3"&gt;כרטיס 2&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="col-12 col-md-4 mb-3"&gt;
+        &lt;div class="card p-3"&gt;כרטיס 3&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+    <div class="concept">
+        <span class="concept-title">📖 למה כתוב גם col-12 וגם col-md-4?</span>
+        זה מה שהופך את האתר למתאים לטלפון. <code class="inline">col-12</code> אומר "במסך קטן (טלפון), כל כרטיס תופס שורה שלמה". <code class="inline">col-md-4</code> אומר "ממסך בינוני ומעלה (מחשב), כל כרטיס תופס שליש". כך בטלפון הכרטיסים אחד מתחת לשני, ובמחשב שלושה בשורה.
+    </div>
+    <div class="checkpoint">הדביקו את הדוגמה בעמוד והריצו. עכשיו הקטינו את חלון הדפדפן לרוחב צר: הכרטיסים יירדו אחד מתחת לשני.</div>
+
+    <!-- ===================== 6 ===================== -->
+    <h2>6. טבלאות</h2>
+<pre class="code-block">&lt;table class="table table-striped table-hover"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;שם&lt;/th&gt;
+            &lt;th&gt;מחיר&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;עט&lt;/td&gt;
+            &lt;td&gt;5 ₪&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;מחברת&lt;/td&gt;
+            &lt;td&gt;12 ₪&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+    <p><code class="inline">table-striped</code> צובע כל שורה שנייה, ו-<code class="inline">table-hover</code> מדגיש שורה כשהעכבר עליה. במדריכי הנתונים נמלא טבלה כזאת במידע אמיתי ממסד הנתונים, עם <code class="inline">@foreach</code>.</p>
+
+    <!-- ===================== 7 ===================== -->
+    <h2>7. איך מוצאים עוד רכיבים</h2>
+    <p>ל-Bootstrap יש עוד עשרות רכיבים: תפריטים נפתחים, חלונות קופצים, טפסים מעוצבים ועוד. כולם מופיעים באתר הרשמי, <a href="https://getbootstrap.com/docs/5.3/" target="_blank">getbootstrap.com</a>:</p>
+    <ul class="step-list">
+        <li>בתפריט הצד של האתר, תחת <strong>Components</strong>, בחרו רכיב (למשל <strong>Badge</strong> או <strong>Accordion</strong>).</li>
+        <li>בכל עמוד יש דוגמה חיה, ומתחתיה הקוד שלה. לחצו על כפתור ההעתקה שליד הקוד.</li>
+        <li>הדביקו בעמוד שלכם, ושנו את הטקסטים.</li>
+    </ul>
+    <div class="warning">
+        <strong>⚠️ שימו לב לגרסה:</strong> הפרויקט שלכם משתמש ב-Bootstrap 5. אם מצאתם דוגמה באתר אחר שלא עובדת, ייתכן שהיא מגרסה ישנה (3 או 4), שבה הקלאסים היו שונים. עדיף להעתיק מהאתר הרשמי.
+    </div>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>הכפתור נראה כמו כפתור רגיל ואפור:</strong> בדקו את שמות הקלאסים. צריך גם <code class="inline">btn</code> וגם <code class="inline">btn-primary</code>, עם רווח ביניהם.</li>
+            <li><strong>העמודות לא אחת ליד השנייה:</strong> כל העמודות (<code class="inline">col-</code>) חייבות להיות בתוך <code class="inline">&lt;div class="row"&gt;</code>, וסכום המספרים בשורה לא יכול לעבור את 12.</li>
+            <li><strong>שום עיצוב של Bootstrap לא עובד:</strong> כנראה הקישור ל-Bootstrap ב-<code class="inline">_Layout.cshtml</code> נמחק או השתנה (ראו מדריך 8, סעיף 6).</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <p>בנו בעמוד "אודות" את החלקים הבאים:</p>
+        <ol>
+            <li>קופסה עליונה עם רקע בהיר, רווחים וכותרת במרכז, עם שם האתר ומשפט על מה הוא.</li>
+            <li>שורה של שלושה כרטיסים (אחד מתחת לשני בטלפון), כל אחד מציג תחביב שלכם.</li>
+            <li>מתחת: כפתור ירוק "צרו קשר" שמוביל לעמוד צור קשר ממדריך 7 (רמז: <code class="inline">&lt;a class="btn ..." asp-controller="..." asp-action="..."&gt;</code>).</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>Bootstrap כבר מותקן ומקושר. משתמשים בו בעזרת <code class="inline">class</code>.</li>
+            <li>כפתורים: <code class="inline">btn btn-צבע</code>. הודעות: <code class="inline">alert alert-צבע</code>. טבלאות: <code class="inline">table</code>.</li>
+            <li>רווחים: <code class="inline">m-</code> ו-<code class="inline">p-</code> עם מספר מ-0 עד 5.</li>
+            <li>פריסה: <code class="inline">row</code> ובתוכה <code class="inline">col-</code>. השורה מחולקת ל-12, ו-<code class="inline">col-12 col-md-4</code> מתאים גם לטלפון וגם למחשב.</li>
+            <li>עוד רכיבים: באתר getbootstrap.com, תחת Components.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>
