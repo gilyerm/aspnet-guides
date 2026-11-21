@@ -59,7 +59,7 @@
         { num: '🛠️', slug: 'tool-errors', section: 'tools', title: 'קריאת שגיאות ושגיאות נפוצות', desc: 'איך מבינים מה השתבש, ואיך מתקנים', ready: true, keywords: 'Error שגיאה Exception Clean Rebuild' },
         { num: '🛠️', slug: 'tool-debug', section: 'tools', title: 'דיבאג עם Breakpoints', desc: 'עוצרים את הקוד ובודקים ערכים', ready: true, keywords: 'Breakpoint F10 F11 Watch' },
         { num: '🛠️', slug: 'tool-planning', section: 'tools', title: 'תכנון הפרויקט', desc: 'תבנית למילוי לפני שמתחילים לכתוב קוד', ready: true },
-        { num: '📚', slug: 'snippets', section: 'tools', title: 'ספריית קטעי קוד', desc: 'קטעים מוכנים להעתקה, עם הסבר מה לשנות' }
+        { num: '📚', slug: 'snippets', section: 'tools', title: 'ספריית קטעי קוד', desc: 'קטעים מוכנים להעתקה, עם הסבר מה לשנות', ready: true }
     ];
 
     var script = document.currentScript;
@@ -122,18 +122,22 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
 
     // ---------- תוכן עניינים בתוך מדריך ----------
+    // data-toc="deep" על ה-body: גם כותרות h3 שבתוך .snippet נכנסות לתוכן העניינים
     if (current && main) {
-        var heads = main.querySelectorAll(':scope > h2');
-        if (heads.length >= 3) {
-            var toc = el('nav', { 'class': 'toc' }, '<strong>📑 בעמוד הזה</strong>');
-            var ol = el('ul');
+        var deep = document.body.getAttribute('data-toc') === 'deep';
+        var heads = main.querySelectorAll(deep ? ':scope > h2, .snippet > h3' : ':scope > h2');
+        if (main.querySelectorAll(':scope > h2').length >= 3) {
+            var toc = el('nav', { 'class': 'toc' + (deep ? ' deep' : '') }, '<strong>📑 בעמוד הזה</strong>');
+            var list = el('ul'), sub = null;
             heads.forEach(function (h, i) {
                 if (!h.id) h.id = 'part-' + (i + 1);
                 var li = el('li');
                 li.appendChild(el('a', { href: '#' + h.id }, h.textContent));
-                ol.appendChild(li);
+                if (h.tagName === 'H3' && sub) { sub.appendChild(li); return; }
+                list.appendChild(li);
+                if (deep) { sub = el('ul'); li.appendChild(sub); }
             });
-            toc.appendChild(ol);
+            toc.appendChild(list);
             var anchor = main.querySelector('.subtitle');
             if (anchor) anchor.insertAdjacentElement('afterend', toc);
         }
@@ -214,6 +218,14 @@
         });
         wrap.appendChild(btn);
     });
+
+    // ---------- קישור לספריית קטעי הקוד בסוף כל מדריך ----------
+    var snippetsGuide = GUIDES.filter(function (g) { return g.slug === 'snippets'; })[0];
+    if (current && main && current !== 'snippets' && snippetsGuide && snippetsGuide.ready) {
+        main.appendChild(el('p', { 'class': 'snippets-link' },
+            '📚 צריכים קוד מוכן לפרויקט? בספריית קטעי הקוד יש קטעים להעתקה, עם הסבר מה לשנות. ' +
+            '<a href="' + guideUrl(snippetsGuide) + '">לספריית קטעי הקוד</a>'));
+    }
 
     // ---------- הקודם / הבא ----------
     if (current && main) {

@@ -413,3 +413,18 @@ table.fill td { height: 2.4rem; }
     h2 { break-after: avoid; }
     table { break-inside: avoid; }
 }
+
+/* ---------- ספריית קטעי קוד ---------- */
+.toc.deep > ul { columns: 1; }
+.toc.deep > ul > li { margin-top: 0.5rem; font-weight: 700; }
+.toc.deep ul ul { columns: 2; column-gap: 2rem; font-weight: 400; padding-inline-start: 1rem; margin-top: 0.2rem; }
+.snippet { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.snippet > h3 { margin-top: 0.2rem; scroll-margin-top: 4.5rem; }
+.snippet .where { font-size: 0.97rem; color: #334155; margin: 0.4rem 0; }
+.snippet .where::before { content: "📁 איפה: "; font-weight: 700; }
+.snippet .guide-link { font-size: 0.95rem; margin: 0.4rem 0 0; }
+.snippet .guide-link::before { content: "📖 "; }
+.star { color: #d97706; }
+@media (max-width: 600px) { .toc.deep ul ul { columns: 1; } }
+.snippets-link { margin-top: 2rem; background: #fefce8; border: 1px solid #fde68a; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.98rem; }
+@media print { .snippets-link { display: none; } }

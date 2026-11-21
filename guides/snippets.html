@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ספריית קטעי קוד</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="snippets" data-toc="deep">
+<main>
+    <h1>📚 ספריית קטעי קוד</h1>
+    <div class="subtitle">קטעים מוכנים להעתקה: מה כל קטע עושה, איפה מדביקים אותו, ומה צריך לשנות</div>
+
+    <div class="explanation">
+        <strong>💡 איך משתמשים בספרייה?</strong> מצאו את מה שאתם צריכים בתוכן העניינים (או חפשו עם <span class="keyboard">Ctrl+F</span>), העתיקו עם כפתור "העתק", והדביקו בקובץ שכתוב ליד "📁 איפה".
+        <ul style="margin-bottom:0">
+            <li>בדוגמאות השמות הם של מוצרים (<code class="inline">Product</code>, <code class="inline">_context.Products</code>). <strong>החליפו אותם בשמות של הפרויקט שלכם.</strong></li>
+            <li>רוב הקטעים מניחים שה-Controller כבר מחובר למסד הנתונים (<code class="inline">_context</code>, מדריך 13).</li>
+            <li>לא בטוחים מה קטע עושה? בתחתית שלו יש קישור למדריך שמסביר אותו לעומק.</li>
+            <li>קטעים שמסומנים ב-<span class="star">⭐</span> שימושיים כמעט בכל פרויקט.</li>
+        </ul>
+    </div>
+
+    <h2>הצגת מידע</h2>
+<div class="snippet">
+<h3>טבלה עם נתונים מהמסד</h3>
+<p>מציג את כל השורות מטבלה במסד הנתונים, בטבלת Bootstrap.</p>
+<p class="where">ב-Controller, Action בשם Index</p>
+<pre class="code-block">public IActionResult Index()
+{
+    var products = _context.Products.ToList();
+    return View(products);
+}</pre>
+<p class="where">ב-View: Views/Products/Index.cshtml</p>
+<pre class="code-block">@model List&lt;Product&gt;
+
+&lt;table class=&quot;table table-striped table-hover&quot;&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;שם&lt;/th&gt;
+            &lt;th&gt;מחיר&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        @foreach (var product in Model)
+        {
+            &lt;tr&gt;
+                &lt;td&gt;@product.Name&lt;/td&gt;
+                &lt;td&gt;@product.Price ₪&lt;/td&gt;
+            &lt;/tr&gt;
+        }
+    &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+<p class="change-note">החליפו את <code class="inline">Products</code>/<code class="inline">Product</code> בשם הטבלה והמודל שלכם, ואת העמודות בשדות שלכם.</p>
+<p class="guide-link">הסבר מלא: <a href="13-database.html">מדריך 13</a>, <a href="10-models.html">מדריך 10</a></p>
+</div>
+<div class="snippet">
+<h3>כרטיסים ברשת</h3>
+<p>כל פריט ככרטיס עם תמונה: שלושה בשורה במחשב, אחד בשורה בטלפון.</p>
+<p class="where">ב-View (במקום טבלה)</p>
+<pre class="code-block">&lt;div class=&quot;row&quot;&gt;
+    @foreach (var product in Model)
+    {
+        &lt;div class=&quot;col-12 col-md-6 col-lg-4 mb-4&quot;&gt;
+            &lt;div class=&quot;card h-100&quot;&gt;
+                &lt;img src=&quot;@(product.ImageUrl ?? &quot;https://placehold.co/400x300?text=No+Image&quot;)&quot; class=&quot;card-img-top&quot; alt=&quot;@product.Name&quot; /&gt;
+                &lt;div class=&quot;card-body&quot;&gt;
+                    &lt;h5 class=&quot;card-title&quot;&gt;@product.Name&lt;/h5&gt;
+                    &lt;p class=&quot;card-text&quot;&gt;@product.Price ₪&lt;/p&gt;
+                    &lt;a asp-action=&quot;Details&quot; asp-route-id=&quot;@product.Id&quot; class=&quot;btn btn-primary&quot;&gt;לפרטים&lt;/a&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    }
+&lt;/div&gt;</pre>
+<p class="change-note">אם אין לכם <code class="inline">ImageUrl</code>, מחקו את שורת ה-<code class="inline">&lt;img&gt;</code>.</p>
+<p class="guide-link">הסבר מלא: <a href="09-bootstrap.html">מדריך 9</a>, <a href="adv-a-partial-views.html">מתקדם א (אותו כרטיס בכמה עמודים)</a></p>
+</div>
+<div class="snippet">
+<h3>עמוד פרטים של פריט אחד</h3>
+<p>עמוד שמציג פריט אחד לפי המספר שבכתובת, למשל /Products/Details/5.</p>
+<p class="where">ב-Controller</p>
+<pre class="code-block">public IActionResult Details(int id)
+{
+    var product = _context.Products.Find(id);
+    if (product == null)
+    {
+        return NotFound();
+    }
+    return View(product);
+}</pre>
+<p class="where">ב-View: Details.cshtml</p>
+<pre class="code-block">@model Product
+@{
+    ViewData[&quot;Title&quot;] = Model.Name;
+}
+
+&lt;h1&gt;@Model.Name&lt;/h1&gt;
+&lt;p&gt;@Model.Description&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;מחיר:&lt;/strong&gt; @Model.Price ₪&lt;/p&gt;
+&lt;a asp-action=&quot;Index&quot; class=&quot;btn btn-secondary&quot;&gt;חזרה לרשימה&lt;/a&gt;</pre>
+<p class="where">הקישור לעמוד (למשל בטבלה)</p>
+<pre class="code-block">&lt;a asp-action=&quot;Details&quot; asp-route-id=&quot;@product.Id&quot;&gt;פרטים&lt;/a&gt;</pre>
+<p class="guide-link">הסבר מלא: <a href="10-models.html">מדריך 10, סעיף 5</a></p>
+</div>
+<div class="snippet">
+<h3>"אין עדיין נתונים" כשהרשימה ריקה</h3>
+<p>במקום טבלה ריקה, הודעה ידידותית.</p>
+<p class="where">ב-View, לפני הטבלה או הלולאה</p>
+<pre class="code-block">@if (Model.Count == 0)
+{
+    &lt;div class=&quot;alert alert-info&quot;&gt;אין עדיין מוצרים. 🙂&lt;/div&gt;
+}
+else
+{
+    @* כאן הטבלה או הכרטיסים *@
+}</pre>
+</div>
+<div class="snippet">
+<h3><span class=star>⭐</span> עיצוב תאריכים ומחירים</h3>
+<p>תאריך בפורמט ישראלי, ומחיר עם שתי ספרות אחרי הנקודה.</p>
+<p class="where">ב-View</p>
+<pre class="code-block">&lt;p&gt;תאריך: @item.CreatedAt.ToString(&quot;dd/MM/yyyy&quot;)&lt;/p&gt;
+&lt;p&gt;תאריך ושעה: @item.CreatedAt.ToString(&quot;dd/MM/yyyy HH:mm&quot;)&lt;/p&gt;
+&lt;p&gt;מחיר: @product.Price.ToString(&quot;N2&quot;) ₪&lt;/p&gt;</pre>
+<p class="change-note"><code class="inline">N2</code> = עם פסיק לאלפים ושתי ספרות אחרי הנקודה (1,250.00). <code class="inline">N0</code> = בלי ספרות אחרי הנקודה.</p>
+</div>
+<div class="snippet">
+<h3>חלוקה לעמודים</h3>
+<p>כשיש הרבה פריטים: 9 בכל עמוד, וקישורים לעמוד 1, 2, 3...</p>
+<p class="where">ב-Controller</p>
+<pre class="code-block">public IActionResult Index(int page = 1)
+{
+    int pageSize = 9;
+    int total = _context.Products.Count();
+
+    var products = _context.Products
+        .OrderBy(p =&gt; p.Id)
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
+
+    ViewBag.Page = page;
+    ViewBag.TotalPages = (int)Math.Ceiling(total / (double)pageSize);
+    return View(products);
+}</pre>
+<p class="where">ב-View, מתחת לרשימה</p>
+<pre class="code-block">&lt;nav&gt;
+    &lt;ul class=&quot;pagination&quot;&gt;
+        @for (int i = 1; i &lt;= ViewBag.TotalPages; i++)
+        {
+            &lt;li class=&quot;page-item @(i == ViewBag.Page ? &quot;active&quot; : &quot;&quot;)&quot;&gt;
+                &lt;a class=&quot;page-link&quot; asp-action=&quot;Index&quot; asp-route-page=&quot;@i&quot;&gt;@i&lt;/a&gt;
+            &lt;/li&gt;
+        }
+    &lt;/ul&gt;
+&lt;/nav&gt;</pre>
+<p class="change-note"><code class="inline">pageSize</code> קובע כמה פריטים בכל עמוד.</p>
+</div>
+<div class="snippet">
+<h3>ספירה: "נמצאו 12 מוצרים"</h3>
+<p>מציג כמה פריטים יש ברשימה.</p>
+<p class="where">ב-View</p>
+<pre class="code-block">&lt;p class=&quot;text-muted&quot;&gt;נמצאו @Model.Count מוצרים&lt;/p&gt;</pre>
+</div>
+<div class="snippet">
+<h3>תמונת ברירת מחדל</h3>
+<p>כשלפריט אין תמונה, מוצגת תמונה כללית.</p>
+<p class="where">ב-View</p>
+<pre class="code-block">&lt;img src=&quot;@(product.ImageUrl ?? &quot;https://placehold.co/400x300?text=No+Image&quot;)&quot; alt=&quot;@product.Name&quot; class=&quot;img-fluid&quot; /&gt;</pre>
+<p class="change-note">אפשר לשים תמונה משלכם ב-<code class="inline">wwwroot/images</code> ולכתוב <code class="inline">"/images/no-image.png"</code> במקום הכתובת.</p>
+<p class="guide-link">הסבר מלא: <a href="16-images.html">מדריך 16</a></p>
+</div>
+<div class="snippet">
+<h3>קיצור טקסט ארוך</h3>
+<p>מציג רק את 100 התווים הראשונים של תיאור ארוך, עם "...".</p>
+<p class="where">ב-View</p>
+<pre class="code-block">@{
+    var text = product.Description ?? &quot;&quot;;
+}
+&lt;p&gt;@(text.Length &gt; 100 ? text.Substring(0, 100) + &quot;...&quot; : text)&lt;/p&gt;
+&lt;a asp-action=&quot;Details&quot; asp-route-id=&quot;@product.Id&quot;&gt;קרא עוד&lt;/a&gt;</pre>
+</div>
+    <h2>פעולות על נתונים</h2>
+<div class="snippet">
+<h3>הוספה, עריכה ומחיקה</h3>
+<p>הדרך המהירה: Scaffolding יוצר את כל העמודים בלחיצה. כאן העריכה והמחיקה, למי שכותב ביד.</p>
+<p class="where">ב-Controller: עריכה</p>
+<pre class="code-block">public IActionResult Edit(int id)
+{
+    var product = _context.Products.Find(id);
+    if (product == null)
+    {
+        return NotFound();
+    }
+    return View(product);
+}
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Edit(Product product)
+{
+    if (!ModelState.IsValid)
+    {
+        return View(product);
+    }
+    _context.Products.Update(product);
+    _context.SaveChanges();
+    return RedirectToAction(&quot;Index&quot;);
+}</pre>
+<p class="where">ב-View: Edit.cshtml (כמו Create, עם שדה נסתר ל-Id)</p>
+<pre class="code-block">&lt;form asp-action=&quot;Edit&quot; method=&quot;post&quot;&gt;
+    &lt;input type=&quot;hidden&quot; asp-for=&quot;Id&quot; /&gt;
+    @* כאן אותם שדות כמו בטופס ההוספה *@
+    &lt;button type=&quot;submit&quot; class=&quot;btn btn-success&quot;&gt;שמירה&lt;/button&gt;
+&lt;/form&gt;</pre>
+<p class="where">ב-Controller: מחיקה</p>
+<pre class="code-block">[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Delete(int id)
+{
+    var product = _context.Products.Find(id);
+    if (product != null)
+    {
+        _context.Products.Remove(product);
+        _context.SaveChanges();
+    }
+    return RedirectToAction(&quot;Index&quot;);
+}</pre>
+<p class="change-note">בטופס העריכה חובה <code class="inline">&lt;input type="hidden" asp-for="Id" /&gt;</code>, אחרת האתר לא יודע איזו שורה לעדכן.</p>
+<p class="guide-link">הסבר מלא: <a href="15-scaffolding.html">מדריך 15 (הדרך האוטומטית)</a>, <a href="11-forms.html">מדריך 11</a></p>
+</div>
+<div class="snippet">
+<h3>חלון אישור לפני מחיקה</h3>
+<p>לפני מחיקה קופץ "בטוחים?", ורק אישור מוחק.</p>
+<p class="where">ב-View, כפתור מחיקה ליד כל פריט</p>
+<pre class="code-block">&lt;form asp-action=&quot;Delete&quot; asp-route-id=&quot;@product.Id&quot; method=&quot;post&quot;
+      onsubmit=&quot;return confirm(&#x27;בטוחים שרוצים למחוק?&#x27;);&quot;&gt;
+    &lt;button type=&quot;submit&quot; class=&quot;btn btn-sm btn-danger&quot;&gt;מחיקה&lt;/button&gt;
+&lt;/form&gt;</pre>
+</div>
+<div class="snippet">
+<h3>הודעת "נשמר בהצלחה"</h3>
+<p>אחרי שמירה ומעבר לעמוד אחר, מופיעה הודעה ירוקה פעם אחת.</p>
+<p class="where">ב-Controller, לפני ה-RedirectToAction</p>
+<pre class="code-block">TempData[&quot;Message&quot;] = &quot;המוצר נשמר בהצלחה!&quot;;
+return RedirectToAction(&quot;Index&quot;);</pre>
+<p class="where">ב-_Layout.cshtml, מעל @RenderBody()</p>
+<pre class="code-block">@if (TempData[&quot;Message&quot;] != null)
+{
+    &lt;div class=&quot;alert alert-success alert-dismissible fade show mt-3&quot;&gt;
+        @TempData[&quot;Message&quot;]
+        &lt;button type=&quot;button&quot; class=&quot;btn-close&quot; data-bs-dismiss=&quot;alert&quot;&gt;&lt;/button&gt;
+    &lt;/div&gt;
+}</pre>
+<p class="change-note"><code class="inline">TempData</code> שורד מעבר עמוד אחד (Redirect), ואז נמחק לבד. כשההודעה ב-Layout, היא עובדת בכל העמודים.</p>
+</div>
+<div class="snippet">
+<h3>רשימה נפתחת מטבלה אחרת</h3>
+<p>בחירת קטגוריה למוצר מתוך טבלת הקטגוריות.</p>
+<p class="where">ב-Controller, בשני ה-Create (וגם ב-Edit)</p>
+<pre class="code-block">ViewBag.Categories = new SelectList(_context.Categories.ToList(), &quot;Id&quot;, &quot;Name&quot;);</pre>
+<p class="where">בטופס</p>
+<pre class="code-block">&lt;select asp-for=&quot;CategoryId&quot; asp-items=&quot;ViewBag.Categories&quot; class=&quot;form-select&quot;&gt;
+    &lt;option value=&quot;&quot;&gt;-- בחרו קטגוריה --&lt;/option&gt;
+&lt;/select&gt;</pre>
+<p class="guide-link">הסבר מלא: <a href="14-relationships.html">מדריך 14, סעיף 4</a></p>
+</div>
+<div class="snippet">
+<h3>חיפוש, מיון וסינון</h3>
+<p>תיבת חיפוש לפי שם, מיון לפי מחיר וסינון לפי קטגוריה.</p>
+<p class="where">ב-Controller (הבסיס)</p>
+<pre class="code-block">public IActionResult Index(string? search)
+{
+    var products = _context.Products.AsQueryable();
+    if (!string.IsNullOrEmpty(search))
+    {
+        products = products.Where(p =&gt; p.Name.Contains(search));
+    }
+    ViewBag.Search = search;
+    return View(products.ToList());
+}</pre>
+<p class="where">ב-View</p>
+<pre class="code-block">&lt;form asp-action=&quot;Index&quot; method=&quot;get&quot; class=&quot;mb-3&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;search&quot; value=&quot;@ViewBag.Search&quot; class=&quot;form-control&quot; placeholder=&quot;חיפוש...&quot; /&gt;
+&lt;/form&gt;</pre>
+<p class="guide-link">הסבר מלא: <a href="adv-b-search.html">מתקדם ב (כולל מיון וסינון לפי קטגוריה)</a></p>
+</div>
+<div class="snippet">
+<h3>העלאת תמונה</h3>
+<p>טופס עם בחירת קובץ, ושמירה ב-wwwroot.</p>
+<p class="where">בטופס</p>
+<pre class="code-block">&lt;form asp-action=&quot;Create&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+    &lt;input type=&quot;file&quot; name=&quot;imageFile&quot; class=&quot;form-control&quot; accept=&quot;image/*&quot; /&gt;
+    ...
+&lt;/form&gt;</pre>
+<p class="guide-link">הסבר מלא: <a href="16-images.html">מדריך 16 (כולל הקוד המלא לשמירה ב-Controller)</a></p>
+</div>
+<div class="snippet">
+<h3><span class=star>⭐</span> נתונים התחלתיים (Seed)</h3>
+<p>מוצרים לדוגמה שנכנסים למסד הנתונים לבד, אם הטבלה ריקה. נוח מאוד במחשב חדש.</p>
+<p class="where">ב-Program.cs, מיד אחרי var app = builder.Build();</p>
+<pre class="code-block">using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService&lt;ApplicationDbContext&gt;();
+
+    if (!db.Products.Any())
+    {
+        db.Products.AddRange(
+            new Product { Name = &quot;עט&quot;, Price = 5, Description = &quot;עט כחול&quot; },
+            new Product { Name = &quot;מחברת&quot;, Price = 12, Description = &quot;מחברת 80 דפים&quot; },
+            new Product { Name = &quot;תיק&quot;, Price = 150, Description = &quot;תיק גב&quot; }
+        );
+        db.SaveChanges();
+    }
+}</pre>
+<p class="change-note">החליפו את המוצרים בנתונים שלכם. אם עשיתם את מדריך 17, אפשר לשים את זה באותו בלוק <code class="inline">using</code> של יצירת המנהל.</p>
+</div>
+<div class="snippet">
+<h3>סינון לפי קטגוריה</h3>
+<p>קישורים לכל קטגוריה, שמציגים רק את המוצרים שלה.</p>
+<p class="where">ב-View</p>
+<pre class="code-block">@foreach (var category in (List&lt;Category&gt;)ViewBag.Categories)
+{
+    &lt;a asp-action=&quot;Index&quot; asp-route-categoryId=&quot;@category.Id&quot; class=&quot;btn btn-sm btn-outline-primary&quot;&gt;@category.Name&lt;/a&gt;
+}</pre>
+<p class="where">ב-Controller, בתוך Index(int? categoryId)</p>
+<pre class="code-block">if (categoryId != null)
+{
+    products = products.Where(p =&gt; p.CategoryId == categoryId);
+}
+ViewBag.Categories = _context.Categories.ToList();</pre>
+<p class="guide-link">הסבר מלא: <a href="adv-b-search.html">מתקדם ב, סעיף 3</a></p>
+</div>
+<div class="snippet">
+<h3>כפתור "אהבתי" עם מונה</h3>
+<p>לחיצה מעלה מונה, בלי לטעון את העמוד מחדש.</p>
+<p class="where">בעמוד (הכפתור)</p>
+<pre class="code-block">&lt;button type=&quot;button&quot; class=&quot;btn btn-sm btn-outline-danger like-btn&quot; data-id=&quot;@product.Id&quot;&gt;
+    ❤️ &lt;span class=&quot;count&quot;&gt;@product.Likes&lt;/span&gt;
+&lt;/button&gt;</pre>
+<p class="guide-link">הסבר מלא: <a href="adv-d-fetch.html">מתקדם ד (הקוד המלא: מודל, Controller ו-JavaScript)</a></p>
+</div>
+    <h2>טפסים</h2>
+<div class="snippet">
+<h3><span class=star>⭐</span> הודעות שגיאה בעברית</h3>
+<p>הכללים הנפוצים, כל אחד עם הודעה בעברית.</p>
+<p class="where">במודל (בראש הקובץ: using System.ComponentModel.DataAnnotations;)</p>
+<pre class="code-block">[Required(ErrorMessage = &quot;שדה חובה&quot;)]
+[StringLength(50, MinimumLength = 2, ErrorMessage = &quot;בין 2 ל-50 תווים&quot;)]
+[Display(Name = &quot;שם&quot;)]
+public string Name { get; set; } = &quot;&quot;;
+
+[Required(ErrorMessage = &quot;נא להזין אימייל&quot;)]
+[EmailAddress(ErrorMessage = &quot;אימייל לא תקין&quot;)]
+[Display(Name = &quot;אימייל&quot;)]
+public string Email { get; set; } = &quot;&quot;;
+
+[Phone(ErrorMessage = &quot;מספר טלפון לא תקין&quot;)]
+[Display(Name = &quot;טלפון&quot;)]
+public string? Phone { get; set; }
+
+[Range(1, 120, ErrorMessage = &quot;גיל בין 1 ל-120&quot;)]
+[Display(Name = &quot;גיל&quot;)]
+public int Age { get; set; }</pre>
+<p class="guide-link">הסבר מלא: <a href="12-validation.html">מדריך 12</a></p>
+</div>
+<div class="snippet">
+<h3>בחירת תאריך</h3>
+<p>שדה עם לוח שנה לבחירת תאריך.</p>
+<p class="where">במודל</p>
+<pre class="code-block">[DataType(DataType.Date)]
+[Display(Name = &quot;תאריך&quot;)]
+public DateTime EventDate { get; set; } = DateTime.Today;</pre>
+<p class="where">בטופס</p>
+<pre class="code-block">&lt;input asp-for=&quot;EventDate&quot; class=&quot;form-control&quot; /&gt;</pre>
+<p class="change-note">בלי <code class="inline">[DataType(DataType.Date)]</code> השדה יבקש גם שעה.</p>
+</div>
+<div class="snippet">
+<h3>תיבת סימון (כן/לא)</h3>
+<p>Property מסוג bool הופך לתיבת סימון.</p>
+<p class="where">במודל</p>
+<pre class="code-block">[Display(Name = &quot;מוצג באתר&quot;)]
+public bool IsActive { get; set; }</pre>
+<p class="where">בטופס</p>
+<pre class="code-block">&lt;div class=&quot;form-check mb-3&quot;&gt;
+    &lt;input asp-for=&quot;IsActive&quot; class=&quot;form-check-input&quot; /&gt;
+    &lt;label asp-for=&quot;IsActive&quot; class=&quot;form-check-label&quot;&gt;&lt;/label&gt;
+&lt;/div&gt;</pre>
+</div>
+<div class="snippet">
+<h3>טקסט ארוך</h3>
+<p>תיבת טקסט גבוהה, לתיאור או להודעה.</p>
+<p class="where">בטופס</p>
+<pre class="code-block">&lt;textarea asp-for=&quot;Description&quot; class=&quot;form-control&quot; rows=&quot;5&quot;&gt;&lt;/textarea&gt;</pre>
+</div>
+<div class="snippet">
+<h3>רשימה נפתחת עם ערכים קבועים</h3>
+<p>בחירה מתוך כמה אפשרויות קבועות, בלי טבלה במסד.</p>
+<p class="where">בטופס</p>
+<pre class="code-block">&lt;select asp-for=&quot;Size&quot; class=&quot;form-select&quot;&gt;
+    &lt;option value=&quot;&quot;&gt;-- בחרו מידה --&lt;/option&gt;
+    &lt;option value=&quot;S&quot;&gt;קטן&lt;/option&gt;
+    &lt;option value=&quot;M&quot;&gt;בינוני&lt;/option&gt;
+    &lt;option value=&quot;L&quot;&gt;גדול&lt;/option&gt;
+&lt;/select&gt;</pre>
+<p class="change-note"><code class="inline">value</code> הוא מה שנשמר, והטקסט הוא מה שרואים.</p>
+</div>
+<div class="snippet">
+<h3>טופס "צור קשר" שנשמר במסד</h3>
+<p>מודל להודעות, שנשמרות בטבלה ומוצגות למנהל.</p>
+<p class="where">מודל: Models/ContactMessage.cs (בתוך המחלקה)</p>
+<pre class="code-block">public int Id { get; set; }
+
+[Required(ErrorMessage = &quot;נא להזין שם&quot;)]
+[Display(Name = &quot;שם&quot;)]
+public string Name { get; set; } = &quot;&quot;;
+
+[Required(ErrorMessage = &quot;נא להזין אימייל&quot;)]
+[EmailAddress(ErrorMessage = &quot;אימייל לא תקין&quot;)]
+[Display(Name = &quot;אימייל&quot;)]
+public string Email { get; set; } = &quot;&quot;;
+
+[Required(ErrorMessage = &quot;נא לכתוב הודעה&quot;)]
+[Display(Name = &quot;הודעה&quot;)]
+public string Message { get; set; } = &quot;&quot;;
+
+public DateTime SentAt { get; set; } = DateTime.Now;</pre>
+<p class="change-note">אחר כך: <code class="inline">DbSet</code> ו-Migration (מדריך 13), ו-Scaffolding (מדריך 15) או Controller עם Create (מדריך 11). את עמוד הרשימה חוסמים למנהל (מדריך 17).</p>
+<p class="guide-link">הסבר מלא: <a href="11-forms.html">מדריך 11</a>, <a href="13-database.html">מדריך 13</a></p>
+</div>
+    <h2>משתמשים</h2>
+<div class="snippet">
+<h3>"שלום, [שם]"</h3>
+<p>ברכה למשתמש המחובר, וקישורי הרשמה לאורח.</p>
+<p class="where">בכל View</p>
+<pre class="code-block">@if (User.Identity?.IsAuthenticated == true)
+{
+    &lt;p&gt;שלום, @User.Identity.Name!&lt;/p&gt;
+}
+else
+{
+    &lt;a asp-area=&quot;Identity&quot; asp-page=&quot;/Account/Login&quot;&gt;התחברות&lt;/a&gt;
+    &lt;a asp-area=&quot;Identity&quot; asp-page=&quot;/Account/Register&quot;&gt;הרשמה&lt;/a&gt;
+}</pre>
+<p class="guide-link">הסבר מלא: <a href="17-users.html">מדריך 17, סעיף 3</a>, <a href="adv-c-identity.html">מתקדם ג (שם מלא במקום אימייל)</a></p>
+</div>
+<div class="snippet">
+<h3>כפתור שרק מנהל רואה</h3>
+<p>מסתיר כפתור מכל מי שאינו מנהל. (ההגנה האמיתית היא [Authorize] ב-Controller!)</p>
+<p class="where">ב-View</p>
+<pre class="code-block">@if (User.IsInRole(&quot;Admin&quot;))
+{
+    &lt;a asp-action=&quot;Create&quot; class=&quot;btn btn-primary&quot;&gt;הוספת מוצר&lt;/a&gt;
+}</pre>
+<p class="guide-link">הסבר מלא: <a href="17-users.html">מדריך 17, סעיף 5</a></p>
+</div>
+<div class="snippet">
+<h3>עמוד שרק מנהל נכנס אליו</h3>
+<p>חוסם Action אחד, או Controller שלם.</p>
+<p class="where">מעל Action או מעל ה-class של ה-Controller</p>
+<pre class="code-block">[Authorize(Roles = &quot;Admin&quot;)]</pre>
+<p class="guide-link">הסבר מלא: <a href="17-users.html">מדריך 17, סעיף 4</a></p>
+</div>
+<div class="snippet">
+<h3>יצירת המנהל הראשון</h3>
+<p>בכל הפעלה: יוצר את התפקיד Admin ונותן אותו לאימייל מסוים.</p>
+<p class="where">ב-Program.cs (דורש .AddRoles&lt;IdentityRole&gt;())</p>
+<pre class="code-block">using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService&lt;RoleManager&lt;IdentityRole&gt;&gt;();
+    var userManager = scope.ServiceProvider.GetRequiredService&lt;UserManager&lt;IdentityUser&gt;&gt;();
+
+    if (!await roleManager.RoleExistsAsync(&quot;Admin&quot;))
+    {
+        await roleManager.CreateAsync(new IdentityRole(&quot;Admin&quot;));
+    }
+
+    var admin = await userManager.FindByEmailAsync(&quot;admin@example.com&quot;);
+    if (admin != null &amp;&amp; !await userManager.IsInRoleAsync(admin, &quot;Admin&quot;))
+    {
+        await userManager.AddToRoleAsync(admin, &quot;Admin&quot;);
+    }
+}</pre>
+<p class="change-note">החליפו את האימייל. אם עשיתם את מתקדם ג, כתבו <code class="inline">ApplicationUser</code> במקום <code class="inline">IdentityUser</code>.</p>
+<p class="guide-link">הסבר מלא: <a href="17-users.html">מדריך 17, סעיף 4 (כל השלבים)</a></p>
+</div>
+<div class="snippet">
+<h3><span class=star>⭐</span> רק הנתונים של המשתמש המחובר ("ההזמנות שלי")</h3>
+<p>כל משתמש רואה רק את מה שהוא יצר. מתאים להזמנות, פוסטים, משימות.</p>
+<p class="where">במודל: שדה שישמור מי יצר</p>
+<pre class="code-block">public string UserId { get; set; } = &quot;&quot;;</pre>
+<p class="where">ב-Controller (בראש הקובץ: using System.Security.Claims;)</p>
+<pre class="code-block">[Authorize]
+public IActionResult MyOrders()
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var orders = _context.Orders.Where(o =&gt; o.UserId == userId).ToList();
+    return View(orders);
+}
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+[Authorize]
+public IActionResult Create(Order order)
+{
+    order.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+    ModelState.Remove(&quot;UserId&quot;);
+
+    if (!ModelState.IsValid)
+    {
+        return View(order);
+    }
+    _context.Orders.Add(order);
+    _context.SaveChanges();
+    return RedirectToAction(&quot;MyOrders&quot;);
+}</pre>
+<p class="change-note"><code class="inline">ModelState.Remove("UserId")</code>: את השדה הזה ממלאים בקוד ולא בטופס, אז לא בודקים אותו. ואחרי הוספת השדה למודל: Migration.</p>
+</div>
+<div class="snippet">
+<h3>ניהול משתמשים ומתן הרשאת מנהל</h3>
+<p>עמוד למנהל: רשימת כל המשתמשים, וכפתור שהופך משתמש למנהל.</p>
+<p class="where">Controller חדש: AdminUsersController (בתוך המחלקה)</p>
+<pre class="code-block">private readonly UserManager&lt;IdentityUser&gt; _userManager;
+
+public AdminUsersController(UserManager&lt;IdentityUser&gt; userManager)
+{
+    _userManager = userManager;
+}
+
+public IActionResult Index()
+{
+    return View(_userManager.Users.ToList());
+}
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task&lt;IActionResult&gt; MakeAdmin(string id)
+{
+    var user = await _userManager.FindByIdAsync(id);
+    if (user != null)
+    {
+        await _userManager.AddToRoleAsync(user, &quot;Admin&quot;);
+    }
+    return RedirectToAction(&quot;Index&quot;);
+}</pre>
+<p class="where">מעל ה-class של ה-Controller</p>
+<pre class="code-block">[Authorize(Roles = &quot;Admin&quot;)]</pre>
+<p class="where">ב-View: Views/AdminUsers/Index.cshtml</p>
+<pre class="code-block">@model List&lt;Microsoft.AspNetCore.Identity.IdentityUser&gt;
+
+&lt;h1&gt;משתמשים&lt;/h1&gt;
+&lt;table class=&quot;table&quot;&gt;
+    @foreach (var user in Model)
+    {
+        &lt;tr&gt;
+            &lt;td&gt;@user.Email&lt;/td&gt;
+            &lt;td&gt;
+                &lt;form asp-action=&quot;MakeAdmin&quot; asp-route-id=&quot;@user.Id&quot; method=&quot;post&quot;&gt;
+                    &lt;button type=&quot;submit&quot; class=&quot;btn btn-sm btn-warning&quot;&gt;הפוך למנהל&lt;/button&gt;
+                &lt;/form&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    }
+&lt;/table&gt;</pre>
+<p class="change-note">אם עשיתם את מתקדם ג, החליפו כל <code class="inline">IdentityUser</code> ב-<code class="inline">ApplicationUser</code>.</p>
+<p class="guide-link">הסבר מלא: <a href="17-users.html">מדריך 17</a></p>
+</div>
+<div class="snippet">
+<h3>עמוד "הפרופיל שלי"</h3>
+<p>לכל משתמש כבר יש עמוד מוכן לשינוי סיסמה ואימייל. רק צריך קישור אליו.</p>
+<p class="where">בתפריט או בכל עמוד</p>
+<pre class="code-block">&lt;a asp-area=&quot;Identity&quot; asp-page=&quot;/Account/Manage/Index&quot;&gt;הפרופיל שלי&lt;/a&gt;</pre>
+</div>
+<div class="snippet">
+<h3>הפניה לעמוד מסוים אחרי התחברות</h3>
+<p>אחרי ההתחברות, המשתמש יגיע לעמוד שבחרתם ולא לדף הבית.</p>
+<p class="where">קישור ההתחברות</p>
+<pre class="code-block">&lt;a asp-area=&quot;Identity&quot; asp-page=&quot;/Account/Login&quot; asp-route-returnUrl=&quot;/Products&quot;&gt;התחברו כדי לקנות&lt;/a&gt;</pre>
+<p class="change-note"><code class="inline">returnUrl</code> הוא הכתובת שאליה יחזרו אחרי ההתחברות.</p>
+</div>
+    <h2>עיצוב ומבנה</h2>
+<div class="snippet">
+<h3><span class=star>⭐</span> האתר בעברית, מימין לשמאל</h3>
+<p>שני שינויים ב-_Layout.cshtml.</p>
+<p class="where">בשורה הראשונה אחרי DOCTYPE</p>
+<pre class="code-block">&lt;html lang=&quot;he&quot; dir=&quot;rtl&quot;&gt;</pre>
+<p class="where">במקום הקישור ל-bootstrap.min.css</p>
+<pre class="code-block">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css&quot; /&gt;</pre>
+<p class="change-note">בדקו את גרסת ה-Bootstrap בפרויקט (בשורה הראשונה של <code class="inline">wwwroot/lib/bootstrap/dist/css/bootstrap.min.css</code>) ושימו אותה במקום 5.3.3.</p>
+<p class="guide-link">הסבר מלא: <a href="08-css-js.html">מדריך 8, סעיף 6</a></p>
+</div>
+<div class="snippet">
+<h3>קישור בתפריט</h3>
+<p>עוד פריט בתפריט העליון.</p>
+<p class="where">ב-_Layout.cshtml, ליד שאר ה-nav-item</p>
+<pre class="code-block">&lt;li class=&quot;nav-item&quot;&gt;
+    &lt;a class=&quot;nav-link text-dark&quot; asp-controller=&quot;Products&quot; asp-action=&quot;Index&quot;&gt;מוצרים&lt;/a&gt;
+&lt;/li&gt;</pre>
+<p class="guide-link">הסבר מלא: <a href="06-layout.html">מדריך 6, סעיף 3</a></p>
+</div>
+<div class="snippet">
+<h3>תפריט שמשתנה לפי מי שמחובר</h3>
+<p>קישורים שונים לאורח, למשתמש ולמנהל.</p>
+<p class="where">ב-_Layout.cshtml, בתוך התפריט</p>
+<pre class="code-block">@if (User.Identity?.IsAuthenticated == true)
+{
+    &lt;li class=&quot;nav-item&quot;&gt;
+        &lt;a class=&quot;nav-link text-dark&quot; asp-controller=&quot;Orders&quot; asp-action=&quot;MyOrders&quot;&gt;ההזמנות שלי&lt;/a&gt;
+    &lt;/li&gt;
+}
+@if (User.IsInRole(&quot;Admin&quot;))
+{
+    &lt;li class=&quot;nav-item&quot;&gt;
+        &lt;a class=&quot;nav-link text-danger&quot; asp-controller=&quot;Categories&quot; asp-action=&quot;Index&quot;&gt;ניהול&lt;/a&gt;
+    &lt;/li&gt;
+}</pre>
+</div>
+<div class="snippet">
+<h3>סימון הקישור הפעיל בתפריט</h3>
+<p>הקישור של העמוד הנוכחי מודגש, כך שרואים איפה נמצאים.</p>
+<p class="where">ב-_Layout.cshtml, לפני התפריט</p>
+<pre class="code-block">@{
+    var currentController = ViewContext.RouteData.Values[&quot;controller&quot;]?.ToString();
+}</pre>
+<p class="where">בכל קישור בתפריט</p>
+<pre class="code-block">&lt;a class=&quot;nav-link @(currentController == &quot;Products&quot; ? &quot;active fw-bold&quot; : &quot;text-dark&quot;)&quot;
+   asp-controller=&quot;Products&quot; asp-action=&quot;Index&quot;&gt;מוצרים&lt;/a&gt;</pre>
+<p class="change-note">בכל קישור, כתבו בתנאי את שם ה-Controller שלו.</p>
+</div>
+<div class="snippet">
+<h3>כפתור "חזרה"</h3>
+<p>חוזר לעמוד הקודם, כמו כפתור החזרה של הדפדפן.</p>
+<p class="where">בכל View</p>
+<pre class="code-block">&lt;a href=&quot;javascript:history.back()&quot; class=&quot;btn btn-secondary&quot;&gt;→ חזרה&lt;/a&gt;</pre>
+</div>
+<div class="snippet">
+<h3>חלון קופץ (Modal)</h3>
+<p>חלון שנפתח מעל העמוד בלחיצה על כפתור. Bootstrap כבר כולל את ה-JavaScript שלו.</p>
+<p class="where">בכל View</p>
+<pre class="code-block">&lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#infoModal&quot;&gt;
+    מידע נוסף
+&lt;/button&gt;
+
+&lt;div class=&quot;modal fade&quot; id=&quot;infoModal&quot; tabindex=&quot;-1&quot;&gt;
+    &lt;div class=&quot;modal-dialog&quot;&gt;
+        &lt;div class=&quot;modal-content&quot;&gt;
+            &lt;div class=&quot;modal-header&quot;&gt;
+                &lt;h5 class=&quot;modal-title&quot;&gt;מידע נוסף&lt;/h5&gt;
+                &lt;button type=&quot;button&quot; class=&quot;btn-close&quot; data-bs-dismiss=&quot;modal&quot;&gt;&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;modal-body&quot;&gt;
+                כאן כותבים את התוכן של החלון.
+            &lt;/div&gt;
+            &lt;div class=&quot;modal-footer&quot;&gt;
+                &lt;button type=&quot;button&quot; class=&quot;btn btn-secondary&quot; data-bs-dismiss=&quot;modal&quot;&gt;סגירה&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+<p class="change-note">ה-<code class="inline">data-bs-target</code> של הכפתור חייב להיות זהה ל-<code class="inline">id</code> של החלון (עם # לפניו).</p>
+</div>
+<div class="snippet">
+<h3>הודעה שנסגרת בלחיצה</h3>
+<p>הודעה עם X לסגירה.</p>
+<p class="where">בכל View</p>
+<pre class="code-block">&lt;div class=&quot;alert alert-warning alert-dismissible fade show&quot;&gt;
+    שימו לב: המבצע מסתיים ביום חמישי!
+    &lt;button type=&quot;button&quot; class=&quot;btn-close&quot; data-bs-dismiss=&quot;alert&quot;&gt;&lt;/button&gt;
+&lt;/div&gt;</pre>
+</div>
+<div class="snippet">
+<h3>לוגו בתפריט ואייקון לכרטיסייה</h3>
+<p>תמונה במקום (או ליד) שם האתר, ואייקון משלכם בלשונית של הדפדפן.</p>
+<p class="where">ב-_Layout.cshtml, בתוך ה-navbar-brand</p>
+<pre class="code-block">&lt;a class=&quot;navbar-brand&quot; asp-controller=&quot;Home&quot; asp-action=&quot;Index&quot;&gt;
+    &lt;img src=&quot;~/images/logo.png&quot; alt=&quot;לוגו&quot; height=&quot;32&quot; /&gt;
+    האתר שלי
+&lt;/a&gt;</pre>
+<p class="where">ב-_Layout.cshtml, בתוך ה-head</p>
+<pre class="code-block">&lt;link rel=&quot;icon&quot; href=&quot;~/images/icon.png&quot; /&gt;</pre>
+<p class="change-note">שימו את התמונות בתיקייה <code class="inline">wwwroot/images</code>.</p>
+</div>
+<div class="snippet">
+<h3>עמוד 404 מעוצב</h3>
+<p>במקום עמוד ריק כשכתובת לא קיימת, עמוד "העמוד לא נמצא" משלכם.</p>
+<p class="where">ב-Program.cs, לפני app.UseRouting();</p>
+<pre class="code-block">app.UseStatusCodePagesWithReExecute(&quot;/Home/PageNotFound&quot;);</pre>
+<p class="where">ב-HomeController</p>
+<pre class="code-block">public IActionResult PageNotFound()
+{
+    return View();
+}</pre>
+<p class="where">Views/Home/PageNotFound.cshtml</p>
+<pre class="code-block">@{
+    ViewData[&quot;Title&quot;] = &quot;העמוד לא נמצא&quot;;
+}
+
+&lt;div class=&quot;text-center mt-5&quot;&gt;
+    &lt;h1 class=&quot;display-1&quot;&gt;404&lt;/h1&gt;
+    &lt;p class=&quot;lead&quot;&gt;אופס, העמוד שחיפשתם לא קיים. 🤔&lt;/p&gt;
+    &lt;a asp-controller=&quot;Home&quot; asp-action=&quot;Index&quot; class=&quot;btn btn-primary&quot;&gt;לדף הבית&lt;/a&gt;
+&lt;/div&gt;</pre>
+</div>
+<div class="snippet">
+<h3>Footer</h3>
+<p>השורה התחתונה של האתר.</p>
+<p class="where">ב-_Layout.cshtml, בתוך ה-footer</p>
+<pre class="code-block">&lt;div class=&quot;container text-center&quot;&gt;
+    &amp;copy; 2026 · האתר של דנה ·
+    &lt;a asp-controller=&quot;Home&quot; asp-action=&quot;Privacy&quot;&gt;פרטיות&lt;/a&gt; ·
+    &lt;a href=&quot;mailto:dana@example.com&quot;&gt;צרו קשר&lt;/a&gt;
+&lt;/div&gt;</pre>
+</div>
+    <h2>JavaScript פשוט</h2>
+<div class="snippet">
+<h3>כפתור "הצג סיסמה"</h3>
+<p>תיבת סימון שמציגה את הסיסמה שהוקלדה.</p>
+<p class="where">בטופס, מתחת לשדה הסיסמה</p>
+<pre class="code-block">&lt;div class=&quot;form-check&quot;&gt;
+    &lt;input type=&quot;checkbox&quot; class=&quot;form-check-input&quot; id=&quot;showPassword&quot; /&gt;
+    &lt;label class=&quot;form-check-label&quot; for=&quot;showPassword&quot;&gt;הצג סיסמה&lt;/label&gt;
+&lt;/div&gt;</pre>
+<p class="where">בסוף העמוד</p>
+<pre class="code-block">@section Scripts {
+    &lt;script&gt;
+        document.getElementById(&quot;showPassword&quot;).addEventListener(&quot;change&quot;, function () {
+            var input = document.querySelector(&#x27;input[type=&quot;password&quot;], input.password-field&#x27;);
+            input.classList.add(&quot;password-field&quot;);
+            input.type = this.checked ? &quot;text&quot; : &quot;password&quot;;
+        });
+    &lt;/script&gt;
+}</pre>
+<p class="change-note">בדפי ההרשמה וההתחברות צריך קודם להוציא אותם לעריכה (מתקדם ג, סעיף 4).</p>
+</div>
+<div class="snippet">
+<h3>מונה תווים בתיבת טקסט</h3>
+<p>מציג כמה תווים הוקלדו מתוך המקסימום.</p>
+<p class="where">בטופס</p>
+<pre class="code-block">&lt;textarea asp-for=&quot;Message&quot; class=&quot;form-control&quot; maxlength=&quot;500&quot; id=&quot;messageBox&quot;&gt;&lt;/textarea&gt;
+&lt;small class=&quot;text-muted&quot;&gt;&lt;span id=&quot;charCount&quot;&gt;0&lt;/span&gt;/500&lt;/small&gt;</pre>
+<p class="where">בסוף העמוד</p>
+<pre class="code-block">@section Scripts {
+    &lt;script&gt;
+        var box = document.getElementById(&quot;messageBox&quot;);
+        box.addEventListener(&quot;input&quot;, function () {
+            document.getElementById(&quot;charCount&quot;).textContent = box.value.length;
+        });
+    &lt;/script&gt;
+}</pre>
+</div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>
