@@ -30,6 +30,7 @@ guides/               One HTML file per guide
 assets/style.css      Shared styles
 assets/site.js        Guide list, navigation, table of contents, search, copy buttons, highlighting
 assets/vendor/        Prism.js (syntax highlighting) and the VS Code Dark+ theme
+tools/build_snippets.py  Generates guides/snippets.html (edit the snippet list there, then run it)
 ```
 
 ## Adding or publishing a guide
