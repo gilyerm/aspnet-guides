@@ -12,6 +12,8 @@
     ];
 
     var GUIDES = [
+        { num: '0', slug: '00-install-vs', section: 'start', title: 'התקנת Visual Studio 2026', desc: 'הורדה, בחירת הרכיבים הנכונים והתחברות לחשבון', ready: true,
+          keywords: 'התקנה Install Community Workloads ASP.NET and web development Installer Modify Repair Sign in' },
         { num: '1', slug: '01-create-project', section: 'start', title: 'יצירת פרויקט', desc: 'פרויקט MVC עם מערכת משתמשים, מבנה התיקיות והרצה ראשונה', ready: true,
           keywords: 'Individual Accounts תבנית wwwroot Controllers Models Views Program.cs appsettings תיקיות SSL אישור' },
         { num: '2', slug: '02-visual-studio', section: 'start', title: 'עבודה ב-Visual Studio', desc: 'הכרת המסך, הרצה, קיצורים, NuGet וצפייה במסד הנתונים', ready: true,

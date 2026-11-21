@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 0: התקנת Visual Studio 2026</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="00-install-vs">
+<main>
+    <h1>מדריך 0: התקנת Visual Studio 2026</h1>
+    <div class="subtitle">מורידים ומתקינים את התוכנה שבה נבנה את האתר, עם הרכיבים הנכונים</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> לפני שבונים אתר, צריך להתקין את Visual Studio על המחשב. בבית הספר היא כנראה כבר מותקנת. המדריך הזה בשביל המחשב בבית.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מחשב עם Windows, וחיבור לאינטרנט.
+    </div>
+
+    <div class="warning">
+        <strong>⚠️ לפני שמתחילים:</strong>
+        <ul style="margin-bottom:0">
+            <li>המחשב חייב להיות <strong>מחובר לאינטרנט לאורך כל ההתקנה</strong>.</li>
+            <li>ההתקנה <strong>ארוכה</strong>: יכולה לקחת קרוב לשעה. כדאי להתחיל כשיש זמן, ולא לכבות את המחשב באמצע.</li>
+            <li>צריך מקום פנוי בדיסק: לפחות 20GB.</li>
+        </ul>
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. הורדה</h2>
+    <ul class="step-list">
+        <li>חפשו בגוגל <strong>Visual Studio downloads</strong>, או היכנסו ישירות ל-<a href="https://visualstudio.microsoft.com/downloads/" target="_blank">visualstudio.microsoft.com/downloads</a>.</li>
+        <li>בחרו ב-<strong>Visual Studio Community</strong> ולחצו על כפתור ההורדה. זו הגרסה החינמית, והיא כל מה שצריך. (Professional ו-Enterprise הן גרסאות בתשלום.)
+            <div class="screenshot"><img src="../assets/images/install/download-page.png" alt="עמוד ההורדה של Visual Studio Community, עם הכפתור Download"></div>
+        </li>
+        <li>בסיום ההורדה, פתחו את הקובץ שירד (שמו מתחיל ב-<code class="inline">vs_community</code>). אשרו את כל ההודעות שקופצות (למשל "האם לאפשר לאפליקציה לבצע שינויים").
+            <div class="screenshot"><img src="../assets/images/install/download-file.png" alt="הקובץ vs_community שירד, בתחתית הדפדפן" style="max-width:320px"></div>
+        </li>
+    </ul>
+
+    <div class="concept">
+        <span class="concept-title">📖 מה הורדנו?</span>
+        הקובץ הקטן שירד הוא לא Visual Studio עצמה, אלא <strong>Visual Studio Installer</strong>: תוכנה שמורידה ומתקינה את Visual Studio, ונותנת לבחור אילו חלקים ממנה להתקין. גם בהמשך משתמשים בה כדי לעדכן או להוסיף רכיבים.
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. בחירת רכיבים (Workloads)</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Workload (חבילת עבודה)</span>
+        Visual Studio יודעת לבנות הרבה סוגים של תוכנות: אתרים, משחקים, אפליקציות לטלפון. לכל סוג יש "חבילה" של כלים, שנקראת Workload. מתקינים רק את מה שצריך, כדי לחסוך מקום וזמן.
+    </div>
+
+    <p>אחרי כמה דקות ייפתח חלון עם הלשונית <strong>Workloads</strong>. סמנו:</p>
+    <table class="simple">
+        <tr><th>רכיב</th><th>איפה בחלון</th><th>למה</th></tr>
+        <tr><td><strong>ASP.NET and web development</strong></td><td>תחת <strong>Web &amp; Cloud</strong></td><td><span class="highlight">חובה.</span> זה מה שמאפשר לבנות אתרי ASP.NET Core MVC.</td></tr>
+        <tr><td><strong>Data storage and processing</strong></td><td>למטה, תחת <strong>Other Toolsets</strong></td><td>מומלץ מאוד. כלים לעבודה עם מסד הנתונים (מדריכים 2 ו-13).</td></tr>
+    </table>
+
+    <div class="screenshot"><img src="../assets/images/install/workloads.png" alt="חלון בחירת הרכיבים של Visual Studio Installer, עם הסימונים"></div>
+
+    <div class="explanation">
+        <strong>💡 על התמונה:</strong> בתמונה מסומנים גם <strong>WinUI application development</strong>, וב"Installation details" שבצד גם <strong>.NET Framework project and item templates</strong>. הם נחוצים לקורסים אחרים בתוכנית (למשל יסודות C#). אם אתם לומדים גם אותם, סמנו גם את אלה. למדריכים באתר הזה מספיקים שני הרכיבים שבטבלה.
+    </div>
+
+    <ul class="step-list">
+        <li>אחרי שסימנתם, לחצו על <strong>Install</strong> בפינה הימנית התחתונה של החלון.</li>
+        <li>עכשיו מתחילה ההתקנה הארוכה. אפשר לעשות דברים אחרים במחשב בינתיים, רק לא לכבות אותו ולא לנתק את האינטרנט.</li>
+    </ul>
+
+    <div class="warning">
+        <strong>⚠️ אם בסוף מופיעה הודעה שההתקנה לא הצליחה כי חסרים רכיבים:</strong> פתחו את <strong>Visual Studio Installer</strong> (חפשו אותו בתפריט התחל), ליד Visual Studio לחצו <strong>Modify</strong>, ואז בחרו <strong>Repair</strong>.
+    </div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. התחברות לחשבון Microsoft</h2>
+    <p>בסוף ההתקנה, Visual Studio תיפתח ותבקש להתחבר:</p>
+    <ul class="step-list">
+        <li>לחצו <strong>Sign in</strong> והתחברו עם חשבון Microsoft.</li>
+        <li>אין לכם חשבון? לחצו על <strong>Create one!</strong> ופתחו חשבון חדש (בחינם).</li>
+    </ul>
+    <div class="screenshot"><img src="../assets/images/install/sign-in.png" alt="חלון הפתיחה של Visual Studio, עם הכפתור Sign in והקישור Create one" style="max-width:420px"></div>
+
+    <div class="warning">
+        <strong>⚠️ חובה להתחבר!</strong> אפשר ללחוץ "Not now, maybe later", אבל בלי התחברות Visual Studio Community <strong>תינעל אחרי 30 יום</strong>.
+    </div>
+
+    <div class="checkpoint">Visual Studio נפתחה, ובמסך הפתיחה יש אפשרויות כמו <strong>Create a new project</strong> ו-<strong>Clone a repository</strong>. ההתקנה הסתיימה! 🎉</div>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. כבר מותקנת? בודקים שיש את הרכיב הנכון</h2>
+    <p>אם Visual Studio כבר מותקנת, אבל במדריך 1 לא מוצאים את התבנית <strong>ASP.NET Core Web App (Model-View-Controller)</strong>, כנראה חסר הרכיב:</p>
+    <ul class="step-list">
+        <li>פתחו את <strong>Visual Studio Installer</strong> מתפריט התחל.</li>
+        <li>ליד Visual Studio לחצו <strong>Modify</strong>.</li>
+        <li>סמנו <strong>ASP.NET and web development</strong> (ואם אין, גם <strong>Data storage and processing</strong>) ולחצו <strong>Modify</strong> בפינה למטה.</li>
+    </ul>
+    <p>באותו מקום (בכפתור <strong>Update</strong>, אם הוא מופיע) מעדכנים את Visual Studio לגרסה החדשה ביותר. כדאי לעדכן מדי פעם, ובמיוחד שבבית ובבית הספר תהיה אותה גרסה (מדריך 3).</p>
+
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>ההתקנה נתקעת על אותו אחוז הרבה זמן:</strong> חלק מהרכיבים גדולים, וזה נורמלי שזה ייקח זמן. אם אחרי שעה לא זז כלום, בדקו את החיבור לאינטרנט ונסו שוב.</li>
+            <li><strong>הודעה שאין מספיק מקום:</strong> פנו מקום בדיסק, או בלשונית <strong>Installation locations</strong> בחרו כונן אחר.</li>
+            <li><strong>ההתקנה נכשלה:</strong> Visual Studio Installer ← Modify ← Repair (סעיף 2).</li>
+        </ul>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>מורידים את <strong>Visual Studio Community</strong> (החינמית) מ-visualstudio.microsoft.com/downloads.</li>
+            <li>חובה לסמן את <strong>ASP.NET and web development</strong>, ומומלץ גם <strong>Data storage and processing</strong>.</li>
+            <li>מתחברים לחשבון Microsoft, אחרת התוכנה תינעל אחרי 30 יום.</li>
+            <li>רכיבים חסרים, תיקון ועדכונים: דרך <strong>Visual Studio Installer</strong> ← Modify.</li>
+        </ul>
+    </div>
+
+    <p style="color:var(--muted); font-size:0.9rem; margin-top:2rem;">השלבים והתמונות במדריך הזה מבוססים על המדריך של הילה קדמן, <a href="https://kadman11.wordpress.com" target="_blank">kadman11.wordpress.com</a>.</p>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

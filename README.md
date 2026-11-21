@@ -8,7 +8,7 @@ A series of step-by-step guides, written in Hebrew, for high-school students bui
 
 | Section | Topics |
 |---|---|
-| Getting started | Creating a project with Individual Accounts, working in Visual Studio, Git & GitHub (GUI only) |
+| Getting started | Installing Visual Studio 2026, creating a project with Individual Accounts, working in Visual Studio, Git & GitHub (GUI only) |
 | Building pages | How MVC works, Razor (`.cshtml`), the Layout and menu, adding pages, CSS & JS, RTL, Bootstrap |
 | Data | Models, forms, validation, Entity Framework & migrations, relationships, scaffolding |
 | Images & users | Image upload, authorization and roles |
@@ -40,5 +40,8 @@ tools/build_snippets.py  Generates guides/snippets.html (edit the snippet list t
 3. Commit and push. GitHub Pages publishes the change within a minute or two.
 
 ## Credits
+
+The Visual Studio installation guide (guide 0) is based on the guide and screenshots by Hila Kadman ([kadman11.wordpress.com](https://kadman11.wordpress.com)).
+
 
 Syntax highlighting by [Prism](https://prismjs.com/) (MIT) with the VS Code Dark+ theme from [prism-themes](https://github.com/PrismJS/prism-themes) (MIT).
