@@ -29,6 +29,12 @@
         { num: 'JS', slug: 'web-js', section: 'web', title: 'יסודות JavaScript', desc: 'לחיצות, הקלדה, הצגה והסתרה, רשימות ובדיקת טופס, עם דוגמאות חיות', ready: true,
           keywords: 'getElementById querySelector addEventListener click textContent classList toggle hidden let const forEach alert confirm' },
 
+        { num: '🎨', slug: 'web-design', section: 'web', title: 'עיצוב שנראה מקצועי', desc: 'גופנים בעברית, אייקונים, סרטונים ומפות, וכללי עיצוב', ready: true,
+          keywords: 'Google Fonts גופן Rubik Heebo אייקונים Bootstrap Icons YouTube מפה iframe embed צבעים פלטה ניגודיות' },
+        { num: 'CSS 2', slug: 'web-css2', section: 'web', title: "CSS חלק ב'", desc: 'משתני צבע, position, Grid ואנימציות', ready: true,
+          keywords: 'var משתנים root position sticky fixed absolute relative grid keyframes animation אנימציה' },
+        { num: 'JS 2', slug: 'web-js2', section: 'web', title: "JavaScript חלק ב'", desc: 'פונקציות, אובייקטים, טיימרים, משחקים קטנים ו-localStorage', ready: true,
+          keywords: 'function return object template literal setTimeout setInterval Math.random random data- dataset localStorage שעון משחק' },
         { num: '4', slug: '04-how-mvc-works', section: 'pages', title: 'איך אתר MVC עובד', desc: 'התמונה הכללית: כתובת, Controller, View ודפדפן', ready: true,
           keywords: 'Model View Controller Action בקשה כתובת URL ניתוב Routing return View' },
         { num: '5', slug: '05-cshtml', section: 'pages', title: 'מה זה cshtml?', desc: 'HTML משולב עם C#, הסימן @ ותחביר Razor', ready: true,

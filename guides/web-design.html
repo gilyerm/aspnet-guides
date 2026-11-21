@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>עיצוב שנראה מקצועי</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="web-design">
+<main>
+    <h1>עיצוב שנראה מקצועי</h1>
+    <div class="subtitle">גופנים בעברית, אייקונים, סרטונים ומפות, וכמה כללי עיצוב שעושים את כל ההבדל</div>
+
+    <div class="explanation"><strong>💡 על מה העמוד הזה?</strong> אתר יכול לעבוד מצוין ועדיין להיראות "של תלמיד". רוב ההבדל לא בקוד מסובך, אלא בכמה בחירות פשוטות: גופן טוב, אייקונים, רווחים וצבעים שמתאימים זה לזה. מומלץ להכיר קודם את <a href="web-css.html">יסודות CSS</a>.
+        <br><br>
+        <strong>✏️ איך עובדים עם העמוד:</strong> בכל תיבה כחולה אפשר <strong>לשנות את הקוד</strong>, והתוצאה מתעדכנת מיד בצד. אם יש לשוניות (HTML / CSS / JavaScript), לחצו עליהן כדי לעבור בין הקבצים. ↺ איפוס מחזיר את הדוגמה למצב ההתחלתי. אי אפשר לשבור כלום, אז תתפרעו!
+    </div>
+
+    <h2>1. גופן בעברית מ-Google Fonts</h2>
+<p>הגופן שמגיע כברירת מחדל לא מיועד לעברית. ב-<a href="https://fonts.google.com/?subset=hebrew" target="_blank">Google Fonts</a> יש גופנים חינמיים שנראים מצוין בעברית, למשל <strong>Rubik</strong> (שהאתר הזה כתוב בו), <strong>Heebo</strong>, <strong>Assistant</strong> ו-<strong>Varela Round</strong>.</p>
+<div class="playground" data-title="נסו: בשורת ה-link שבראש ה-HTML, ובשורה של .after, החליפו Rubik ב-Heebo" data-height="260">
+<textarea data-lang="html">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&amp;display=swap&quot;&gt;
+&lt;h2 class=&quot;before&quot;&gt;לפני: הגופן הרגיל&lt;/h2&gt;
+&lt;p class=&quot;before&quot;&gt;ברוכים הבאים לחנות שלנו! כאן תמצאו את כל הציוד לבית הספר.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 class=&quot;after&quot;&gt;אחרי: הגופן Rubik&lt;/h2&gt;
+&lt;p class=&quot;after&quot;&gt;ברוכים הבאים לחנות שלנו! כאן תמצאו את כל הציוד לבית הספר.&lt;/p&gt;</textarea>
+<textarea data-lang="css">.before {
+    font-family: &quot;Times New Roman&quot;, serif;
+}
+
+.after {
+    font-family: &quot;Rubik&quot;, sans-serif;
+}</textarea>
+</div>
+<h3>איך מוסיפים לפרויקט</h3>
+<ul class="step-list"><li>ב-<a href="https://fonts.google.com/?subset=hebrew" target="_blank">fonts.google.com</a> בחרו גופן, לחצו <strong>Get font</strong> ואז <strong>Get embed code</strong>. העתיקו את שורת ה-<code class="inline">&lt;link&gt;</code> שמופיעה שם.</li><li>ב-<code class="inline">Views/Shared/_Layout.cshtml</code>, הדביקו אותה בתוך ה-<code class="inline">&lt;head&gt;</code>, <strong>לפני</strong> השורה של <code class="inline">site.css</code>. לדוגמה:<pre class="code-block">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&amp;display=swap&quot;&gt;</pre></li><li>ב-<code class="inline">wwwroot/css/site.css</code>, הוסיפו:<pre class="code-block">body {
+    font-family: &quot;Rubik&quot;, sans-serif;
+}</pre></li></ul>
+<div class="checkpoint">כל האתר בגופן החדש, כולל התפריט והכפתורים.</div>
+    <h2>2. אייקונים</h2>
+<p><a href="https://icons.getbootstrap.com/" target="_blank">Bootstrap Icons</a> היא ספרייה של כ-2,000 אייקונים חינמיים, שמתאימה ל-Bootstrap. כל אייקון הוא תגית <code class="inline">&lt;i&gt;</code> עם class.</p>
+<div class="playground" data-title="נסו: באתר icons.getbootstrap.com חפשו אייקון, והחליפו bi-cart בשם שלו" data-height="170">
+<textarea data-lang="html">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css&quot;&gt;
+&lt;p&gt;
+    &lt;i class=&quot;bi bi-cart&quot;&gt;&lt;/i&gt; עגלה
+    &amp;nbsp; &lt;i class=&quot;bi bi-heart-fill&quot; style=&quot;color: crimson&quot;&gt;&lt;/i&gt; אהבתי
+    &amp;nbsp; &lt;i class=&quot;bi bi-trash&quot;&gt;&lt;/i&gt; מחיקה
+    &amp;nbsp; &lt;i class=&quot;bi bi-person-circle&quot;&gt;&lt;/i&gt; הפרופיל שלי
+&lt;/p&gt;
+
+&lt;button class=&quot;btn-icon&quot;&gt;&lt;i class=&quot;bi bi-plus-lg&quot;&gt;&lt;/i&gt; הוספת מוצר&lt;/button&gt;
+&lt;button class=&quot;btn-icon&quot;&gt;&lt;i class=&quot;bi bi-search&quot;&gt;&lt;/i&gt; חיפוש&lt;/button&gt;</textarea>
+<textarea data-lang="css">.bi {
+    font-size: 1.3rem;
+    vertical-align: middle;
+}
+
+.btn-icon {
+    padding: 8px 14px;
+    font-size: 16px;
+    border: 1px solid #888;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+}</textarea>
+</div>
+<h3>איך מוסיפים לפרויקט</h3>
+<p>ב-<code class="inline">_Layout.cshtml</code>, בתוך ה-<code class="inline">&lt;head&gt;</code>, הוסיפו:</p><pre class="code-block">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css&quot;&gt;</pre><p>ומעכשיו בכל עמוד: <code class="inline">&lt;i class=&quot;bi bi-cart&quot;&gt;&lt;/i&gt;</code>. את השם של כל אייקון מוצאים באתר, בחיפוש באנגלית (cart, heart, trash, user...).</p>
+<div class="explanation"><strong>💡 גם אימוג'י עובד!</strong> בכפתורים פשוטים אפשר גם לכתוב אימוג'י ישירות בטקסט (🛒 ❤️ 🗑️). זה פחות אחיד מאייקונים, אבל לא צריך להוסיף כלום.</div>
+    <h2>3. סרטון YouTube ומפה</h2>
+<p>אתרים כמו YouTube ו-Google Maps נותנים קוד מוכן להטמעה (embed). זו תגית <code class="inline">&lt;iframe&gt;</code>: "חלון" לאתר אחר בתוך העמוד שלכם.</p>
+<h3>סרטון YouTube</h3>
+<ul class="step-list"><li>ב-YouTube, מתחת לסרטון, לחצו <strong>שיתוף (Share)</strong> ואז <strong>הטמעה (Embed)</strong>.</li><li>העתיקו את הקוד שמופיע (מתחיל ב-<code class="inline">&lt;iframe</code>) והדביקו ב-View שלכם.</li><li>כדי שהסרטון יתאים לרוחב המסך, עטפו אותו ב-div של Bootstrap:<pre class="code-block">&lt;div class=&quot;ratio ratio-16x9&quot;&gt;
+    &lt;iframe src=&quot;https://www.youtube.com/embed/VIDEO_ID&quot; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/div&gt;</pre>ב-<code class="inline">VIDEO_ID</code> יופיע הקוד של הסרטון, אם העתקתם מ-YouTube.</li></ul>
+<h3>מפה של Google</h3>
+<p>הדרך הקלה: כתובת עם <code class="inline">q=</code> ושם המקום. למשל, מפה של "תל אביב":</p>
+<pre class="code-block">&lt;div class=&quot;ratio ratio-16x9&quot;&gt;
+    &lt;iframe src=&quot;https://maps.google.com/maps?q=Tel%20Aviv&amp;output=embed&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;</pre>
+<p>וכך זה נראה:</p><div class="screenshot" style="padding:0"><iframe src="https://maps.google.com/maps?q=Tel%20Aviv&amp;output=embed" style="width:100%;height:280px;border:0;border-radius:8px" loading="lazy" title="מפה לדוגמה"></iframe></div>
+<p class="change-note">החליפו את <code class="inline">Tel%20Aviv</code> בכתובת שלכם (<code class="inline">%20</code> = רווח).</p>
+    <h2>4. כללי עיצוב שעושים את כל ההבדל</h2>
+<p>הנה אותו כרטיס פעמיים. שניהם "עובדים", אבל ההבדל ברור. אחרי הדוגמה מוסבר כל כלל:</p>
+<div class="playground" data-title="נסו: שנו את הצבע #4c1d95 בשלושת המקומות לצבע אחר" data-height="360">
+<textarea data-lang="html">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&amp;display=swap&quot;&gt;
+&lt;div class=&quot;bad&quot;&gt;
+    &lt;h2&gt;מבצע מטורף!!!&lt;/h2&gt;
+    &lt;p&gt;מחברות במחיר מיוחד רק השבוע!!! אל תפספסו!!! כל המחברות בחנות במחיר מוזל.&lt;/p&gt;
+    &lt;button&gt;לקנייה&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;good&quot;&gt;
+    &lt;h2&gt;מבצע השבוע&lt;/h2&gt;
+    &lt;p&gt;כל המחברות בחנות ב-10 ₪ בלבד, עד יום חמישי.&lt;/p&gt;
+    &lt;button&gt;לקנייה&lt;/button&gt;
+&lt;/div&gt;</textarea>
+<textarea data-lang="css">/* לפני: יותר מדי צבעים, בלי רווחים, קשה לקרוא */
+.bad {
+    background: yellow;
+    color: red;
+    font-family: &quot;Comic Sans MS&quot;;
+    border: 4px dashed blue;
+    margin-bottom: 20px;
+}
+.bad h2 { color: green; text-align: center; }
+.bad button { background: purple; color: lime; }
+
+/* אחרי: צבע אחד מוביל, רווחים, ניגודיות טובה */
+.good {
+    font-family: &quot;Rubik&quot;, sans-serif;
+    background: white;
+    color: #333;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    max-width: 400px;
+}
+.good h2 { color: #4c1d95; margin-top: 0; }
+.good p { line-height: 1.6; }
+.good button {
+    background: #4c1d95;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}</textarea>
+</div>
+<table class="simple"><tr><th>כלל</th><th>למה</th><th>איך</th></tr><tr><td><strong>2-3 צבעים בלבד</strong></td><td>יותר צבעים = בלגן. צבע אחד "מוביל" (לכפתורים ולכותרות), ושאר העמוד בשחור, אפור ולבן.</td><td>בחרו צבע מוביל אחד, והשתמשו בו בכל האתר.</td></tr><tr><td><strong>ניגודיות</strong></td><td>טקסט צהוב על לבן, או אפור בהיר על אפור, קשה לקרוא.</td><td>טקסט כהה על רקע בהיר (או הפוך).</td></tr><tr><td><strong>רווחים</strong></td><td>צפיפות מעייפת את העין. רווח "נותן לתוכן לנשום".</td><td><code class="inline">padding</code> בתוך קופסאות, <code class="inline">margin</code> ביניהן, <code class="inline">line-height: 1.6</code> בטקסט.</td></tr><tr><td><strong>היררכיה</strong></td><td>צריך לראות מיד מה הכי חשוב.</td><td>כותרת גדולה, טקסט רגיל, ופעולה אחת בולטת (כפתור בצבע המוביל).</td></tr><tr><td><strong>עקביות</strong></td><td>אתר שבו כל עמוד נראה אחרת נראה לא גמור.</td><td>אותו גופן, אותם צבעים, אותו סגנון כפתורים בכל העמודים. (בשביל זה יש <code class="inline">site.css</code> ומשתני CSS, ראו <a href="web-css2.html">CSS חלק ב'</a>.)</td></tr><tr><td><strong>פחות זה יותר</strong></td><td>סימני קריאה, אנימציות ומסגרות צועקות מסיחים את הדעת.</td><td>כל קישוט צריך סיבה.</td></tr></table>
+<div class="explanation"><strong>💡 לא בטוחים באילו צבעים לבחור?</strong> באתרים כמו <a href="https://coolors.co" target="_blank">coolors.co</a> יש פלטות מוכנות של צבעים שמתאימים זה לזה. לחצו רווח כדי לקבל פלטה חדשה, והעתיקו את הקודים.</div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul><li>גופן מ-Google Fonts: שורת link ב-Layout, ו-font-family ב-site.css.</li>
+<li>אייקונים: Bootstrap Icons, שורת link אחת, ואז <code class="inline">&lt;i class=&quot;bi bi-...&quot;&gt;</code>.</li>
+<li>סרטונים ומפות: קוד הטמעה (iframe), עטוף ב-<code class="inline">ratio ratio-16x9</code>.</li>
+<li>עיצוב: צבע מוביל אחד, ניגודיות, רווחים, היררכיה ועקביות.</li></ul>
+    </div>
+    <p style="margin-top:1.5rem">🔎 <strong>רוצים עוד?</strong> השראה: עברו על אתרים שאתם אוהבים, ופתחו F12 ← Elements כדי לראות איזה גופן, צבעים ורווחים הם בחרו.</p>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -540,7 +540,7 @@ p {
       'Box Model: padding בפנים, border מסגרת, margin בחוץ.',
       'Flexbox מסדר בשורה, ו-@media מתאים לטלפון.',
       'משנים את Bootstrap עם class משלכם ב-site.css, ולא בקבצים שלו.'],
-     'כל התכונות, עם דוגמאות: <a href="https://www.w3schools.com/css/" target="_blank">w3schools CSS</a>. משחק שמלמד Flexbox: <a href="https://flexboxfroggy.com/#he" target="_blank">Flexbox Froggy</a> (יש גם בעברית).')
+     'ההמשך באתר: <a href="web-css2.html">CSS חלק ב\'</a> (מיקום, משתני צבע, Grid ואנימציות) ו-<a href="web-design.html">עיצוב שנראה מקצועי</a>. כל התכונות, עם דוגמאות: <a href="https://www.w3schools.com/css/" target="_blank">w3schools CSS</a>. משחק שמלמד Flexbox: <a href="https://flexboxfroggy.com/#he" target="_blank">Flexbox Froggy</a> (יש גם בעברית).')
 
 # =====================================================================
 # JavaScript
@@ -748,6 +748,19 @@ document.getElementById("del").addEventListener("click", function () {
       'hidden מסתיר, classList.toggle מחליף עיצוב.',
       'בדיקה ב-JavaScript היא לנוחות. הבדיקה האמיתית בשרת.',
       'שגיאות רואים ב-F12 ← Console.'],
-     'מדריך מלא: <a href="https://www.w3schools.com/js/" target="_blank">w3schools JavaScript</a>, או <a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript" target="_blank">MDN</a> (באנגלית).')
+     'ההמשך באתר: <a href="web-js2.html">JavaScript חלק ב\'</a> (אובייקטים, טיימרים, משחקים קטנים ו-localStorage). מדריך מלא: <a href="https://www.w3schools.com/js/" target="_blank">w3schools JavaScript</a>, או <a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript" target="_blank">MDN</a> (באנגלית).')
 
-print('built web-html, web-css, web-js')
+
+
+def code(src, lang=None):
+    attr = f' data-lang="{lang}"' if lang else ''
+    return f'<pre class="code-block"{attr}>{html.escape(src.strip(chr(10)))}</pre>'
+
+
+def box(kind, title, text):
+    return f'<div class="{kind}"><strong>{title}</strong> {text}</div>'
+
+
+exec(open(os.path.join(os.path.dirname(__file__), 'web_part2.py'), encoding='utf-8').read())
+
+print('built web basics pages')

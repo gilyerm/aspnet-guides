@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS חלק ב'</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="web-css2">
+<main>
+    <h1>CSS חלק ב'</h1>
+    <div class="subtitle">מיקום, משתני צבע, Grid ואנימציות</div>
+
+    <div class="explanation"><strong>💡 על מה העמוד הזה?</strong> המשך של <a href="web-css.html">יסודות CSS</a>, למי שכבר מרגיש בנוח עם סלקטורים, צבעים ו-Box Model. כאן: איך להצמיד דברים למקום, להגדיר צבעים פעם אחת לכל האתר, לבנות פריסות מורכבות, ולהוסיף תנועה.
+        <br><br>
+        <strong>✏️ איך עובדים עם העמוד:</strong> בכל תיבה כחולה אפשר <strong>לשנות את הקוד</strong>, והתוצאה מתעדכנת מיד בצד. אם יש לשוניות (HTML / CSS / JavaScript), לחצו עליהן כדי לעבור בין הקבצים. ↺ איפוס מחזיר את הדוגמה למצב ההתחלתי. אי אפשר לשבור כלום, אז תתפרעו!
+    </div>
+
+    <h2>1. משתני CSS: הצבעים של האתר במקום אחד</h2>
+<div class="concept"><span class="concept-title">📖 משתנה CSS</span>שם שמחזיק ערך. מגדירים פעם אחת ב-<code class="inline">:root</code> (עם שני מקפים בהתחלה), ומשתמשים עם <code class="inline">var(...)</code>.<span class="example">ככה, כשרוצים להחליף את הצבע של כל האתר, משנים שורה אחת.</span></div>
+<div class="playground" data-title="נסו: שנו רק את --main-color ל-teal. כל העמוד משתנה" data-height="180">
+<textarea data-lang="html">&lt;h2&gt;החנות שלנו&lt;/h2&gt;
+&lt;p&gt;כל הצבעים בעמוד מגיעים משלושה משתנים.&lt;/p&gt;
+&lt;button class=&quot;main-btn&quot;&gt;לקנייה&lt;/button&gt;
+&lt;span class=&quot;tag&quot;&gt;חדש!&lt;/span&gt;</textarea>
+<textarea data-lang="css">:root {
+    --main-color: #4c1d95;
+    --light-color: #ede9fe;
+    --radius: 10px;
+}
+
+h2 {
+    color: var(--main-color);
+}
+
+.main-btn {
+    background: var(--main-color);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: var(--radius);
+}
+
+.tag {
+    background: var(--light-color);
+    color: var(--main-color);
+    padding: 4px 10px;
+    border-radius: var(--radius);
+}</textarea>
+</div>
+<div class="explanation"><strong>💡 בפרויקט:</strong> שימו את ה-<code class="inline">:root</code> בראש <code class="inline">site.css</code>, והשתמשו במשתנים בכל העיצוב שלכם.</div>
+    <h2>2. מיקום (position)</h2>
+<table class="simple"><tr><th>ערך</th><th>מה הוא עושה</th><th>שימוש נפוץ</th></tr><tr><td><code class="inline">sticky</code></td><td>האלמנט גולל כרגיל, עד שהוא מגיע לראש המסך, ואז "נדבק" שם.</td><td>תפריט שתמיד נשאר למעלה.</td></tr><tr><td><code class="inline">fixed</code></td><td>קבוע במקום על המסך, גם כשגוללים.</td><td>כפתור צף ("וואטסאפ", "חזרה למעלה").</td></tr><tr><td><code class="inline">relative</code> + <code class="inline">absolute</code></td><td><code class="inline">absolute</code> ממקם ביחס להורה הקרוב שיש לו <code class="inline">relative</code>.</td><td>תווית "מבצע!" בפינה של כרטיס.</td></tr></table>
+<div class="playground" data-title="נסו: גללו בתוצאה. ואז שנו left של .badge ל-right" data-height="260">
+<textarea data-lang="html">&lt;nav class=&quot;sticky-bar&quot;&gt;תפריט שנדבק למעלה (גללו בחלון הזה)&lt;/nav&gt;
+
+&lt;div class=&quot;card&quot;&gt;
+    &lt;span class=&quot;badge&quot;&gt;מבצע!&lt;/span&gt;
+    &lt;h3&gt;מחברת&lt;/h3&gt;
+    &lt;p&gt;12 ₪&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;טקסט כדי שיהיה מה לגלול.&lt;/p&gt;
+&lt;p&gt;עוד טקסט.&lt;/p&gt;
+&lt;p&gt;ועוד.&lt;/p&gt;
+&lt;p&gt;ועוד קצת.&lt;/p&gt;
+&lt;p&gt;כמעט נגמר.&lt;/p&gt;
+&lt;p&gt;סוף.&lt;/p&gt;
+
+&lt;button class=&quot;float-btn&quot;&gt;💬&lt;/button&gt;</textarea>
+<textarea data-lang="css">.sticky-bar {
+    position: sticky;
+    top: 0;
+    background: #4c1d95;
+    color: white;
+    padding: 10px;
+}
+
+.card {
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+    width: 200px;
+}
+
+.badge {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background: crimson;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.float-btn {
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: seagreen;
+    font-size: 22px;
+}</textarea>
+</div>
+    <h2>3. CSS Grid: שורות ועמודות</h2>
+<div class="concept"><span class="concept-title">📖 Grid</span>פריסה בשתי ממדים: מגדירים על העוטף כמה עמודות יהיו, והילדים מסתדרים בתוכן לבד. <code class="inline">repeat(3, 1fr)</code> פירושו "3 עמודות ברוחב שווה" (<code class="inline">fr</code> = חלק מהמקום הפנוי).<span class="example">מתי Flexbox ומתי Grid? Flexbox לשורה אחת (תפריט, כפתורים). Grid לרשת שלמה (גלריה, לוח).</span></div>
+<div class="playground" data-title="נסו: repeat(4, 1fr), ואחר כך span 3" data-height="280">
+<textarea data-lang="html">&lt;div class=&quot;gallery&quot;&gt;
+    &lt;div&gt;1&lt;/div&gt;&lt;div&gt;2&lt;/div&gt;&lt;div&gt;3&lt;/div&gt;
+    &lt;div&gt;4&lt;/div&gt;&lt;div class=&quot;wide&quot;&gt;5 (רחב)&lt;/div&gt;
+    &lt;div&gt;6&lt;/div&gt;&lt;div&gt;7&lt;/div&gt;&lt;div&gt;8&lt;/div&gt;
+&lt;/div&gt;</textarea>
+<textarea data-lang="css">.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.gallery div {
+    background: lightsteelblue;
+    padding: 25px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 8px;
+}
+
+.gallery .wide {
+    grid-column: span 2;
+    background: steelblue;
+    color: white;
+}</textarea>
+</div>
+<div class="playground" data-title="קסם: גלריה שמתאימה את עצמה לכל מסך, בשורה אחת" data-height="230">
+<textarea data-lang="html">&lt;div class=&quot;auto&quot;&gt;
+    &lt;div&gt;🍎&lt;/div&gt;&lt;div&gt;🍌&lt;/div&gt;&lt;div&gt;🍇&lt;/div&gt;&lt;div&gt;🍓&lt;/div&gt;
+    &lt;div&gt;🍒&lt;/div&gt;&lt;div&gt;🥝&lt;/div&gt;&lt;div&gt;🍍&lt;/div&gt;&lt;div&gt;🥭&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;הקטינו את רוחב החלון: מספר העמודות משתנה לבד!&lt;/p&gt;</textarea>
+<textarea data-lang="css">.auto {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.auto div {
+    background: #fef3c7;
+    font-size: 40px;
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px;
+}</textarea>
+</div>
+    <h2>4. אנימציות</h2>
+<div class="concept"><span class="concept-title">📖 @keyframes</span>מגדירים "תסריט" של תנועה: איך האלמנט נראה בהתחלה (<code class="inline">from</code>) ובסוף (<code class="inline">to</code>), או באחוזים לאורך הדרך. אחר כך מפעילים אותו עם <code class="inline">animation</code>.</div>
+<div class="playground" data-title="נסו: שנו 1s ל-0.3s, ו-3s ל-10s" data-height="190">
+<textarea data-lang="html">&lt;div class=&quot;pulse&quot;&gt;❤️&lt;/div&gt;
+&lt;div class=&quot;spin&quot;&gt;⚙️&lt;/div&gt;
+&lt;p class=&quot;fade&quot;&gt;טקסט שמופיע לאט&lt;/p&gt;</textarea>
+<textarea data-lang="css">@keyframes beat {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.pulse { font-size: 50px; display: inline-block; animation: beat 1s infinite; }
+.spin  { font-size: 50px; display: inline-block; animation: rotate 3s linear infinite; }
+.fade  { font-size: 22px; animation: appear 2s; }</textarea>
+</div>
+<table class="simple"><tr><th>חלק ב-animation</th><th>פירוש</th></tr><tr><td><code class="inline">beat</code></td><td>שם ה-@keyframes.</td></tr><tr><td><code class="inline">1s</code></td><td>כמה זמן לוקח סיבוב אחד.</td></tr><tr><td><code class="inline">infinite</code></td><td>לחזור בלי סוף. בלי זה, פעם אחת.</td></tr><tr><td><code class="inline">linear</code></td><td>מהירות קבועה (בלי האטה בהתחלה ובסוף).</td></tr></table>
+<div class="warning"><strong>⚠️ במידה:</strong> אנימציה אחת קטנה מוסיפה חיים. הרבה אנימציות מסיחות את הדעת ומעייפות. השתמשו בזה על דבר אחד שרוצים שישימו אליו לב.</div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul><li>משתני CSS (<code class="inline">--name</code> ו-<code class="inline">var()</code>): צבעים וגדלים במקום אחד.</li>
+<li>position: sticky לתפריט, fixed לכפתור צף, relative + absolute לתווית על כרטיס.</li>
+<li>Grid לרשתות: <code class="inline">grid-template-columns: repeat(3, 1fr)</code>, ו-auto-fill לגלריה שמתאימה את עצמה.</li>
+<li>אנימציות עם @keyframes ו-animation, במידה.</li></ul>
+    </div>
+    <p style="margin-top:1.5rem">🔎 <strong>רוצים עוד?</strong> משחק שמלמד Grid: <a href="https://cssgridgarden.com/#he" target="_blank">Grid Garden</a> (יש גם בעברית). ועוד על אנימציות: <a href="https://www.w3schools.com/css/css3_animations.asp" target="_blank">w3schools</a>.</p>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

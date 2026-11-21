@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript חלק ב'</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="web-js2">
+<main>
+    <h1>JavaScript חלק ב'</h1>
+    <div class="subtitle">פונקציות, אובייקטים, טיימרים, מספרים אקראיים וזיכרון בדפדפן</div>
+
+    <div class="explanation"><strong>💡 על מה העמוד הזה?</strong> המשך של <a href="web-js.html">יסודות JavaScript</a>, למי שכבר יודע למצוא אלמנט, להגיב ללחיצה ולשנות טקסט. כאן נבנה דברים קצת יותר מעניינים: כרטיסים מתוך נתונים, שעון, משחקים קטנים.
+        <br><br>
+        <strong>✏️ איך עובדים עם העמוד:</strong> בכל תיבה כחולה אפשר <strong>לשנות את הקוד</strong>, והתוצאה מתעדכנת מיד בצד. אם יש לשוניות (HTML / CSS / JavaScript), לחצו עליהן כדי לעבור בין הקבצים. ↺ איפוס מחזיר את הדוגמה למצב ההתחלתי. אי אפשר לשבור כלום, אז תתפרעו!
+    </div>
+
+    <h2>1. פונקציות עם פרמטרים</h2>
+<div class="concept"><span class="concept-title">📖 פרמטר</span>ערך שמעבירים לפונקציה כשקוראים לה. ככה אותה פונקציה עושה דברים שונים לפי מה שמקבלת.<span class="example">דוגמה: <code class="inline">function greet(name) { ... }</code> ואז <code class="inline">greet(&quot;דנה&quot;)</code> או <code class="inline">greet(&quot;יוסי&quot;)</code>. עם <code class="inline">return</code> הפונקציה גם מחזירה תוצאה.</span></div>
+<div class="playground" data-title="נסו: חשבו גם ל-250" data-height="130">
+<textarea data-lang="html">&lt;button id=&quot;b1&quot;&gt;חשב מחיר עם מע&quot;מ&lt;/button&gt;
+&lt;p id=&quot;out&quot;&gt;&lt;/p&gt;</textarea>
+<textarea data-lang="js">function withVat(price) {
+    return price * 1.18;
+}
+
+function show(text) {
+    document.getElementById(&quot;out&quot;).textContent = text;
+}
+
+document.getElementById(&quot;b1&quot;).addEventListener(&quot;click&quot;, function () {
+    var total = withVat(100);
+    show(&quot;100 ₪ עם מע\&quot;מ: &quot; + total.toFixed(2) + &quot; ₪&quot;);
+});</textarea>
+</div>
+    <h2>2. אובייקטים ו-template literals</h2>
+<div class="concept"><span class="concept-title">📖 אובייקט</span>כמה ערכים שקשורים זה לזה, בתוך <code class="inline">{ }</code>, כל אחד עם שם. בדיוק כמו מודל ב-C# (מדריך 10).<span class="example">דוגמה: <code class="inline">{ name: &quot;עט&quot;, price: 5 }</code>. ניגשים עם נקודה: <code class="inline">product.name</code>.</span></div>
+<div class="concept"><span class="concept-title">📖 Template literal</span>מחרוזת בתוך גרשיים הפוכים (<code class="inline">`</code>, המקש משמאל ל-1), שאפשר להכניס לתוכה ערכים עם <code class="inline">${...}</code>. נוח מאוד לבנות HTML.<span class="example">דוגמה: <code class="inline">`שלום ${name}!`</code> במקום <code class="inline">&quot;שלום &quot; + name + &quot;!&quot;</code>.</span></div>
+<div class="playground" data-title="נסו: הוסיפו מוצר רביעי למערך" data-height="220">
+<textarea data-lang="html">&lt;div id=&quot;products&quot;&gt;&lt;/div&gt;</textarea>
+<textarea data-lang="css">#products {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 12px;
+    width: 120px;
+    text-align: center;
+}
+
+.price { color: green; font-weight: bold; }</textarea>
+<textarea data-lang="js">var products = [
+    { name: &quot;עט&quot;, price: 5, emoji: &quot;🖊️&quot; },
+    { name: &quot;מחברת&quot;, price: 12, emoji: &quot;📓&quot; },
+    { name: &quot;תיק&quot;, price: 150, emoji: &quot;🎒&quot; }
+];
+
+var html = &quot;&quot;;
+products.forEach(function (p) {
+    html += `
+        &lt;div class=&quot;card&quot;&gt;
+            &lt;div style=&quot;font-size: 40px&quot;&gt;${p.emoji}&lt;/div&gt;
+            &lt;h4&gt;${p.name}&lt;/h4&gt;
+            &lt;div class=&quot;price&quot;&gt;${p.price} ₪&lt;/div&gt;
+        &lt;/div&gt;`;
+});
+
+document.getElementById(&quot;products&quot;).innerHTML = html;</textarea>
+</div>
+<div class="explanation"><strong>💡 זה הבסיס ל-fetch:</strong> כשהשרת מחזיר JSON (<a href="adv-d-fetch.html">מתקדם ד</a>), מקבלים בדיוק מערך של אובייקטים כזה, ובונים ממנו HTML באותה דרך.</div>
+    <h2>3. טיימרים</h2>
+<table class="simple"><tr><th>פונקציה</th><th>מה היא עושה</th></tr><tr><td><code class="inline">setTimeout(function, 2000)</code></td><td>מריצה את הפונקציה <strong>פעם אחת</strong>, אחרי 2000 מילישניות (2 שניות).</td></tr><tr><td><code class="inline">setInterval(function, 1000)</code></td><td>מריצה את הפונקציה <strong>שוב ושוב</strong>, כל שנייה.</td></tr><tr><td><code class="inline">clearInterval(id)</code></td><td>עוצרת setInterval.</td></tr></table>
+<div class="playground" data-title="נסו: שנו את הספירה להתחיל מ-5" data-height="180">
+<textarea data-lang="html">&lt;h2 id=&quot;clock&quot;&gt;&lt;/h2&gt;
+&lt;p&gt;ספירה לאחור: &lt;strong id=&quot;count&quot;&gt;10&lt;/strong&gt;&lt;/p&gt;
+&lt;button id=&quot;start&quot;&gt;התחל&lt;/button&gt;</textarea>
+<textarea data-lang="js">// שעון שמתעדכן כל שנייה
+setInterval(function () {
+    document.getElementById(&quot;clock&quot;).textContent = new Date().toLocaleTimeString(&quot;he-IL&quot;);
+}, 1000);
+
+// ספירה לאחור
+document.getElementById(&quot;start&quot;).addEventListener(&quot;click&quot;, function () {
+    var n = 10;
+    var timer = setInterval(function () {
+        n = n - 1;
+        document.getElementById(&quot;count&quot;).textContent = n;
+        if (n === 0) {
+            clearInterval(timer);
+            document.getElementById(&quot;count&quot;).textContent = &quot;🚀 המראה!&quot;;
+        }
+    }, 1000);
+});</textarea>
+</div>
+<div class="playground" data-title="מצגת שמתחלפת לבד. נסו: הוסיפו תמונה, או שנו את המהירות" data-height="160">
+<textarea data-lang="html">&lt;div id=&quot;slide&quot;&gt;&lt;/div&gt;</textarea>
+<textarea data-lang="css">#slide {
+    font-size: 80px;
+    text-align: center;
+    padding: 20px;
+    transition: opacity 0.5s;
+}</textarea>
+<textarea data-lang="js">var pictures = [&quot;🌅&quot;, &quot;🏖️&quot;, &quot;🏔️&quot;, &quot;🌃&quot;];
+var i = 0;
+
+function showNext() {
+    document.getElementById(&quot;slide&quot;).textContent = pictures[i];
+    i = (i + 1) % pictures.length;
+}
+
+showNext();
+setInterval(showNext, 1500);</textarea>
+</div>
+<div class="concept"><span class="concept-title">📖 מה זה % ?</span>שארית חלוקה. <code class="inline">(i + 1) % 4</code> עובר 1, 2, 3, 0, 1, 2... כך המצגת חוזרת להתחלה אחרי התמונה האחרונה.</div>
+    <h2>4. מספרים אקראיים: משחקים קטנים</h2>
+<div class="concept"><span class="concept-title">📖 Math.random</span><code class="inline">Math.random()</code> נותן מספר אקראי בין 0 ל-1. כדי לקבל מספר שלם בין 1 ל-6: <code class="inline">Math.floor(Math.random() * 6) + 1</code>.</div>
+<div class="playground" data-title="נסו: שנו את המשחק למספר בין 1 ל-100" data-height="250">
+<textarea data-lang="html">&lt;button id=&quot;roll&quot;&gt;🎲 הטל קובייה&lt;/button&gt;
+&lt;span id=&quot;dice&quot; style=&quot;font-size: 50px&quot;&gt;&lt;/span&gt;
+
+&lt;hr&gt;
+&lt;p&gt;חשבתי על מספר בין 1 ל-20. נחשו!&lt;/p&gt;
+&lt;input type=&quot;number&quot; id=&quot;guess&quot; min=&quot;1&quot; max=&quot;20&quot;&gt;
+&lt;button id=&quot;check&quot;&gt;בדוק&lt;/button&gt;
+&lt;p id=&quot;hint&quot;&gt;&lt;/p&gt;</textarea>
+<textarea data-lang="js">var faces = [&quot;⚀&quot;, &quot;⚁&quot;, &quot;⚂&quot;, &quot;⚃&quot;, &quot;⚄&quot;, &quot;⚅&quot;];
+document.getElementById(&quot;roll&quot;).addEventListener(&quot;click&quot;, function () {
+    var n = Math.floor(Math.random() * 6);
+    document.getElementById(&quot;dice&quot;).textContent = faces[n];
+});
+
+var secret = Math.floor(Math.random() * 20) + 1;
+var tries = 0;
+document.getElementById(&quot;check&quot;).addEventListener(&quot;click&quot;, function () {
+    var g = Number(document.getElementById(&quot;guess&quot;).value);
+    tries++;
+    var hint = document.getElementById(&quot;hint&quot;);
+    if (g === secret) {
+        hint.textContent = &quot;🎉 נכון! הצלחתם ב-&quot; + tries + &quot; ניסיונות&quot;;
+    } else if (g &lt; secret) {
+        hint.textContent = &quot;גבוה יותר ⬆️&quot;;
+    } else {
+        hint.textContent = &quot;נמוך יותר ⬇️&quot;;
+    }
+});</textarea>
+</div>
+    <h2>5. תכונות data-: כפתור אחד, הרבה פריטים</h2>
+<p>כשיש הרבה כפתורים דומים (למשל "הוספה לעגלה" ליד כל מוצר), לא כותבים קוד לכל אחד. שומרים על כל כפתור מידע בתכונה שמתחילה ב-<code class="inline">data-</code>, וקוראים אותה עם <code class="inline">dataset</code>:</p>
+<div class="playground" data-title="נסו: הוסיפו כפתור רביעי. אין צורך לשנות את ה-JavaScript!" data-height="190">
+<textarea data-lang="html">&lt;button class=&quot;add&quot; data-name=&quot;עט&quot; data-price=&quot;5&quot;&gt;🖊️ עט&lt;/button&gt;
+&lt;button class=&quot;add&quot; data-name=&quot;מחברת&quot; data-price=&quot;12&quot;&gt;📓 מחברת&lt;/button&gt;
+&lt;button class=&quot;add&quot; data-name=&quot;תיק&quot; data-price=&quot;150&quot;&gt;🎒 תיק&lt;/button&gt;
+&lt;p&gt;בעגלה: &lt;span id=&quot;items&quot;&gt;ריק&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;סה&quot;כ: &lt;strong id=&quot;total&quot;&gt;0&lt;/strong&gt; ₪&lt;/p&gt;</textarea>
+<textarea data-lang="js">var total = 0;
+var names = [];
+
+document.querySelectorAll(&quot;.add&quot;).forEach(function (btn) {
+    btn.addEventListener(&quot;click&quot;, function () {
+        names.push(btn.dataset.name);
+        total += Number(btn.dataset.price);
+        document.getElementById(&quot;items&quot;).textContent = names.join(&quot;, &quot;);
+        document.getElementById(&quot;total&quot;).textContent = total;
+    });
+});</textarea>
+</div>
+<div class="explanation"><strong>💡 בפרויקט:</strong> ב-cshtml כותבים <code class="inline">data-id=&quot;@product.Id&quot;</code> בתוך ה-<code class="inline">@foreach</code>, וכך כל כפתור "יודע" לאיזה מוצר הוא שייך (<a href="adv-d-fetch.html">מתקדם ד</a>).</div>
+    <h2>6. localStorage: הדפדפן זוכר</h2>
+<div class="concept"><span class="concept-title">📖 localStorage</span>מקום קטן בדפדפן שבו אפשר לשמור טקסט, והוא נשאר גם אחרי רענון או סגירה של הדפדפן. כל משתמש, בדפדפן שלו בלבד.<span class="example">מתאים להעדפות (מצב לילה, גודל טקסט). <strong>לא</strong> מתאים לנתונים חשובים או משותפים: אלה הולכים למסד הנתונים.</span></div>
+<table class="simple"><tr><th>קוד</th><th>מה הוא עושה</th></tr><tr><td><code class="inline">localStorage.setItem(&quot;theme&quot;, &quot;dark&quot;)</code></td><td>שומר.</td></tr><tr><td><code class="inline">localStorage.getItem(&quot;theme&quot;)</code></td><td>קורא (או <code class="inline">null</code> אם אין).</td></tr><tr><td><code class="inline">localStorage.removeItem(&quot;theme&quot;)</code></td><td>מוחק.</td></tr></table>
+<p>דוגמה: מצב לילה שנשמר. בדוגמה הזאת אין עורך חי, כי העורך בעמוד רץ בסביבה מוגנת שבה localStorage חסום. העתיקו אותה לעמוד בפרויקט שלכם:</p>
+<pre class="code-block">&lt;button id=&quot;mode&quot;&gt;🌙 מצב לילה&lt;/button&gt;
+
+&lt;script&gt;
+    // בטעינת העמוד: אם נשמר מצב לילה, מפעילים אותו
+    if (localStorage.getItem(&quot;theme&quot;) === &quot;dark&quot;) {
+        document.body.classList.add(&quot;dark&quot;);
+    }
+
+    document.getElementById(&quot;mode&quot;).addEventListener(&quot;click&quot;, function () {
+        document.body.classList.toggle(&quot;dark&quot;);
+        var isDark = document.body.classList.contains(&quot;dark&quot;);
+        localStorage.setItem(&quot;theme&quot;, isDark ? &quot;dark&quot; : &quot;light&quot;);
+    });
+&lt;/script&gt;</pre>
+<p>וב-CSS:</p>
+<pre class="code-block">body.dark {
+    background-color: #1e1e1e;
+    color: #eee;
+}</pre>
+<div class="checkpoint">הפעילו מצב לילה, ורעננו את העמוד (או סגרו ופתחו את הדפדפן). מצב הלילה נשאר!</div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul><li>פונקציה עם פרמטרים ו-return עושה דברים שונים לפי מה שמקבלת.</li>
+<li>מערך של אובייקטים + template literal (<code class="inline">`${...}`</code>) = HTML שנבנה מנתונים.</li>
+<li>setTimeout לפעם אחת, setInterval לחזרה, clearInterval לעצירה.</li>
+<li>Math.random למשחקים, data- לכפתורים רבים, localStorage להעדפות.</li></ul>
+    </div>
+    <p style="margin-top:1.5rem">🔎 <strong>רוצים עוד?</strong> המשך מצוין: <a href="https://javascript.info/" target="_blank">javascript.info</a> (באנגלית), או <a href="https://www.w3schools.com/js/" target="_blank">w3schools</a>.</p>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>
