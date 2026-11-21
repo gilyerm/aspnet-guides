@@ -49,23 +49,25 @@
 
     <!-- ===================== 3 ===================== -->
     <h2>3. מוסיפים DbSet</h2>
+    <p>פתחו את <code class="inline">Data/ApplicationDbContext.cs</code>. המחלקה שם עוד ריקה, והיא נראית כך:</p>
+<pre class="code-block">public class ApplicationDbContext(DbContextOptions&lt;ApplicationDbContext&gt; options) : IdentityDbContext(options)
+{
+}</pre>
+    <div class="explanation">
+        <strong>💡 מה זה הסוגריים אחרי שם המחלקה?</strong> זו דרך מקוצרת לכתוב "המחלקה מקבלת הגדרות חיבור למסד הנתונים". לא צריך להבין אותה, ו<strong>לא נוגעים בשורה הזאת</strong>. עובדים רק בין הסוגריים המסולסלים.
+    </div>
     <ul class="step-list">
-        <li>פתחו את <code class="inline">Data/ApplicationDbContext.cs</code>. תראו מחלקה עם פונקציה אחת בתוכה (שמתחילה ב-<code class="inline">public ApplicationDbContext(</code>).</li>
-        <li>מתחת לפונקציה הזאת, עדיין בתוך המחלקה, הוסיפו:
+        <li>בין הסוגריים המסולסלים (<code class="inline">{</code> ו-<code class="inline">}</code>), הוסיפו:
 <pre class="code-block">public DbSet&lt;Product&gt; Products { get; set; }</pre>
         </li>
         <li>אם <code class="inline">Product</code> מסומן באדום: עמדו עליו, <span class="keyboard">Ctrl+.</span>, ובחרו את ה-<code class="inline">using</code>.</li>
     </ul>
-    <p>הקובץ ייראה בערך כך:</p>
-<pre class="code-block">public class ApplicationDbContext : IdentityDbContext
+    <p>הקובץ ייראה כך:</p>
+<pre class="code-block">public class ApplicationDbContext(DbContextOptions&lt;ApplicationDbContext&gt; options) : IdentityDbContext(options)
 {
-    public ApplicationDbContext(DbContextOptions&lt;ApplicationDbContext&gt; options)
-        : base(options)
-    {
-    }
-
     public DbSet&lt;Product&gt; Products { get; set; }
 }</pre>
+    <p style="color:var(--muted)">(בפרויקטים שנוצרו בגרסאות ישנות יותר, בתוך המחלקה יש פונקציה שמתחילה ב-<code class="inline">public ApplicationDbContext(</code>. גם זה בסדר: מוסיפים את ה-DbSet מתחתיה, בתוך המחלקה.)</p>
 
     <!-- ===================== 4 ===================== -->
     <h2>4. Migration: יוצרים את הטבלה</h2>

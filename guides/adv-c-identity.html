@@ -44,8 +44,9 @@ namespace <span class="change">MyProject</span>.Models
     <h2>2. מחליפים IdentityUser ב-ApplicationUser</h2>
     <p>עכשיו צריך להגיד לכל האתר להשתמש במחלקה החדשה. זה ב<strong>ארבעה</strong> מקומות:</p>
     <ul class="step-list">
-        <li><strong><code class="inline">Data/ApplicationDbContext.cs</code>:</strong> בשורה של המחלקה, הוסיפו <code class="inline">&lt;ApplicationUser&gt;</code>:
-<pre class="code-block">public class ApplicationDbContext : IdentityDbContext&lt;ApplicationUser&gt;</pre>
+        <li><strong><code class="inline">Data/ApplicationDbContext.cs</code>:</strong> בשורה של המחלקה, הוסיפו <code class="inline">&lt;ApplicationUser&gt;</code> מיד אחרי <code class="inline">IdentityDbContext</code>:
+<pre class="code-block">public class ApplicationDbContext(DbContextOptions&lt;ApplicationDbContext&gt; options) : IdentityDbContext&lt;ApplicationUser&gt;(options)</pre>
+            (כל מה שבתוך המחלקה, כמו ה-DbSet-ים, נשאר כמו שהוא. אם <code class="inline">ApplicationUser</code> באדום, <span class="keyboard">Ctrl+.</span>.)
         </li>
         <li><strong><code class="inline">Program.cs</code>:</strong> בשורה של <code class="inline">AddDefaultIdentity</code>, החליפו <code class="inline">IdentityUser</code> ב-<code class="inline">ApplicationUser</code>:
 <pre class="code-block">builder.Services.AddDefaultIdentity&lt;ApplicationUser&gt;(options =&gt; options.SignIn.RequireConfirmedAccount = true)</pre>
