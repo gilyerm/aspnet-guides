@@ -20,6 +20,8 @@ Every guide includes:
 
 - Copy-ready code with a **Copy** button and syntax highlighting
 - Live editors in the web basics pages: change the code and see the result immediately
+
+The site has a desktop layout (guide sidebar + sticky "on this page" navigation), a mobile layout, and a light/dark theme toggle (remembered per browser).
 - Concept boxes in plain Hebrew, each with an example
 - Checkpoints ("you should now see…") and a troubleshooting section
 - A short exercise and a "what we learned" summary
@@ -30,6 +32,7 @@ Every guide includes:
 index.html            Home page (guide list is built from assets/site.js)
 guides/               One HTML file per guide
 assets/style.css      Shared styles
+assets/theme-init.js  Applies the saved light/dark theme before the page renders
 assets/site.js        Guide list, navigation, table of contents, search, copy buttons, highlighting
 assets/vendor/        Prism.js (syntax highlighting) and the VS Code Dark+ theme
 tools/build_snippets.py  Generates guides/snippets.html (edit the snippet list there, then run it)

@@ -104,28 +104,47 @@
     if (current) markVisited(current);
     var visited = getVisited();
 
-    // ---------- כותרת עליונה עם תפריט "כל המדריכים" ----------
+    // ---------- מצב כהה / בהיר ----------
+    var THEME_KEY = 'aspnet-guides-theme';
+    function currentTheme() { return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        try { localStorage.setItem(THEME_KEY, t); } catch (e) { }
+        var btn = document.querySelector('.theme-btn');
+        if (btn) {
+            btn.textContent = t === 'dark' ? '☀️' : '🌙';
+            btn.title = t === 'dark' ? 'מעבר למצב בהיר' : 'מעבר למצב כהה';
+        }
+    }
+
+    // ---------- רשימת המדריכים (לתפריט ולסרגל הצד) ----------
     var menuHtml = SECTIONS.map(function (s) {
         var items = GUIDES.filter(function (g) { return g.section === s.id; }).map(function (g) {
-            var label = '<span class="m-num">' + g.num + '</span> ' + g.title;
-            if (!g.ready) return '<li class="soon">' + label + ' <small>(בקרוב)</small></li>';
+            var label = '<span class="m-num">' + g.num + '</span>' + g.title;
+            if (!g.ready) return '<li><span class="soon">' + label + ' <small>(בקרוב)</small></span></li>';
             var cls = g.slug === current ? ' class="current"' : '';
             return '<li' + cls + '><a href="' + guideUrl(g) + '">' + label + (visited[g.slug] ? ' <span class="tick">✓</span>' : '') + '</a></li>';
         }).join('');
-        return '<div class="menu-section"><h4>' + s.title + '</h4><ul>' + items + '</ul></div>';
+        return '<div class="nav-section"><h4>' + s.title + '</h4><ul>' + items + '</ul></div>';
     }).join('');
 
+    // ---------- כותרת עליונה ----------
     var header = el('header', { 'class': 'site-header' },
         '<div class="inner">' +
         '<a class="brand" href="' + root + 'index.html">🎓 <span>מדריכי ASP.NET Core MVC</span></a>' +
         '<nav>' +
-        '<button type="button" class="menu-btn" aria-expanded="false">כל המדריכים ▾</button>' +
         (GUIDES.some(function (g) { return g.slug === 'snippets' && g.ready; })
-            ? '<a href="' + root + 'guides/snippets.html">קטעי קוד</a>' : '') +
+            ? '<a class="nav-link-snippets" href="' + root + 'guides/snippets.html">📚 קטעי קוד</a>' : '') +
+        '<button type="button" class="header-btn menu-btn" aria-expanded="false">כל המדריכים ▾</button>' +
+        '<button type="button" class="header-btn theme-btn" aria-label="החלפת מצב כהה ובהיר"></button>' +
         '</nav>' +
         '</div>' +
         '<div class="guide-menu" hidden><div class="inner">' + menuHtml + '</div></div>');
     document.body.insertBefore(header, document.body.firstChild);
+    setTheme(currentTheme());
+    header.querySelector('.theme-btn').addEventListener('click', function () {
+        setTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+    });
 
     var menuBtn = header.querySelector('.menu-btn');
     var menu = header.querySelector('.guide-menu');
@@ -139,6 +158,7 @@
 
     // ---------- תוכן עניינים בתוך מדריך ----------
     // data-toc="deep" על ה-body: גם כותרות h3 שבתוך .snippet נכנסות לתוכן העניינים
+    var tocList = null;
     if (current && main) {
         var deep = document.body.getAttribute('data-toc') === 'deep';
         var heads = main.querySelectorAll(deep ? ':scope > h2, .snippet > h3' : ':scope > h2');
@@ -154,8 +174,41 @@
                 if (deep) { sub = el('ul'); li.appendChild(sub); }
             });
             toc.appendChild(list);
+            tocList = list;
             var anchor = main.querySelector('.subtitle');
             if (anchor) anchor.insertAdjacentElement('afterend', toc);
+        }
+    }
+
+    // ---------- פריסה למחשב: סרגל צד עם כל המדריכים, ותוכן עניינים צמוד ----------
+    if (current && main) {
+        document.body.classList.add('has-sidebar');
+        var layout = el('div', { 'class': 'layout' + (tocList ? ' with-toc' : '') });
+        var sidebar = el('aside', { 'class': 'sidebar', 'aria-label': 'כל המדריכים' },
+            '<div class="sidebar-title">כל המדריכים</div>' + menuHtml);
+        main.parentNode.insertBefore(layout, main);
+        layout.appendChild(sidebar);
+        layout.appendChild(main);
+        var cur = sidebar.querySelector('li.current');
+        if (cur) setTimeout(function () { sidebar.scrollTop = cur.offsetTop - sidebar.clientHeight / 3; }, 0);
+
+        if (tocList) {
+            var side = el('aside', { 'class': 'toc-side', 'aria-label': 'בעמוד הזה' }, '<strong>בעמוד הזה</strong>');
+            side.appendChild(tocList.cloneNode(true));
+            layout.appendChild(side);
+            var links = side.querySelectorAll('a');
+            var targets = [].map.call(links, function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+            var onScroll = function () {
+                var y = window.scrollY + 120, active = 0;
+                targets.forEach(function (t, i) { if (t && t.getBoundingClientRect().top + window.scrollY <= y) active = i; });
+                links.forEach(function (a, i) { a.classList.toggle('active', i === active); });
+                var act = links[active];
+                if (act && (act.offsetTop < side.scrollTop || act.offsetTop > side.scrollTop + side.clientHeight - 40)) {
+                    side.scrollTop = act.offsetTop - side.clientHeight / 2;
+                }
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
         }
     }
 
@@ -394,15 +447,26 @@
     // ---------- דף הבית: חיפוש ורשימת המדריכים ----------
     var index = document.getElementById('guide-index');
     if (index) {
+        document.body.classList.add('home');
+        var readyGuides = GUIDES.filter(function (g) { return g.ready; });
+        var readCount = readyGuides.filter(function (g) { return visited[g.slug]; }).length;
+        var statEl = document.getElementById('stat-guides');
+        if (statEl) statEl.textContent = readyGuides.length;
+        var tools = el('div', { 'class': 'home-tools' });
         var searchBox = el('div', { 'class': 'search-box' },
             '<input type="search" placeholder="🔍 חיפוש מדריך (למשל: טופס, Migration, תפריט)" aria-label="חיפוש מדריך">');
-        index.parentNode.insertBefore(searchBox, index);
+        tools.appendChild(searchBox);
+        tools.appendChild(el('div', { 'class': 'progress', title: 'נשמר רק בדפדפן הזה' },
+            'פתחתם ' + readCount + ' מתוך ' + readyGuides.length +
+            '<span class="progress-bar"><span style="width:' + Math.round(100 * readCount / Math.max(1, readyGuides.length)) + '%"></span></span>'));
+        index.parentNode.insertBefore(tools, index);
         var noResults = el('p', { 'class': 'no-results', hidden: '' }, 'לא נמצא מדריך מתאים. נסו מילה אחרת.');
         index.parentNode.insertBefore(noResults, index.nextSibling);
 
         SECTIONS.forEach(function (s) {
             var sec = el('section', { 'class': 'home-section' });
-            sec.appendChild(el('h2', {}, s.title));
+            var n = GUIDES.filter(function (g) { return g.section === s.id; }).length;
+            sec.appendChild(el('h2', { id: 'sec-' + s.id }, s.title + ' <span class="count">' + n + '</span>'));
             if (s.note) sec.appendChild(el('p', { 'class': 'section-note' }, s.note));
             var ul = el('ul', { 'class': 'guide-cards' });
             GUIDES.filter(function (g) { return g.section === s.id; }).forEach(function (g) {
