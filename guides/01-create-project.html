@@ -28,43 +28,42 @@
         <li>המתינו כמה שניות עד ש-Visual Studio יסיים ליצור את הפרויקט. בסיום, בסרגל הימני (<strong>Solution Explorer</strong>) יופיעו כל התיקיות והקבצים של האתר.</li>
     </ul>
 
-    <!-- INTERACTIVE ACCORDION 1: FOLDER STRUCTURE -->
-    <details>
-        <summary>📁 רוצים להבין מה כל תיקייה עושה? (לחצו לפתיחה)</summary>
-        <div class="explanation" style="margin-top: 1rem; margin-bottom: 0.5rem; background-color: #f8fafc; border-right-color: #64748b;">
-            <strong>💡 אל תיבהלו מכמות הקבצים!</strong> Visual Studio יצר עבורנו מבנה מסודר. הנה מילון קצר שיעזור לכם להבין איפה נמצא כל דבר:
-        </div>
-        <ul class="folder-list">
-            <li>
-                <span class="folder-title"><span class="folder-icon">🌐</span> wwwroot</span>
-                התיקייה "הציבורית" של האתר. כאן נשמור תמונות, קובצי עיצוב (CSS) וקוד צד-לקוח (JavaScript) שמוצגים ישירות למשתמש.
-            </li>
-            <li>
-                <span class="folder-title"><span class="folder-icon">🧠</span> Controllers (בקרים)</span>
-                המוח של האתר. המחלקות כאן מקבלות בקשות מהמשתמש (למשל כשהוא לוחץ על כפתור), וקובעות איזה דף להציג לו בתגובה.
-            </li>
-            <li>
-                <span class="folder-title"><span class="folder-icon">📦</span> Models (מודלים)</span>
-                כאן נכתוב את המחלקות שמייצגות נתונים (למשל: מחלקת 'משתמש' או 'מוצר'). בהמשך, המחלקות האלו יהפכו לטבלאות/מידע בתוך מסד הנתונים שלנו.
-            </li>
-            <li>
-                <span class="folder-title"><span class="folder-icon">🎨</span> Views (תצוגות)</span>
-                כאן נמצאים כל דפי ה-HTML (אלו שמסתיימים ב-cshtml) שהמשתמש רואה בעיניים.
-            </li>
-            <li>
-                <span class="folder-title"><span class="folder-icon">🗄️</span> Data</span>
-                תיקייה שמכילה את הקוד שמנהל את הקשר בין האתר שלנו למסד הנתונים. שם נוסיף את רשימת הטבלאות שלנו.
-            </li>
-            <li>
-                <span class="folder-title"><span class="folder-icon">⚙️</span> appsettings.json</span>
-                קובץ ההגדרות של האתר (למשל, כאן מוגדרת הכתובת של מסד הנתונים).
-            </li>
-            <li>
-                <span class="folder-title"><span class="folder-icon">🚀</span> Program.cs</span>
-                נקודת ההתחלה של האתר כולו. הקוד הראשון שרץ מאחורי הקלעים כשלוחצים Play.
-            </li>
-        </ul>
-    </details>
+    <h2>מה יש בפרויקט?</h2>
+    <div class="explanation">
+        <strong>💡 אל תיבהלו מכמות הקבצים!</strong> Visual Studio יצרה עבורנו מבנה מסודר. ב-Solution Explorer (הסרגל בצד) תראו את התיקיות והקבצים. אלה החשובים, ובכל אחד מהם נעבוד במדריכים הבאים:
+    </div>
+    <ul class="folder-list">
+        <li>
+            <span class="folder-title"><span class="folder-icon">🌐</span> wwwroot</span>
+            התיקייה "הציבורית" של האתר. כאן נשמור תמונות, קובצי עיצוב (CSS) וקוד צד-לקוח (JavaScript) שמוצגים ישירות למשתמש.
+        </li>
+        <li>
+            <span class="folder-title"><span class="folder-icon">🧠</span> Controllers (בקרים)</span>
+            המוח של האתר. המחלקות כאן מקבלות בקשות מהמשתמש (למשל כשהוא לוחץ על כפתור), וקובעות איזה דף להציג לו בתגובה.
+        </li>
+        <li>
+            <span class="folder-title"><span class="folder-icon">📦</span> Models (מודלים)</span>
+            כאן נכתוב את המחלקות שמייצגות נתונים (למשל: מחלקת 'משתמש' או 'מוצר'). בהמשך, המחלקות האלו יהפכו לטבלאות/מידע בתוך מסד הנתונים שלנו.
+        </li>
+        <li>
+            <span class="folder-title"><span class="folder-icon">🎨</span> Views (תצוגות)</span>
+            כאן נמצאים כל דפי ה-HTML (אלו שמסתיימים ב-cshtml) שהמשתמש רואה בעיניים.
+        </li>
+        <li>
+            <span class="folder-title"><span class="folder-icon">🗄️</span> Data</span>
+            תיקייה שמכילה את הקוד שמנהל את הקשר בין האתר שלנו למסד הנתונים. שם נוסיף את רשימת הטבלאות שלנו.
+        </li>
+        <li>
+            <span class="folder-title"><span class="folder-icon">⚙️</span> appsettings.json</span>
+            קובץ ההגדרות של האתר (למשל, כאן מוגדרת הכתובת של מסד הנתונים).
+        </li>
+        <li>
+            <span class="folder-title"><span class="folder-icon">🚀</span> Program.cs</span>
+            נקודת ההתחלה של האתר כולו. הקוד הראשון שרץ מאחורי הקלעים כשלוחצים Play.
+        </li>
+    </ul>
+
+    <p class="web-basics-link" style="margin-top:1rem">🗺️ יש עוד קבצים שלא מופיעים כאן, כמו <code class="inline">_ViewStart.cshtml</code>, <code class="inline">Migrations</code> ו-<code class="inline">bin</code>. מה כל אחד מהם עושה, מתי נוגעים בו ואם מותר למחוק: ב<a href="tool-project-map.html">מפת הפרויקט</a>.</p>
 
     <h2>הרצת האתר</h2>
     <div class="explanation">

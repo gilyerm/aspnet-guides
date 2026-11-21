@@ -72,6 +72,8 @@
         { num: 'ד', slug: 'adv-d-fetch', section: 'advanced', title: 'JS שמדבר עם השרת', desc: 'עדכון חלק מהעמוד בלי לטעון מחדש', ready: true, keywords: 'fetch JSON AJAX' },
         { num: 'ה', slug: 'adv-e-cart', section: 'advanced', title: 'עגלת קניות', desc: 'הוספה לעגלה, עמוד עגלה ומחיקה', ready: true, keywords: 'Session חנות' },
 
+        { num: '🗺️', slug: 'tool-project-map', section: 'tools', title: 'מפת הפרויקט', desc: 'כל תיקייה וקובץ: מה יש בו, מתי נוגעים בו, ואם מותר למחוק', ready: true,
+          keywords: 'Solution Explorer תיקייה קובץ wwwroot Controllers Models Views Data Migrations _ViewImports _ViewStart _Layout launchSettings appsettings Program.cs bin obj Dependencies Areas' },
         { num: '🛠️', slug: 'tool-errors', section: 'tools', title: 'קריאת שגיאות ושגיאות נפוצות', desc: 'איך מבינים מה השתבש, ואיך מתקנים', ready: true, keywords: 'Error שגיאה Exception Clean Rebuild' },
         { num: '🛠️', slug: 'tool-debug', section: 'tools', title: 'דיבאג עם Breakpoints', desc: 'עוצרים את הקוד ובודקים ערכים', ready: true, keywords: 'Breakpoint F10 F11 Watch' },
         { num: '🛠️', slug: 'tool-planning', section: 'tools', title: 'תכנון הפרויקט', desc: 'תבנית למילוי לפני שמתחילים לכתוב קוד', ready: true },
