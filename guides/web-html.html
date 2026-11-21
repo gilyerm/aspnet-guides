@@ -91,27 +91,71 @@
 </div>
     <h2>6. טבלאות</h2>
 <table class="simple"><tr><th>תגית</th><th>מה היא</th></tr><tr><td><code class="inline">&lt;table&gt;</code></td><td>הטבלה כולה.</td></tr><tr><td><code class="inline">&lt;thead&gt;</code> / <code class="inline">&lt;tbody&gt;</code></td><td>חלק הכותרות / חלק הנתונים.</td></tr><tr><td><code class="inline">&lt;tr&gt;</code></td><td>שורה (table row).</td></tr><tr><td><code class="inline">&lt;th&gt;</code></td><td>תא כותרת (מודגש).</td></tr><tr><td><code class="inline">&lt;td&gt;</code></td><td>תא רגיל (table data).</td></tr></table>
-<div class="playground" data-title="נסו: הוסיפו שורה, או עמודה "כמות"" data-height="220">
-<textarea data-lang="html">&lt;table border=&quot;1&quot; cellpadding=&quot;6&quot;&gt;
+<h3>תכונות של תאים: איחוד תאים</h3>
+<table class="simple"><tr><th>תכונה</th><th>מה היא עושה</th><th>דוגמה</th></tr><tr><td><code class="inline">colspan</code></td><td>התא תופס כמה <strong>עמודות</strong>.</td><td><code class="inline">&lt;td colspan=&quot;2&quot;&gt;</code></td></tr><tr><td><code class="inline">rowspan</code></td><td>התא תופס כמה <strong>שורות</strong>.</td><td><code class="inline">&lt;td rowspan=&quot;2&quot;&gt;</code></td></tr></table>
+<h3>עיצוב הטבלה: עם CSS</h3>
+<p>בדוגמאות ישנות באינטרנט תראו תכונות כמו <code class="inline">border=&quot;1&quot;</code> ו-<code class="inline">cellpadding=&quot;6&quot;</code> ישירות על <code class="inline">&lt;table&gt;</code>. הן עדיין עובדות, אבל הן <strong>מיושנות</strong>: היום מעצבים טבלה עם CSS, שנותן הרבה יותר שליטה. הנה מה מחליף כל אחת:</p>
+<table class="simple"><tr><th>תכונה ישנה (לא מומלץ)</th><th>מה עושים במקום (CSS)</th></tr><tr><td><code class="inline">border=&quot;1&quot;</code></td><td><code class="inline">border: 1px solid #ccc;</code> על <code class="inline">th, td</code>, ו-<code class="inline">border-collapse: collapse;</code> על <code class="inline">table</code> (כדי שלא יהיו קווים כפולים).</td></tr><tr><td><code class="inline">cellpadding=&quot;6&quot;</code></td><td><code class="inline">padding: 6px;</code> על <code class="inline">th, td</code>.</td></tr><tr><td><code class="inline">cellspacing=&quot;0&quot;</code></td><td><code class="inline">border-collapse: collapse;</code> על <code class="inline">table</code>.</td></tr><tr><td><code class="inline">width=&quot;100%&quot;</code></td><td><code class="inline">width: 100%;</code></td></tr><tr><td><code class="inline">bgcolor=&quot;yellow&quot;</code></td><td><code class="inline">background-color: yellow;</code></td></tr><tr><td><code class="inline">align=&quot;center&quot;</code></td><td><code class="inline">text-align: center;</code> (לתוכן התאים).</td></tr></table>
+<div class="playground" data-title="נסו: בלשונית CSS שנו צבעים, או מחקו את border-collapse ותראו מה קורה" data-height="280">
+<textarea data-lang="html">&lt;table class=&quot;products&quot;&gt;
     &lt;thead&gt;
         &lt;tr&gt;
             &lt;th&gt;שם&lt;/th&gt;
             &lt;th&gt;מחיר&lt;/th&gt;
+            &lt;th&gt;מלאי&lt;/th&gt;
         &lt;/tr&gt;
     &lt;/thead&gt;
     &lt;tbody&gt;
         &lt;tr&gt;
             &lt;td&gt;עט&lt;/td&gt;
             &lt;td&gt;5 ₪&lt;/td&gt;
+            &lt;td&gt;120&lt;/td&gt;
         &lt;/tr&gt;
         &lt;tr&gt;
             &lt;td&gt;מחברת&lt;/td&gt;
             &lt;td&gt;12 ₪&lt;/td&gt;
+            &lt;td&gt;45&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;תיק&lt;/td&gt;
+            &lt;td&gt;150 ₪&lt;/td&gt;
+            &lt;td&gt;8&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td colspan=&quot;2&quot;&gt;&lt;strong&gt;סה&quot;כ פריטים במלאי&lt;/strong&gt;&lt;/td&gt;
+            &lt;td&gt;&lt;strong&gt;173&lt;/strong&gt;&lt;/td&gt;
         &lt;/tr&gt;
     &lt;/tbody&gt;
 &lt;/table&gt;</textarea>
+<textarea data-lang="css">.products {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.products th,
+.products td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+.products th {
+    background-color: #4c1d95;
+    color: white;
+}
+
+/* כל שורה זוגית בצבע אחר (&quot;זברה&quot;) */
+.products tbody tr:nth-child(even) {
+    background-color: #f3f0ff;
+}
+
+/* שורה שהעכבר עליה */
+.products tbody tr:hover {
+    background-color: #fff3cd;
+}</textarea>
 </div>
-<div class="explanation"><strong>💡 בפרויקט:</strong> את השורות לא כותבים ביד, אלא בונים בלולאה <code class="inline">@foreach</code> מתוך נתונים (מדריך 10), ומעצבים עם <code class="inline">class=&quot;table&quot;</code> של Bootstrap (מדריך 9).</div>
+<table class="simple"><tr><th>תכונת CSS</th><th>מה היא עושה</th></tr><tr><td><code class="inline">border-collapse: collapse</code></td><td>מאחדת את הקווים של תאים צמודים לקו אחד.</td></tr><tr><td><code class="inline">tr:nth-child(even)</code></td><td>בוחרת כל שורה זוגית (<code class="inline">odd</code> = אי-זוגית). ככה עושים "זברה".</td></tr><tr><td><code class="inline">tr:hover</code></td><td>השורה שהעכבר עליה.</td></tr><tr><td><code class="inline">vertical-align: top</code></td><td>יישור התוכן בתא לגובה (למעלה / <code class="inline">middle</code> / <code class="inline">bottom</code>).</td></tr></table>
+<div class="explanation"><strong>💡 בפרויקט:</strong> את השורות לא כותבים ביד, אלא בונים בלולאה <code class="inline">@foreach</code> מתוך נתונים (מדריך 10). ואפשר לוותר על רוב ה-CSS: <code class="inline">class=&quot;table table-striped table-hover&quot;</code> של Bootstrap עושה את כל זה בשבילכם (מדריך 9).</div>
     <h2>7. טפסים</h2>
 <p>טפסים הם החלק הכי חשוב ב-HTML בשביל הפרויקט: הרשמה, הוספת מוצר, צור קשר. כל שדה הוא <code class="inline">&lt;input&gt;</code> עם <code class="inline">type</code> אחר.</p>
 <table class="simple"><tr><th>תגית / type</th><th>מה היא</th></tr><tr><td><code class="inline">&lt;form&gt;</code></td><td>עוטפת את כל השדות. כשלוחצים על כפתור submit, כל מה שבתוכה נשלח.</td></tr><tr><td><code class="inline">&lt;label for=&quot;...&quot;&gt;</code></td><td>תווית של שדה. ה-<code class="inline">for</code> מחבר אותה ל-<code class="inline">id</code> של השדה (לחיצה על התווית מפעילה את השדה).</td></tr><tr><td><code class="inline">type=&quot;text&quot;</code></td><td>שורת טקסט.</td></tr><tr><td><code class="inline">type=&quot;email&quot;</code>, <code class="inline">type=&quot;password&quot;</code>, <code class="inline">type=&quot;number&quot;</code>, <code class="inline">type=&quot;date&quot;</code></td><td>אימייל, סיסמה (מוסתרת), מספר, תאריך.</td></tr><tr><td><code class="inline">type=&quot;checkbox&quot;</code> / <code class="inline">type=&quot;radio&quot;</code></td><td>תיבת סימון / בחירה אחת מכמה (לכל ה-radio באותה קבוצה אותו <code class="inline">name</code>).</td></tr><tr><td><code class="inline">&lt;select&gt;</code> + <code class="inline">&lt;option&gt;</code></td><td>רשימה נפתחת.</td></tr><tr><td><code class="inline">&lt;textarea&gt;</code></td><td>טקסט ארוך.</td></tr><tr><td><code class="inline">&lt;button type=&quot;submit&quot;&gt;</code></td><td>כפתור ששולח את הטופס.</td></tr></table>

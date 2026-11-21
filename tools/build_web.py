@@ -177,26 +177,85 @@ page('web-html', 'יסודות HTML', 'התגיות שנשתמש בהן בפרו
                  [c('<th>'), 'תא כותרת (מודגש).'],
                  [c('<td>'), 'תא רגיל (table data).'],
              ]),
+             '<h3>תכונות של תאים: איחוד תאים</h3>',
+             table(['תכונה', 'מה היא עושה', 'דוגמה'], [
+                 [c('colspan'), 'התא תופס כמה <strong>עמודות</strong>.', c('<td colspan="2">')],
+                 [c('rowspan'), 'התא תופס כמה <strong>שורות</strong>.', c('<td rowspan="2">')],
+             ]),
+             '<h3>עיצוב הטבלה: עם CSS</h3>',
+             '<p>בדוגמאות ישנות באינטרנט תראו תכונות כמו ' + c('border="1"') + ' ו-' + c('cellpadding="6"') + ' ישירות על ' + c('<table>') + '. הן עדיין עובדות, אבל הן <strong>מיושנות</strong>: היום מעצבים טבלה עם CSS, שנותן הרבה יותר שליטה. הנה מה מחליף כל אחת:</p>',
+             table(['תכונה ישנה (לא מומלץ)', 'מה עושים במקום (CSS)'], [
+                 [c('border="1"'), c('border: 1px solid #ccc;') + ' על ' + c('th, td') + ', ו-' + c('border-collapse: collapse;') + ' על ' + c('table') + ' (כדי שלא יהיו קווים כפולים).'],
+                 [c('cellpadding="6"'), c('padding: 6px;') + ' על ' + c('th, td') + '.'],
+                 [c('cellspacing="0"'), c('border-collapse: collapse;') + ' על ' + c('table') + '.'],
+                 [c('width="100%"'), c('width: 100%;')],
+                 [c('bgcolor="yellow"'), c('background-color: yellow;')],
+                 [c('align="center"'), c('text-align: center;') + ' (לתוכן התאים).'],
+             ]),
              pg('''
-<table border="1" cellpadding="6">
+<table class="products">
     <thead>
         <tr>
             <th>שם</th>
             <th>מחיר</th>
+            <th>מלאי</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>עט</td>
             <td>5 ₪</td>
+            <td>120</td>
         </tr>
         <tr>
             <td>מחברת</td>
             <td>12 ₪</td>
+            <td>45</td>
+        </tr>
+        <tr>
+            <td>תיק</td>
+            <td>150 ₪</td>
+            <td>8</td>
+        </tr>
+        <tr>
+            <td colspan="2"><strong>סה"כ פריטים במלאי</strong></td>
+            <td><strong>173</strong></td>
         </tr>
     </tbody>
-</table>''', title='נסו: הוסיפו שורה, או עמודה "כמות"', height=220),
-             '<div class="explanation"><strong>💡 בפרויקט:</strong> את השורות לא כותבים ביד, אלא בונים בלולאה ' + c('@foreach') + ' מתוך נתונים (מדריך 10), ומעצבים עם ' + c('class="table"') + ' של Bootstrap (מדריך 9).</div>',
+</table>''', css='''
+.products {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.products th,
+.products td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+.products th {
+    background-color: #4c1d95;
+    color: white;
+}
+
+/* כל שורה זוגית בצבע אחר ("זברה") */
+.products tbody tr:nth-child(even) {
+    background-color: #f3f0ff;
+}
+
+/* שורה שהעכבר עליה */
+.products tbody tr:hover {
+    background-color: #fff3cd;
+}''', title='נסו: בלשונית CSS שנו צבעים, או מחקו את border-collapse ותראו מה קורה', height=280),
+             table(['תכונת CSS', 'מה היא עושה'], [
+                 [c('border-collapse: collapse'), 'מאחדת את הקווים של תאים צמודים לקו אחד.'],
+                 [c('tr:nth-child(even)'), 'בוחרת כל שורה זוגית (' + c('odd') + ' = אי-זוגית). ככה עושים "זברה".'],
+                 [c('tr:hover'), 'השורה שהעכבר עליה.'],
+                 [c('vertical-align: top'), 'יישור התוכן בתא לגובה (למעלה / ' + c('middle') + ' / ' + c('bottom') + ').'],
+             ]),
+             '<div class="explanation"><strong>💡 בפרויקט:</strong> את השורות לא כותבים ביד, אלא בונים בלולאה ' + c('@foreach') + ' מתוך נתונים (מדריך 10). ואפשר לוותר על רוב ה-CSS: ' + c('class="table table-striped table-hover"') + ' של Bootstrap עושה את כל זה בשבילכם (מדריך 9).</div>',
          ]),
          ('7. טפסים', [
              '<p>טפסים הם החלק הכי חשוב ב-HTML בשביל הפרויקט: הרשמה, הוספת מוצר, צור קשר. כל שדה הוא ' + c('<input>') + ' עם ' + c('type') + ' אחר.</p>',
@@ -569,7 +628,37 @@ btn.addEventListener("click", function () {
                  [c('// ...'), 'הערה. JavaScript מתעלם ממנה.'],
              ]),
          ]),
-         ('2. משתנים', [
+         ('2. console.log: הודעות למתכנת', [
+             '<p>' + c('alert') + ' מקפיץ הודעה <strong>למשתמש</strong>. אבל כשרוצים לבדוק מה קורה בקוד (מה הערך של משתנה, האם פונקציה רצה בכלל), כותבים הודעה <strong>לעצמנו</strong>, ב-Console. המשתמש לא רואה אותה.</p>',
+             concept('Console', f'חלון בכלי המפתחים של הדפדפן ({c("F12")} ← לשונית Console), שמציג הודעות מהקוד ושגיאות. בעורכים בעמוד הזה, ההודעות מופיעות בחלון שחור מתחת לתוצאה.'),
+             table(['פקודה', 'איך זה נראה', 'מתי משתמשים'], [
+                 [c('console.log("טקסט", x)'), 'שורה רגילה.', 'הכי נפוץ: להדפיס ערך של משתנה, או לבדוק שהקוד הגיע לשורה מסוימת.'],
+                 [c('console.info(...)'), 'שורה עם סימן מידע (ℹ).', 'מידע כללי. בפועל, כמעט כמו log.'],
+                 [c('console.warn(...)'), 'שורה <strong>צהובה</strong> עם ⚠.', 'משהו חשוד, אבל לא שגיאה.'],
+                 [c('console.error(...)'), 'שורה <strong>אדומה</strong> עם ✖.', 'משהו השתבש. (גם שגיאות אמיתיות של JavaScript מופיעות באדום.)'],
+                 [c('console.table(array)'), 'מערך או אובייקט כטבלה.', 'לראות רשימה של אובייקטים בבת אחת.'],
+                 [c('console.clear()'), 'מנקה את החלון.', 'כשיש יותר מדי הודעות.'],
+             ]),
+             pg('''
+<button id="go">לחצו ובדקו את ה-Console</button>''', js='''
+var price = 120;
+var products = [
+    { name: "עט", price: 5 },
+    { name: "מחברת", price: 12 }
+];
+
+document.getElementById("go").addEventListener("click", function () {
+    console.log("הכפתור נלחץ!");
+    console.log("המחיר הוא:", price);
+    console.info("יש", products.length, "מוצרים");
+    console.warn("המלאי עומד להיגמר");
+    console.error("לא הצלחנו להתחבר לשרת (סתם, זו דוגמה)");
+    console.table(products);
+});''', title='נסו: לחצו על הכפתור, ואז הוסיפו console.log משלכם', height=110),
+             '<div class="explanation"><strong>💡 טריק הדיבאג הכי פשוט:</strong> כשמשהו לא עובד, שימו ' + c('console.log') + ' בכמה מקומות בקוד. אם הודעה לא מופיעה, הקוד לא הגיע לשם. אם הערך שמודפס לא מה שציפיתם, מצאתם את הבעיה. (ב-C# יש לזה כלי חזק יותר: <a href="tool-debug.html">Breakpoints</a>.)</div>',
+             '<div class="warning"><strong>⚠️ לפני שמסיימים:</strong> מחקו את ה-' + c('console.log') + '-ים שהוספתם לבדיקה. הם לא מזיקים, אבל קוד נקי יותר נוח לקרוא.</div>',
+         ]),
+         ('3. משתנים', [
              concept('משתנה', f'"קופסה" עם שם, ששומרת ערך. ב-JavaScript מגדירים עם {c("let")} (אפשר לשנות אחר כך) או {c("const")} (קבוע).',
                      f'דוגמה: {c("let count = 0;")} ואחר כך {c("count = count + 1;")}. בשונה מ-C#, לא כותבים את הסוג (int, string).'),
              pg('''
@@ -588,7 +677,7 @@ document.getElementById("reset").addEventListener("click", function () {
     document.getElementById("count").textContent = count;
 });''', title='נסו: הוסיפו כפתור "1-"', height=150),
          ]),
-         ('3. מוצאים אלמנטים', [
+         ('4. מוצאים אלמנטים', [
              table(['פונקציה', 'מה היא מחזירה'], [
                  [c('document.getElementById("x")'), 'האלמנט עם ' + c('id="x"') + '.'],
                  [c('document.querySelector(".card")'), 'האלמנט <strong>הראשון</strong> שמתאים לסלקטור CSS (כמו בעמוד ה-CSS).'],
@@ -606,7 +695,7 @@ document.getElementById("paint").addEventListener("click", function () {
     });
 });''', title='נסו: החליפו querySelectorAll ב-querySelector. מה השתנה?', height=190),
          ]),
-         ('4. משנים עיצוב עם classList', [
+         ('5. משנים עיצוב עם classList', [
              '<p>אפשר לשנות עיצוב ישירות (' + c('element.style.color = "red"') + '), אבל עדיף להגדיר class ב-CSS, ורק להוסיף או להוריד אותו ב-JavaScript:</p>',
              table(['פונקציה', 'מה היא עושה'], [
                  [c('element.classList.add("x")'), 'מוסיפה את ה-class.'],
@@ -632,7 +721,7 @@ document.getElementById("mode").addEventListener("click", function () {
     document.querySelector(".page").classList.toggle("dark");
 });''', title='נסו: בלשונית CSS שנו את הצבעים של .dark', height=190),
          ]),
-         ('5. הצגה והסתרה', [
+         ('6. הצגה והסתרה', [
              pg('''
 <button id="toggle">הצג תשובה</button>
 <p id="answer" hidden>התשובה היא 42 🙂</p>''', js='''
@@ -645,7 +734,7 @@ btn.addEventListener("click", function () {
 });''', title='נסו: הוסיפו עוד שאלה ותשובה', height=130),
              concept('מה זה ? :', f'תנאי מקוצר: {c("תנאי ? אם-כן : אם-לא")}. כאן: אם התשובה מוסתרת, הכפתור אומר "הצג". אחרת, "הסתר".'),
          ]),
-         ('6. אירועים נוספים: הקלדה', [
+         ('7. אירועים נוספים: הקלדה', [
              '<p>חוץ מ-' + c('"click"') + ' יש עוד אירועים. ' + c('"input"') + ' קורה בכל פעם שהמשתמש מקליד בשדה:</p>',
              pg('''
 <label for="name">איך קוראים לכם?</label>
@@ -660,7 +749,7 @@ document.getElementById("name").addEventListener("input", function () {
                  [c('submit'), 'שליחת טופס.'], [c('mouseover'), 'העכבר נכנס לאלמנט.'],
              ]),
          ]),
-         ('7. רשימות ולולאות', [
+         ('8. רשימות ולולאות', [
              '<p>מערך (' + c('[ ]') + ') הוא רשימה. לולאה עוברת עליו ובונה HTML לכל פריט:</p>',
              pg('''
 <input type="text" id="newItem" placeholder="משימה חדשה">
@@ -695,7 +784,7 @@ showTasks();''', title='נסו: הוסיפו משימות, או שנו את המ
                  [c('function showTasks() { ... }'), 'פונקציה משלנו, שאפשר לקרוא לה כמה פעמים.'],
              ]),
          ]),
-         ('8. בדיקת טופס לפני שליחה', [
+         ('9. בדיקת טופס לפני שליחה', [
              pg('''
 <form id="signup">
     <input type="text" id="user" placeholder="שם משתמש">
@@ -716,10 +805,11 @@ document.getElementById("signup").addEventListener("submit", function (event) {
 });''', title='נסו: שלחו עם שם קצר, ואז עם שם ארוך', height=150),
              '<div class="warning"><strong>⚠️ חשוב:</strong> בדיקה ב-JavaScript היא רק לנוחות. משתמש יכול לעקוף אותה, ולכן תמיד בודקים <strong>גם בשרת</strong>. בפרויקט, ASP.NET עושה את שתי הבדיקות בשבילכם (מדריך 12).</div>',
          ]),
-         ('9. חלונות קופצים', [
+         ('10. חלונות קופצים', [
              table(['פונקציה', 'מה היא עושה'], [
                  [c('alert("טקסט")'), 'הודעה עם כפתור "אישור".'],
                  [c('confirm("בטוחים?")'), 'שאלה עם "אישור" ו"ביטול". מחזירה ' + c('true') + ' או ' + c('false') + '.'],
+                 [c('prompt("איך קוראים לך?")'), 'שאלה עם תיבת טקסט. מחזירה את מה שהמשתמש הקליד (או ' + c('null') + ' אם ביטל).'],
              ]),
              pg('''
 <button id="del">מחיקה</button>
@@ -731,11 +821,21 @@ document.getElementById("del").addEventListener("click", function () {
         document.getElementById("status").textContent = "בוטל";
     }
 });''', title='נסו: לחצו, ובחרו פעם "אישור" ופעם "ביטול"', height=120),
+             pg('''
+<button id="ask">הכירו אותי</button>
+<p id="hello"></p>''', js='''
+document.getElementById("ask").addEventListener("click", function () {
+    var name = prompt("איך קוראים לך?");
+    if (name) {
+        document.getElementById("hello").textContent = "נעים מאוד, " + name + "! 👋";
+    }
+});''', title='נסו: prompt', height=110),
+             '<div class="explanation"><strong>💡 מתי להשתמש בהם?</strong> הם נוחים לבדיקות ולדברים קטנים (כמו "בטוחים שרוצים למחוק?"). באתר מעוצב עדיף להציג הודעות בתוך העמוד, או בחלון קופץ של Bootstrap (בספריית קטעי הקוד: "חלון קופץ").</div>',
              '<div class="explanation"><strong>💡 בפרויקט:</strong> חלון אישור לפני מחיקה, בשורה אחת: בספריית קטעי הקוד, "חלון אישור לפני מחיקה". ו-JavaScript שמדבר עם השרת בלי לטעון את העמוד: מתקדם ד.</div>',
          ]),
-         ('10. כשמשהו לא עובד', [
+         ('11. כשמשהו לא עובד', [
              '<p>ב-JavaScript, שגיאה אחת עוצרת את כל הקוד שאחריה, ובדרך כלל <strong>לא רואים אותה בעמוד</strong>. איפה מוצאים אותה:</p>',
-             '<ul><li><strong>בעמוד הזה:</strong> שגיאה תופיע בפס אדום מתחת לתוצאה. נסו לכתוב בדוגמה ' + c('getElementByid') + ' (עם d קטנה).</li><li><strong>באתר שלכם:</strong> F12 ← Console. השגיאה מופיעה שם באדום, עם הקובץ ומספר השורה.</li></ul>',
+             '<ul><li><strong>בעמוד הזה:</strong> שגיאה תופיע בפס אדום מתחת לתוצאה. נסו לכתוב בדוגמה ' + c('getElementByid') + ' (עם d קטנה).</li><li><strong>באתר שלכם:</strong> F12 ← Console. השגיאה מופיעה שם באדום, עם הקובץ ומספר השורה.</li><li><strong>אין שגיאה, אבל זה לא עובד?</strong> הוסיפו ' + c('console.log') + ' (סעיף 2) כדי לראות עד איפה הקוד מגיע ומה הערכים.</li></ul>',
              table(['שגיאה נפוצה', 'הסיבה'], [
                  [c("Cannot read properties of null"), 'ה-id בקוד לא זהה ל-id בתגית, או שהסקריפט רץ לפני שהתגית קיימת.'],
                  [c('... is not a function'), 'טעות כתיב בשם פונקציה. JavaScript רגיש לאותיות גדולות: ' + c('getElementById') + ' ולא ' + c('getElementByid') + '.'],
@@ -744,6 +844,7 @@ document.getElementById("del").addEventListener("click", function () {
          ]),
      ],
      ['מוצאים אלמנט (getElementById / querySelector), מחכים לאירוע (addEventListener), ומשנים משהו (textContent, classList).',
+      'console.log (וגם warn, error, table) כותב הודעות לעצמכם ב-Console. alert, confirm ו-prompt מדברים עם המשתמש.',
       'משתנים עם let ו-const. מערכים עם [ ], ו-forEach עובר עליהם.',
       'hidden מסתיר, classList.toggle מחליף עיצוב.',
       'בדיקה ב-JavaScript היא לנוחות. הבדיקה האמיתית בשרת.',

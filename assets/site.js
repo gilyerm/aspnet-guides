@@ -249,16 +249,24 @@
         body.appendChild(editor);
         body.appendChild(result);
         var err = el('div', { 'class': 'pg-error' });
-        pg.appendChild(bar); pg.appendChild(body); pg.appendChild(err);
+        var con = el('div', { 'class': 'pg-console' });
+        pg.appendChild(bar); pg.appendChild(body); pg.appendChild(err); pg.appendChild(con);
 
         function render() {
             err.className = 'pg-error';
+            con.innerHTML = '';
+            con.className = 'pg-console';
             var js = (current.js || '').replace(/<\/script/gi, '<\\/script');
             frame.srcdoc = '<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="utf-8">' +
                 (pg.hasAttribute('data-bootstrap') ? '<link rel="stylesheet" href="' + BOOTSTRAP_CSS + '">' : '') +
                 '<style>body{font-family:system-ui,-apple-system,Arial,sans-serif;margin:0;padding:12px;line-height:1.5}</style>' +
                 '<style>' + (current.css || '') + '</style></head><body>' + (current.html || '') +
-                '<script>window.onerror=function(m){parent.postMessage({pg:"' + id + '",err:String(m)},"*");};<\/script>' +
+                '<script>window.onerror=function(m){parent.postMessage({pg:"' + id + '",err:String(m)},"*");};' +
+                '(function(){function f(v){try{return typeof v==="object"&&v!==null?JSON.stringify(v):String(v);}catch(e){return String(v);}}' +
+                '["log","info","warn","error","table"].forEach(function(t){var o=console[t];console[t]=function(){var a=[].slice.call(arguments);' +
+                'var d=null;if(t==="table"){try{d=JSON.parse(JSON.stringify(a[0]));}catch(e){}}' +
+                'parent.postMessage({pg:"' + id + '",con:t,text:a.map(f).join(" "),data:d},"*");o&&o.apply(console,arguments);};});' +
+                'console.clear=function(){parent.postMessage({pg:"' + id + '",con:"clear"},"*");};})();<\/script>' +
                 (js ? '<script>' + js + '<\/script>' : '') + '</body></html>';
         }
         var timer;
@@ -290,9 +298,41 @@
             }
         });
         window.addEventListener('message', function (e) {
-            if (e.data && e.data.pg === id) {
+            if (!e.data || e.data.pg !== id) return;
+            if (e.data.err) {
                 err.textContent = '⚠️ שגיאה ב-JavaScript: ' + e.data.err;
                 err.className = 'pg-error show';
+            } else if (e.data.con === 'clear') {
+                con.innerHTML = '';
+            } else if (e.data.con) {
+                if (!con.childNodes.length) con.appendChild(el('div', { 'class': 'pg-console-title' }, '🖥️ Console (כמו F12 ← Console)'));
+                var line = el('div', { 'class': 'pg-line pgl-' + e.data.con });
+                var d = e.data.data;
+                if (e.data.con === 'table' && d && typeof d === 'object') {
+                    var rows = Array.isArray(d) ? d : Object.keys(d).map(function (k) { return d[k]; });
+                    var keys = Array.isArray(d) ? d.map(function (_, i) { return i; }) : Object.keys(d);
+                    var cols = [];
+                    rows.forEach(function (r) {
+                        if (r && typeof r === 'object') Object.keys(r).forEach(function (k) { if (cols.indexOf(k) === -1) cols.push(k); });
+                    });
+                    var t = el('table', { 'class': 'pg-ctable' });
+                    var head = '<tr><th>(index)</th>' + (cols.length ? cols.map(function (k) { return '<th></th>'; }).join('') : '<th>Value</th>') + '</tr>';
+                    t.innerHTML = head;
+                    var ths = t.querySelectorAll('th');
+                    cols.forEach(function (k, i) { ths[i + 1].textContent = k; });
+                    rows.forEach(function (r, i) {
+                        var tr = el('tr');
+                        var cells = [keys[i]].concat(cols.length ? cols.map(function (k) { return r && typeof r === 'object' ? r[k] : ''; }) : [r]);
+                        cells.forEach(function (v) { var td = el('td'); td.textContent = v === undefined ? '' : (typeof v === 'object' ? JSON.stringify(v) : v); tr.appendChild(td); });
+                        t.appendChild(tr);
+                    });
+                    line.appendChild(t);
+                } else {
+                    line.textContent = (e.data.con === 'warn' ? '⚠ ' : e.data.con === 'error' ? '✖ ' : e.data.con === 'info' ? 'ℹ ' : '› ') + e.data.text;
+                }
+                con.appendChild(line);
+                con.className = 'pg-console show';
+                con.scrollTop = con.scrollHeight;
             }
         });
         render();
