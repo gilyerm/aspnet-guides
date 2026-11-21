@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 3: Git ו-GitHub</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="03-git-github">
+<main>
+    <h1>מדריך 3: Git ו-GitHub</h1>
+    <div class="subtitle">שומרים גיבוי של הפרויקט בענן, ועוברים בין מחשבים, הכול בכפתורים של Visual Studio</div>
+
+    <div class="explanation">
+        <strong>💡 למה צריך את זה?</strong> פרויקט שנמצא רק על מחשב אחד יכול להיעלם: המחשב מתקלקל, מישהו מוחק תיקייה, או שאתם פשוט רוצים להמשיך לעבוד בבית על מה שהתחלתם בבית הספר. GitHub שומר עותק של הפרויקט באינטרנט, וגם זוכר כל גרסה ששמרתם, כך שתמיד אפשר לחזור אחורה.
+        <br><br>
+        <strong>מה צריך לפני:</strong> פרויקט שיצרתם במדריך 1, וחשבון ב-<a href="https://github.com/signup" target="_blank">GitHub</a> (ההרשמה בחינם).
+    </div>
+
+    <h2>המושגים שצריך להכיר</h2>
+    <p>יש כאן כמה מילים חדשות. אל דאגה, אחרי פעם-פעמיים זה נהיה טבעי:</p>
+
+    <div class="concept">
+        <span class="concept-title">📖 Git ו-GitHub</span>
+        <strong>Git</strong> היא תוכנה שעוקבת אחרי השינויים בקבצים של הפרויקט וזוכרת כל גרסה. <strong>GitHub</strong> הוא אתר שבו שומרים את הפרויקט יחד עם כל הגרסאות שלו.
+        <span class="example">דוגמה: Git הוא כמו "היסטוריית גרסאות" של מסמך ב-Google Docs, ו-GitHub הוא כמו Google Drive שבו המסמך שמור.</span>
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 Repository (מאגר)</span>
+        "התיקייה" של הפרויקט ב-GitHub. לכל פרויקט יש מאגר משלו.
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 Commit</span>
+        שמירת "נקודת שמירה" של הפרויקט <strong>על המחשב שלכם</strong>, עם משפט קצר שמתאר מה עשיתם.
+        <span class="example">דוגמה: כמו נקודת שמירה במשחק מחשב. אם משהו נשבר אחר כך, אפשר לחזור אליה.</span>
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 Push ו-Pull</span>
+        <strong>Push</strong> (דחיפה) מעלה את נקודות השמירה מהמחשב שלכם ל-GitHub. <strong>Pull</strong> (משיכה) מוריד מ-GitHub את מה שחדש שם למחשב שלכם.
+        <span class="example">דוגמה: עשיתם Commit בבית הספר ו-Push. בבית עושים Pull, ומקבלים בדיוק את מה שעשיתם בבית הספר.</span>
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 Clone</span>
+        הורדת פרויקט מ-GitHub למחשב שעוד אין בו את הפרויקט. עושים את זה פעם אחת בכל מחשב חדש.
+    </div>
+
+    <div class="warning">
+        <strong>⚠️ הכי חשוב לזכור:</strong> Commit שומר רק על המחשב שלכם! הגיבוי ב-GitHub מתעדכן רק אחרי <strong>Push</strong>.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. חיבור Visual Studio לחשבון GitHub (פעם אחת)</h2>
+    <ul class="step-list">
+        <li>ב-Visual Studio, בתפריט העליון בחרו <strong>File ← Account Settings</strong>.</li>
+        <li>תחת <strong>All Accounts</strong> לחצו <strong>Add</strong> ובחרו <strong>GitHub</strong>.</li>
+        <li>ייפתח דפדפן. התחברו לחשבון GitHub שלכם ואשרו את הגישה (<strong>Authorize</strong>).</li>
+        <li>חזרו ל-Visual Studio. החשבון אמור להופיע ברשימה.</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של חלון Account Settings עם הכפתור Add</div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. העלאת הפרויקט ל-GitHub (פעם אחת לכל פרויקט)</h2>
+    <ul class="step-list">
+        <li>פתחו את הפרויקט ב-Visual Studio.</li>
+        <li>בתפריט העליון בחרו <strong>Git ← Create Git Repository</strong>.</li>
+        <li>בצד ימין של החלון ודאו שנבחר <strong>GitHub</strong>, ובחרו את החשבון שלכם ב-<strong>Account</strong>.</li>
+        <li>ב-<strong>Repository name</strong> כתבו שם למאגר (באנגלית, בלי רווחים). אפשר להשאיר את השם שמופיע, שזה שם הפרויקט.</li>
+        <li>תיבת הסימון <strong>Private repository</strong> קובעת מי יכול לראות את הפרויקט. מסומנת: רק אתם (ומי שתזמינו). לא מסומנת: כולם. אם אתם לא בטוחים, שאלו את המורה.</li>
+        <li>לחצו <strong>Create and Push</strong>.</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של חלון Create Git Repository עם סימון של השדות</div>
+    <div class="checkpoint">היכנסו ל-github.com, לחצו על תמונת הפרופיל ובחרו <strong>Your repositories</strong>. המאגר החדש אמור להופיע, ובתוכו התיקיות של הפרויקט (Controllers, Views ועוד).</div>
+
+    <div class="concept">
+        <span class="concept-title">📖 קובץ ‎.gitignore</span>
+        רשימה של קבצים ש-Git <strong>לא</strong> מעלה. Visual Studio יוצרת אותה לבד. בזכותה תיקיות כמו <code class="inline">bin</code> ו-<code class="inline">obj</code> (קבצים זמניים שנוצרים מחדש בכל הרצה) לא נכנסות לגיבוי.
+    </div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. העבודה היומיומית: Commit ו-Push</h2>
+    <p>את זה עושים <strong>בכל פעם</strong> שמסיימים לעבוד, או אחרי שמשהו מתחיל לעבוד ורוצים לשמור אותו:</p>
+    <ul class="step-list">
+        <li>פתחו את החלון <strong>Git Changes</strong>: בתפריט <strong>View ← Git Changes</strong> (או <span class="keyboard">Ctrl+0</span> ואז <span class="keyboard">Ctrl+G</span>). בחלון מופיעה רשימת הקבצים ששיניתם.</li>
+        <li>בתיבה שבראש החלון כתבו משפט קצר שמתאר מה עשיתם.</li>
+        <li>לחצו על החץ הקטן שליד הכפתור <strong>Commit All</strong>, ובחרו <strong>Commit All and Push</strong>. כך עושים Commit ו-Push בלחיצה אחת.</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של חלון Git Changes: תיבת ההודעה והכפתור Commit All עם החץ</div>
+
+    <p>אם כבר לחצתם <strong>Commit All</strong> בלבד, אפשר לעשות Push בנפרד: בראש החלון Git Changes יש חץ שמצביע למעלה (↑). לחיצה עליו היא Push.</p>
+
+    <table class="simple">
+        <tr><th>הודעת Commit טובה ✅</th><th>הודעת Commit לא טובה ❌</th></tr>
+        <tr><td>הוספתי עמוד "אודות" לתפריט</td><td>שינויים</td></tr>
+        <tr><td>תיקנתי את טופס ההרשמה</td><td>asdf</td></tr>
+        <tr><td>הוספתי טבלת מוצרים למסד הנתונים</td><td>עבודה</td></tr>
+    </table>
+
+    <div class="explanation">
+        <strong>🔁 תזכורת קבועה:</strong> סיימתם לעבוד? <strong>Commit ו-Push</strong> לפני שסוגרים את Visual Studio. ככה העבודה שלכם שמורה ב-GitHub, ותוכלו להמשיך ממנה מכל מחשב.
+    </div>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. מעבר בין מחשבים</h2>
+
+    <h3>במחשב שעוד אין בו את הפרויקט: Clone (פעם אחת)</h3>
+    <ul class="step-list">
+        <li>ב-github.com, פתחו את המאגר שלכם. לחצו על הכפתור הירוק <strong>Code</strong> והעתיקו את הכתובת שמופיעה (מתחילה ב-<code class="inline">https://github.com/</code>).</li>
+        <li>פתחו את Visual Studio. במסך הפתיחה בחרו <strong>Clone a repository</strong>.</li>
+        <li>ב-<strong>Repository location</strong> הדביקו את הכתובת. ב-<strong>Path</strong> בחרו איפה לשמור את הפרויקט במחשב.</li>
+        <li>לחצו <strong>Clone</strong>. הפרויקט יורד ונפתח.</li>
+    </ul>
+
+    <div class="warning">
+        <strong>⚠️ מסד הנתונים לא עובר עם הפרויקט!</strong> הוא שמור ב-LocalDB על המחשב הקודם (ראו מדריך 2). במחשב החדש צריך ליצור אותו מחדש: פתחו <strong>Tools ← NuGet Package Manager ← Package Manager Console</strong>, הקלידו את הפקודה הבאה ולחצו <span class="keyboard">Enter</span>:
+        <pre class="code-block">Update-Database</pre>
+        מסד הנתונים ייווצר עם כל הטבלאות, אבל <strong>ריק</strong>. המשתמשים והנתונים שהזנתם במחשב הקודם נשארים שם.
+    </div>
+
+    <div class="warning">
+        <strong>⚠️ אותה גרסת .NET בכל מחשב:</strong> אם יצרתם את הפרויקט ב-.NET 10 בבית הספר, גם במחשב בבית צריך להיות מותקן .NET 10 (הוא מגיע עם Visual Studio מעודכנת). אחרת הפרויקט לא ייפתח או לא ירוץ.
+    </div>
+
+    <h3>במחשב שכבר יש בו את הפרויקט: Pull בתחילת כל עבודה</h3>
+    <ul class="step-list">
+        <li>פתחו את הפרויקט ואת החלון <strong>Git Changes</strong>.</li>
+        <li>לחצו על החץ שמצביע למטה (↓) בראש החלון. זה <strong>Pull</strong>: הוא מוריד את מה שעשיתם במחשב האחר.</li>
+        <li>עכשיו אפשר לעבוד. בסוף, כרגיל: <strong>Commit All and Push</strong>.</li>
+    </ul>
+
+    <div class="explanation">
+        <strong>💡 הכלל לזכור:</strong> מתחילים לעבוד ← <strong>Pull</strong>. מסיימים לעבוד ← <strong>Commit ו-Push</strong>.
+    </div>
+
+    <!-- ===================== safety ===================== -->
+    <h2>5. מה לא מעלים ל-GitHub</h2>
+    <p>אם המאגר ציבורי, כל אחד בעולם יכול לקרוא את הקוד. לכן <strong>לעולם</strong> לא כותבים בקוד סיסמאות אמיתיות, מפתחות של שירותים (API Keys) או פרטים אישיים. גם במאגר פרטי זה הרגל טוב.</p>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>Push נכשל עם הודעה שיש שינויים שאין לכם (rejected):</strong> כנראה עבדתם במחשב אחר ולא עשיתם Pull. לחצו Pull (↓), ואחר כך שוב Push (↑).</li>
+            <li><strong>הודעה על Conflict (התנגשות):</strong> אותו קובץ שונה בשני מחשבים שונים, ו-Git לא יודע איזו גרסה לשמור. אל תלחצו על שום דבר באקראי, וקראו למורה.</li>
+            <li><strong>אין תפריט Git בסרגל העליון:</strong> כנראה גרסה ישנה של Visual Studio. עדכנו אותה דרך <strong>Help ← Check for Updates</strong>.</li>
+            <li><strong>אחרי Clone, האתר נותן שגיאה של מסד נתונים:</strong> שכחתם להריץ <code class="inline">Update-Database</code> (ראו סעיף 4).</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>שנו את הכותרת בדף הבית של האתר (בקובץ <code class="inline">Views/Home/Index.cshtml</code>) למשהו משלכם.</li>
+            <li>עשו <strong>Commit All and Push</strong> עם הודעה שמתארת את השינוי.</li>
+            <li>היכנסו למאגר ב-github.com, לחצו על הקישור <strong>Commits</strong> (מעל רשימת הקבצים), ומצאו את ההודעה שכתבתם.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li><strong>Commit</strong> שומר נקודת שמירה במחשב, <strong>Push</strong> מעלה אותה ל-GitHub, <strong>Pull</strong> מוריד מ-GitHub.</li>
+            <li>מעלים פרויקט ל-GitHub פעם אחת, דרך <strong>Git ← Create Git Repository</strong>.</li>
+            <li>בכל מחשב חדש: <strong>Clone</strong>, ואחר כך <code class="inline">Update-Database</code> כדי ליצור את מסד הנתונים.</li>
+            <li>מתחילים לעבוד ב-Pull, ומסיימים ב-Commit ו-Push.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

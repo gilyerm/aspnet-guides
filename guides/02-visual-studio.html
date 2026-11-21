@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 2: עבודה ב-Visual Studio</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="02-visual-studio">
+<main>
+    <h1>מדריך 2: עבודה ב-Visual Studio</h1>
+    <div class="subtitle">הכרת המסך, הרצת האתר, קיצורים שימושיים וצפייה במסד הנתונים</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> Visual Studio היא התוכנה שבה נכתוב את כל האתר. בהתחלה יש בה המון כפתורים וחלונות, אבל בפועל משתמשים כל הזמן רק בחלק קטן מהם. במדריך הזה נכיר את החלק הזה.
+        <br><br>
+        <strong>מה צריך לפני:</strong> פרויקט שיצרתם במדריך 1.
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: סביבת פיתוח (IDE)</span>
+        תוכנה שמרכזת במקום אחד את כל מה שצריך כדי לכתוב תוכנה: עורך קוד, כפתור הרצה, הודעות שגיאה ועוד.
+        <span class="example">דוגמה: Visual Studio היא סביבת פיתוח. Word הוא "סביבת עבודה" למסמכים, ו-Visual Studio היא סביבת עבודה לקוד.</span>
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. הכרת המסך</h2>
+    <p>כשפותחים פרויקט, אלה החלונות שתשתמשו בהם הכי הרבה:</p>
+
+    <div class="screenshot">כאן תבוא תמונה של מסך Visual Studio, עם סימון של כל חלון</div>
+
+    <table class="simple">
+        <tr><th>חלון</th><th>מה יש בו</th><th>איך פותחים אם נסגר</th></tr>
+        <tr><td><strong>Solution Explorer</strong><br>(סייר הפתרונות)</td><td>כל התיקיות והקבצים של הפרויקט. לחיצה כפולה על קובץ פותחת אותו.</td><td>View ← Solution Explorer<br><span class="keyboard">Ctrl+Alt+L</span></td></tr>
+        <tr><td><strong>העורך</strong></td><td>האזור הגדול באמצע, שבו כותבים קוד. כל קובץ פתוח מקבל לשונית משלו למעלה.</td><td>נפתח לבד כשפותחים קובץ</td></tr>
+        <tr><td><strong>Error List</strong><br>(רשימת שגיאות)</td><td>כל השגיאות בקוד, עם שם הקובץ ומספר השורה. לחיצה כפולה על שגיאה קופצת לשורה.</td><td>View ← Error List<br><span class="keyboard">Ctrl+\, E</span></td></tr>
+        <tr><td><strong>Output</strong><br>(פלט)</td><td>הודעות שהתוכנה כותבת בזמן בנייה והרצה. שימושי כשמשהו נתקע.</td><td>View ← Output<br><span class="keyboard">Ctrl+Alt+O</span></td></tr>
+        <tr><td><strong>סרגל הכלים</strong></td><td>הסרגל העליון, עם כפתור ההפעלה הירוק (Play).</td><td>תמיד מוצג</td></tr>
+    </table>
+
+    <div class="warning">
+        <strong>⚠️ סגרתם חלון בטעות או שהכול התבלגן?</strong> בתפריט העליון בחרו <strong>Window ← Reset Window Layout</strong>, וכל החלונות יחזרו למקומם המקורי.
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. הרצה ועצירה של האתר</h2>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: localhost</span>
+        כשמריצים את האתר, הוא לא עולה לאינטרנט. הוא רץ רק על המחשב שלכם, ולכן הכתובת בדפדפן מתחילה ב-<code class="inline">localhost</code>, שפירושו "המחשב הזה". המספר שאחרי הנקודתיים נקרא <strong>פורט</strong>, והוא נבחר אוטומטית.
+        <span class="example">דוגמה: <code class="inline">https://localhost:7123/</code>. אם תשלחו את הכתובת הזאת לחבר, היא לא תעבוד אצלו, כי אצלו "המחשב הזה" הוא המחשב שלו.</span>
+    </div>
+
+    <p>יש שתי דרכים להריץ את האתר:</p>
+    <table class="simple">
+        <tr><th>דרך</th><th>איך</th><th>מתי משתמשים</th></tr>
+        <tr><td><strong>הרצה עם דיבאג</strong></td><td>כפתור ה-Play הירוק, או <span class="keyboard">F5</span></td><td>כשרוצים לעצור את הקוד באמצע ולבדוק מה קורה בו (נלמד במדריך הדיבאג).</td></tr>
+        <tr><td><strong>הרצה בלי דיבאג</strong></td><td><span class="keyboard">Ctrl+F5</span></td><td>כשרק רוצים לראות את האתר. עולה מהר יותר.</td></tr>
+    </table>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: דיבאג (Debug)</span>
+        מצב הרצה מיוחד שבו Visual Studio "מסתכלת" על הקוד בזמן שהוא רץ, ויכולה לעצור אותו בשורה שתבחרו.
+        <span class="example">דוגמה: כמו לעצור סרטון בסצנה מסוימת כדי לראות מה קורה בה בדיוק.</span>
+    </div>
+
+    <p><strong>עצירת האתר:</strong> לוחצים על הריבוע האדום בסרגל הכלים, או <span class="keyboard">Shift+F5</span>. אם הרצתם בלי דיבאג, פשוט סוגרים את החלון השחור (הקונסולה) שנפתח.</p>
+
+    <div class="screenshot">כאן תבוא תמונה של סרגל הכלים: כפתור Play, כפתור העצירה וכפתור Hot Reload</div>
+
+    <div class="checkpoint">הריצו את האתר עם <span class="keyboard">Ctrl+F5</span>, ובדקו שהכתובת בדפדפן מתחילה ב-<code class="inline">https://localhost</code>. אחר כך עצרו אותו.</div>
+
+    <div class="warning">
+        <strong>⚠️ חשוב:</strong> לפני שמתקינים חבילה (NuGet) או מריצים פקודה של מסד הנתונים, <strong>עוצרים את האתר</strong>. אחרת תקבלו שגיאה שהקובץ "נעול" (בשימוש).
+    </div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. Hot Reload: לראות שינויים בלי להריץ מחדש</h2>
+    <p>כשהאתר רץ ואתם משנים משהו בקוד, אין צורך לעצור ולהריץ מחדש. אפשר:</p>
+    <ul class="step-list">
+        <li>לשמור את הקובץ (<span class="keyboard">Ctrl+S</span>) וללחוץ על כפתור <strong>Hot Reload</strong> (סמל של להבה 🔥) בסרגל הכלים.</li>
+        <li>או להפעיל עדכון אוטומטי: לחצו על החץ הקטן שליד כפתור הלהבה, וסמנו <strong>Hot Reload on File Save</strong>. מעכשיו כל שמירה תעדכן את האתר לבד.</li>
+        <li>חזרו לדפדפן ורעננו את העמוד (<span class="keyboard">F5</span> בדפדפן).</li>
+    </ul>
+    <div class="warning">
+        <strong>⚠️ שימו לב:</strong> Hot Reload לא מצליח בכל שינוי. אם השינוי לא מופיע, או שקפצה הודעה שאי אפשר להחיל אותו, פשוט עוצרים את האתר ומריצים מחדש.
+    </div>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. Visual Studio עוזרת לכם לכתוב</h2>
+
+    <h3>השלמה אוטומטית (IntelliSense)</h3>
+    <p>כשמתחילים להקליד, נפתחת רשימה של הצעות. בוחרים עם החיצים ולוחצים <span class="keyboard">Tab</span> או <span class="keyboard">Enter</span>. אם הרשימה לא נפתחה, אפשר לפתוח אותה עם <span class="keyboard">Ctrl+Space</span>.</p>
+
+    <h3>הנורה הצהובה (תיקון מהיר)</h3>
+    <p>כשמופיע קו אדום מתחת לקוד, עומדים עליו ולוחצים <span class="keyboard">Ctrl+.</span> (קונטרול ונקודה). Visual Studio תציע תיקונים, ולפעמים התיקון הוא בדיוק מה שצריך.</p>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: using</span>
+        שורה בראש קובץ C# שאומרת "אני הולך להשתמש בדברים מהספרייה הזאת". בלעדיה, C# לא מכירה את השמות מהספרייה.
+        <span class="example">דוגמה: כתבתם <code class="inline">List&lt;string&gt;</code> וקיבלתם קו אדום? <span class="keyboard">Ctrl+.</span> יציע להוסיף <code class="inline">using System.Collections.Generic;</code> בראש הקובץ.</span>
+    </div>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. קיצורי מקלדת שכדאי להכיר</h2>
+    <table class="simple">
+        <tr><th>קיצור</th><th>מה הוא עושה</th></tr>
+        <tr><td><span class="keyboard">Ctrl+S</span></td><td>שמירת הקובץ הנוכחי</td></tr>
+        <tr><td><span class="keyboard">Ctrl+Shift+S</span></td><td>שמירת כל הקבצים הפתוחים</td></tr>
+        <tr><td><span class="keyboard">Ctrl+K</span> ואז <span class="keyboard">Ctrl+D</span></td><td>סידור הקוד: מיישר רווחים והזחות, כדי שהקוד יהיה קריא</td></tr>
+        <tr><td><span class="keyboard">Ctrl+K</span> ואז <span class="keyboard">Ctrl+C</span></td><td>הפיכת השורות המסומנות להערה (ו-<span class="keyboard">Ctrl+K</span> ואז <span class="keyboard">Ctrl+U</span> מבטל)</td></tr>
+        <tr><td><span class="keyboard">Ctrl+Z</span></td><td>ביטול הפעולה האחרונה</td></tr>
+        <tr><td><span class="keyboard">Ctrl+F</span></td><td>חיפוש בקובץ הנוכחי</td></tr>
+        <tr><td><span class="keyboard">Ctrl+Shift+F</span></td><td>חיפוש בכל הפרויקט</td></tr>
+        <tr><td><span class="keyboard">F12</span></td><td>קפיצה למקום שבו מוגדר הדבר שעליו עומדים (מחלקה, פונקציה)</td></tr>
+        <tr><td><span class="keyboard">Ctrl+R</span> ואז <span class="keyboard">Ctrl+R</span></td><td>שינוי שם של משתנה או מחלקה בכל הפרויקט בבת אחת</td></tr>
+        <tr><td><span class="keyboard">Ctrl+Shift+B</span></td><td>בנייה (Build): בדיקה שהקוד מתקמפל, בלי להריץ</td></tr>
+    </table>
+
+    <!-- ===================== 6 ===================== -->
+    <h2>6. התקנת חבילות NuGet</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: חבילה (NuGet)</span>
+        קוד מוכן שמישהו אחר כתב, ואפשר להוסיף לפרויקט בלחיצה, במקום לכתוב הכול לבד. NuGet היא "החנות" שממנה מתקינים חבילות.
+        <span class="example">דוגמה: כמו אפליקציה שמתקינים בטלפון. במדריכים הבאים נתקין חבילות למשל כדי ליצור עמודים אוטומטית.</span>
+    </div>
+    <ul class="step-list">
+        <li>עצרו את האתר אם הוא רץ.</li>
+        <li>ב-Solution Explorer, לחצו קליק ימני על <strong>שם הפרויקט</strong> (השורה המודגשת, לא השורה העליונה של ה-Solution) ובחרו <strong>Manage NuGet Packages</strong>.</li>
+        <li>עברו ללשונית <strong>Browse</strong> והקלידו את שם החבילה שהמדריך אומר לכם.</li>
+        <li>בחרו את החבילה מהרשימה. מצד ימין, ב-<strong>Version</strong>, ודאו שהגרסה מתחילה באותו מספר כמו גרסת ה-.NET של הפרויקט (למשל <strong>10.x.x</strong> לפרויקט ב-.NET 10).</li>
+        <li>לחצו <strong>Install</strong> ואשרו את החלונות שקופצים (<strong>OK</strong>, ואחר כך <strong>I Accept</strong> אם מופיע).</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של חלון NuGet, עם סימון של Browse, Version ו-Install</div>
+    <div class="checkpoint">עברו ללשונית <strong>Installed</strong> באותו חלון. החבילה שהתקנתם אמורה להופיע ברשימה.</div>
+
+    <h3>Package Manager Console</h3>
+    <p>חלון שבו כותבים פקודות לפרויקט. נשתמש בו בעיקר במדריך מסד הנתונים. פותחים אותו מהתפריט: <strong>Tools ← NuGet Package Manager ← Package Manager Console</strong>. החלון נפתח בתחתית המסך, ושם מקלידים פקודה ולוחצים <span class="keyboard">Enter</span>.</p>
+
+    <!-- ===================== 7 ===================== -->
+    <h2>7. צפייה במידע שבמסד הנתונים</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: מסד נתונים (Database)</span>
+        המקום שבו האתר שומר מידע לאורך זמן, כמו משתמשים שנרשמו. המידע מסודר בטבלאות, כמו בגיליון אקסל: כל שורה היא פריט אחד, וכל עמודה היא פרט עליו.
+        <span class="example">דוגמה: בטבלת המשתמשים, כל שורה היא משתמש אחד, ויש עמודות כמו אימייל ושם משתמש.</span>
+    </div>
+
+    <div class="warning">
+        <strong>⚠️ איפה מסד הנתונים נמצא?</strong> הוא <strong>לא</strong> נמצא בתיקיית הפרויקט, אלא בתוכנה בשם <strong>LocalDB</strong> שמותקנת על המחשב עצמו. לכן אם תעבירו את הפרויקט למחשב אחר, מסד הנתונים לא יעבור איתו (במדריך 3 נראה מה עושים במקרה כזה).
+    </div>
+
+    <h3>שלב א: יצירת מסד הנתונים (פעם אחת)</h3>
+    <p>מסד הנתונים לא קיים עד שיוצרים אותו בפעם הראשונה. הדרך הכי פשוטה:</p>
+    <ul class="step-list">
+        <li>הריצו את האתר ולחצו על <strong>Register</strong> בתפריט העליון. הזינו אימייל וסיסמה ולחצו <strong>Register</strong>.</li>
+        <li>בפעם הראשונה יופיע דף שגיאה שכתוב בו שפעולה על מסד הנתונים נכשלה. <strong>זה תקין!</strong> בדף יש כפתור כחול <strong>Apply Migrations</strong>. לחצו עליו.</li>
+        <li>כשמופיעה הודעה שהפעולה הצליחה, רעננו את העמוד (<span class="keyboard">F5</span> בדפדפן). אם הדפדפן שואל אם לשלוח שוב את הטופס, אשרו.</li>
+        <li>יופיע עמוד שמבקש לאשר את החשבון. מכיוון שהאתר לא באמת שולח מיילים, יש בעמוד קישור <strong>Click here to confirm your account</strong>. לחצו עליו, ואחר כך תוכלו להתחבר עם <strong>Login</strong>.</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של דף השגיאה עם הכפתור Apply Migrations</div>
+
+    <h3>שלב ב: פתיחת הטבלאות ב-Visual Studio</h3>
+    <ul class="step-list">
+        <li>בתפריט העליון בחרו <strong>View ← SQL Server Object Explorer</strong>.</li>
+        <li>בחלון שנפתח, פתחו (לחיצה על החץ הקטן): <strong>SQL Server ← (localdb)\MSSQLLocalDB ← Databases</strong>.</li>
+        <li>מצאו את מסד הנתונים של הפרויקט. השם שלו מתחיל ב-<code class="inline">aspnet-</code> ואחריו שם הפרויקט. פתחו אותו, ואז את התיקייה <strong>Tables</strong>.</li>
+        <li>לחצו קליק ימני על הטבלה <strong>dbo.AspNetUsers</strong> ובחרו <strong>View Data</strong>.</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של SQL Server Object Explorer עם העץ פתוח עד הטבלה</div>
+    <div class="checkpoint">נפתחה טבלה, ובה שורה עם האימייל שנרשמתם איתו. זה המשתמש שלכם, שמור במסד הנתונים!</div>
+
+    <div class="warning">
+        <strong>⚠️ כלל ברזל:</strong> מותר להסתכל על הנתונים, ואפילו לשנות או למחוק שורות. אבל <strong>לא משנים כאן את מבנה הטבלאות</strong> (עמודות). את המבנה קובע קוד ה-C# שלכם, ושינוי כאן ישבור את האתר.
+    </div>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>כפתור ה-Play אפור ולא לוחץ:</strong> האתר כנראה עדיין רץ. עצרו אותו (<span class="keyboard">Shift+F5</span>) ונסו שוב.</li>
+            <li><strong>"The process cannot access the file... because it is being used":</strong> האתר רץ בזמן שניסיתם להתקין חבילה או לבנות. עצרו אותו ונסו שוב.</li>
+            <li><strong>לא מוצאים את מסד הנתונים ב-SQL Server Object Explorer:</strong> כנראה עוד לא יצרתם אותו. חזרו לשלב א. אם כבר יצרתם, לחצו על כפתור הרענון (🔄) בראש החלון.</li>
+            <li><strong>חלון נעלם:</strong> <strong>Window ← Reset Window Layout</strong>.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>הירשמו לאתר עם משתמש נוסף (אימייל אחר).</li>
+            <li>פתחו שוב את הטבלה <strong>dbo.AspNetUsers</strong> ובדקו שיש בה עכשיו שתי שורות. אם לא רואים את החדשה, לחצו על כפתור הרענון בחלון הטבלה.</li>
+            <li>מצאו בטבלה את העמודה שבה שמורה הסיסמה. האם רואים בה את הסיסמה שהקלדתם? (רמז: לא, והסיבה טובה. האתר שומר סיסמאות בצורה מוצפנת כדי שאף אחד לא יוכל לקרוא אותן.)</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>החלונות החשובים: Solution Explorer, העורך, Error List ו-Output. אם משהו התבלגן: Reset Window Layout.</li>
+            <li>מריצים עם <span class="keyboard">F5</span> או <span class="keyboard">Ctrl+F5</span>, ועוצרים עם <span class="keyboard">Shift+F5</span>. האתר רץ על <code class="inline">localhost</code>, כלומר רק על המחשב שלכם.</li>
+            <li>מתקינים חבילות דרך Manage NuGet Packages, ותמיד עוצרים את האתר לפני.</li>
+            <li>מסד הנתונים נמצא ב-LocalDB על המחשב, ורואים אותו ב-SQL Server Object Explorer.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

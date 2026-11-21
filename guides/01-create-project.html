@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 1: יצירת פרויקט</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="01-create-project">
+<main>
+    <h1>מדריך 1: יצירת פרויקט</h1>
+    <div class="subtitle">שלב אחר שלב – יצירת פרויקט ASP.NET Core MVC עם מערכת משתמשים</div>
+
+    <h2>יצירת פרויקט חדש</h2>
+    <div class="explanation">
+        <strong>💡 הסבר קצר:</strong> בשלב זה ניצור את שלד האתר שלנו. חשוב מאוד להגדיר כבר עכשיו שהאתר יתמוך במערכת משתמשים (הרשמה והתחברות), כדי שסביבת הפיתוח תכין עבורנו את כל הקבצים הדרושים מראש.
+    </div>
+    <ul class="step-list">
+        <li>פתחו את <strong>Visual Studio</strong> ובחרו באפשרות <strong>Create a new project</strong>.</li>
+        <li>בשורת החיפוש למעלה הקלידו <strong>MVC</strong>, ובחרו בתבנית <strong>ASP.NET Core Web App (Model-View-Controller)</strong> (ודאו שיש סמל של C# ליד).</li>
+        <li>לחצו <strong>Next</strong>, תנו שם לפרויקט (באנגלית, ללא רווחים) ולחצו <strong>Next</strong>.</li>
+        <li>במסך ההגדרות, בחרו בגרסת ה-Framework העדכנית ביותר שמופיעה ברשימה (מומלץ לבחור בגרסה עם התווית <strong>LTS</strong>, למשל <strong>.NET 10</strong>).</li>
+        <li>תחת Authentication type, שנו את ההגדרה מ-None ל-<strong>Individual Accounts</strong>. <span class="highlight">(זהו השלב החשוב ביותר!)</span></li>
+        <li>לחצו על <strong>Create</strong>.</li>
+        <li>המתינו כמה שניות עד ש-Visual Studio יסיים ליצור את הפרויקט. בסיום, בסרגל הימני (<strong>Solution Explorer</strong>) יופיעו כל התיקיות והקבצים של האתר.</li>
+    </ul>
+
+    <!-- INTERACTIVE ACCORDION 1: FOLDER STRUCTURE -->
+    <details>
+        <summary>📁 רוצים להבין מה כל תיקייה עושה? (לחצו לפתיחה)</summary>
+        <div class="explanation" style="margin-top: 1rem; margin-bottom: 0.5rem; background-color: #f8fafc; border-right-color: #64748b;">
+            <strong>💡 אל תיבהלו מכמות הקבצים!</strong> Visual Studio יצר עבורנו מבנה מסודר. הנה מילון קצר שיעזור לכם להבין איפה נמצא כל דבר:
+        </div>
+        <ul class="folder-list">
+            <li>
+                <span class="folder-title"><span class="folder-icon">🌐</span> wwwroot</span>
+                התיקייה "הציבורית" של האתר. כאן נשמור תמונות, קובצי עיצוב (CSS) וקוד צד-לקוח (JavaScript) שמוצגים ישירות למשתמש.
+            </li>
+            <li>
+                <span class="folder-title"><span class="folder-icon">🧠</span> Controllers (בקרים)</span>
+                המוח של האתר. המחלקות כאן מקבלות בקשות מהמשתמש (למשל כשהוא לוחץ על כפתור), וקובעות איזה דף להציג לו בתגובה.
+            </li>
+            <li>
+                <span class="folder-title"><span class="folder-icon">📦</span> Models (מודלים)</span>
+                כאן נכתוב את המחלקות שמייצגות נתונים (למשל: מחלקת 'משתמש' או 'מוצר'). בהמשך, המחלקות האלו יהפכו לטבלאות/מידע בתוך מסד הנתונים שלנו.
+            </li>
+            <li>
+                <span class="folder-title"><span class="folder-icon">🎨</span> Views (תצוגות)</span>
+                כאן נמצאים כל דפי ה-HTML (אלו שמסתיימים ב-cshtml) שהמשתמש רואה בעיניים.
+            </li>
+            <li>
+                <span class="folder-title"><span class="folder-icon">🗄️</span> Data</span>
+                תיקייה שמכילה את הקוד שמנהל את הקשר בין האתר שלנו למסד הנתונים. שם נוסיף את רשימת הטבלאות שלנו.
+            </li>
+            <li>
+                <span class="folder-title"><span class="folder-icon">⚙️</span> appsettings.json</span>
+                קובץ ההגדרות של האתר (למשל, כאן מוגדרת הכתובת של מסד הנתונים).
+            </li>
+            <li>
+                <span class="folder-title"><span class="folder-icon">🚀</span> Program.cs</span>
+                נקודת ההתחלה של האתר כולו. הקוד הראשון שרץ מאחורי הקלעים כשלוחצים Play.
+            </li>
+        </ul>
+    </details>
+
+    <h2>הרצת האתר</h2>
+    <div class="explanation">
+        <strong>💡 הסבר קצר:</strong> עכשיו נריץ את האתר כדי לוודא שהכל עובד. Visual Studio מפעיל עבורנו שרת קטן על המחשב ופותח את האתר בדפדפן.
+    </div>
+    <ul class="step-list">
+        <li>לחצו על כפתור ההפעלה הירוק (<strong>Play</strong>) בסרגל העליון של Visual Studio (ליד הכפתור מופיע השם <strong>https</strong>).</li>
+        <li>בהרצה הראשונה יקפוץ חלון שמבקש לסמוך על אישור האבטחה של האתר (<strong>Trust ASP.NET Core SSL Certificate</strong>). לחצו <strong>Yes</strong>, ובחלון האזהרה שיופיע אחריו לחצו שוב <strong>Yes</strong>.</li>
+    </ul>
+
+    <div class="success-msg">
+        🎉 אם הכל עבד כראוי, האתר ייפתח בדפדפן עם דף הבית שנוצר כברירת מחדל!
+    </div>
+
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <p>צרו פרויקט נוסף בשם <code class="inline">PracticeSite</code> לגמרי לבד, בלי להסתכל במדריך. בסוף ודאו שגם הוא נפתח בדפדפן.</p>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>יוצרים פרויקט מהתבנית <strong>ASP.NET Core Web App (Model-View-Controller)</strong>.</li>
+            <li>בוחרים <strong>Individual Accounts</strong> כדי לקבל מערכת הרשמה והתחברות מוכנה.</li>
+            <li>מריצים את האתר עם כפתור <strong>Play</strong> הירוק.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>
