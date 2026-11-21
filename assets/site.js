@@ -139,6 +139,61 @@
         }
     }
 
+    // ---------- צביעת קוד (Prism, שמור בתיקייה assets/vendor) ----------
+    function detectLanguage(text) {
+        var t = text.trim();
+        if (/^(Add-Migration|Update-Database|Remove-Migration|Install-Package)\b/m.test(t)) return 'powershell';
+        var htmlTag = /(^|[^\w])<\/?[a-z!][\w-]*(\s|>|\/)/m.test(t);
+        if (/^\s*@[\w{*]/m.test(t) || htmlTag || /&copy;/.test(t)) return 'cshtml';
+        if (/\bdocument\.|\bfunction\s*\(|\baddEventListener\b|\bconst\s|\blet\s|=>\s*\{?\s*$|\bfetch\(/m.test(t) && !/\bpublic\b|\bvar\s+\w+\s*=\s*new\b/.test(t)) return 'javascript';
+        if (/^[\w\s.#:>,-]+\{\s*$/m.test(t) && /^\s*[\w-]+\s*:\s*[^;]+;\s*$/m.test(t) && !/\b(public|return|var)\b/.test(t)) return 'css';
+        return 'csharp';
+    }
+
+    function wrapChanges(root, words) {
+        if (!words.length) return;
+        var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        var nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(function (node) {
+            words.forEach(function (w) {
+                var i = node.nodeValue.indexOf(w);
+                if (i === -1 || !node.parentNode) return;
+                var after = node.splitText(i);
+                after.splitText(w.length);
+                var span = document.createElement('span');
+                span.className = 'change';
+                after.parentNode.replaceChild(span, after);
+                span.appendChild(after);
+            });
+        });
+    }
+
+    var blocks = document.querySelectorAll('pre.code-block');
+    if (blocks.length) {
+        var css = el('link', { rel: 'stylesheet', href: root + 'assets/vendor/prism-vsc-dark-plus.css' });
+        document.head.appendChild(css);
+        var prismScript = el('script', { src: root + 'assets/vendor/prism.js' });
+        prismScript.onload = function () {
+            blocks.forEach(function (pre) {
+                var words = [];
+                pre.querySelectorAll('.change').forEach(function (s) {
+                    if (words.indexOf(s.textContent) === -1) words.push(s.textContent);
+                });
+                var text = pre.textContent;
+                var lang = pre.getAttribute('data-lang') || detectLanguage(text);
+                var code = document.createElement('code');
+                code.className = 'language-' + lang;
+                code.textContent = text;
+                pre.textContent = '';
+                pre.appendChild(code);
+                window.Prism.highlightElement(code);
+                wrapChanges(code, words);
+            });
+        };
+        document.head.appendChild(prismScript);
+    }
+
     // ---------- כפתור העתקה לכל בלוק קוד ----------
     document.querySelectorAll('pre.code-block').forEach(function (pre) {
         var wrap = el('div', { 'class': 'code-wrap' });

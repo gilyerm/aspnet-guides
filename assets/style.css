@@ -382,3 +382,21 @@ pre.code-block .change { background: #4d3d00; color: #ffe08a; border-radius: 3px
 .change-note { font-size: 0.95rem; color: #92400e; }
 .change-note::before { content: "✏️ "; }
 pre.code-block { padding-top: 2.4rem; }
+
+/* צביעת קוד: שומרים על הגודל והגופן שלנו */
+pre.code-block code[class*="language-"] {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: inherit;
+    line-height: inherit;
+    background: none;
+    padding: 0;
+    white-space: pre;
+}
+pre.code-block[class*="language-"] {
+    padding: 2.4rem 1.2rem 1.2rem;
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 8px;
+    background-color: #1e1e1e;
+}
