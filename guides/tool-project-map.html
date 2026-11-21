@@ -7,14 +7,14 @@
     <script src="../assets/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/style.css">
     <style>
-        .tree { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; box-shadow: var(--shadow); direction: ltr; text-align: left; font-family: 'Consolas', monospace; font-size: 0.95rem; line-height: 1.9; overflow-x: auto; }
+        .tree { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; box-shadow: var(--shadow); direction: ltr; text-align: left; font-family: var(--mono); font-size: 0.95rem; line-height: 1.9; overflow-x: auto; }
         .tree ul { list-style: none; margin: 0; padding-left: 1.4rem; border-left: 1px dashed var(--border-strong); }
         .tree > ul { padding-left: 0; border: 0; }
         .tree a { text-decoration: none; color: var(--text); padding: 0.05rem 0.35rem; border-radius: 5px; white-space: nowrap; }
         .tree a:hover { background: var(--primary-soft); color: var(--primary); }
-        .tree .note { font-family: 'Rubik', sans-serif; color: var(--muted); font-size: 0.85rem; direction: rtl; unicode-bidi: isolate; }
+        .tree .note { font-family: var(--font); color: var(--muted); font-size: 0.85rem; direction: rtl; unicode-bidi: isolate; }
         .legend { display: flex; gap: 1.2rem; flex-wrap: wrap; font-size: 0.95rem; margin: 0.8rem 0 0; }
-        .item-table td:first-child { white-space: nowrap; font-family: 'Consolas', monospace; direction: ltr; text-align: left; font-size: 0.92rem; }
+        .item-table td:first-child { white-space: nowrap; font-family: var(--mono); direction: ltr; text-align: left; font-size: 0.92rem; }
         .item-table td:nth-child(3) { text-align: center; white-space: nowrap; }
         .item-table th, .item-table td:last-child { white-space: nowrap; overflow-wrap: normal; }
         .item-table tr:target { outline: 2px solid var(--primary); outline-offset: -2px; background: var(--primary-soft); }

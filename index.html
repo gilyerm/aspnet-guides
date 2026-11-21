@@ -10,22 +10,27 @@
 <body>
     <main>
         <section class="hero">
-            <h1>מדריכי ASP.NET Core MVC</h1>
-            <p>בונים אתר אמיתי ב-Visual Studio, שלב אחר שלב: מהתקנה ועד מסד נתונים, משתמשים והרשאות. בעברית, עם קוד מוכן להעתקה ודוגמאות שאפשר לנסות.</p>
-            <div class="hero-actions">
-                <a class="primary" href="guides/00-install-vs.html">מתחילים מכאן ←</a>
-                <a class="secondary" href="guides/snippets.html">📚 ספריית קטעי קוד</a>
-                <a class="secondary" href="guides/tool-errors.html">🛠️ יש לי שגיאה</a>
+            <div>
+                <h1>בונים אתר אמיתי, צעד אחר צעד</h1>
+                <p>מדריכים בעברית ל-ASP.NET Core MVC ב-Visual Studio: מהתקנה ועד מסד נתונים, משתמשים והרשאות. כל קטע קוד מוכן להעתקה, וכל דוגמת ווב אפשר לשנות ולראות מיד.</p>
+                <div class="hero-actions">
+                    <a class="btn primary" href="guides/00-install-vs.html">מתחילים מההתקנה</a>
+                    <a class="btn" href="guides/snippets.html">ספריית קטעי קוד</a>
+                    <a class="btn" href="guides/tool-errors.html">יש לי שגיאה</a>
+                </div>
             </div>
-            <div class="hero-stats">
-                <div><b id="stat-guides">40</b>מדריכים ועמודי עזר</div>
-                <div><b>44</b>קטעי קוד מוכנים</div>
-                <div><b>✏️</b>דוגמאות "נסו בעצמכם"</div>
+            <div class="editor" aria-label="דוגמה: Controller ראשון">
+                <div class="editor-tabs">
+                    <span class="editor-tab active">HomeController.cs</span>
+                    <span class="editor-tab">Index.cshtml</span>
+                </div>
+                <pre id="hero-code"></pre>
+                <div class="editor-status"><span>Controllers</span><span id="hero-status" dir="ltr">Building…</span></div>
             </div>
         </section>
 
         <div class="explanation">
-            <strong>💡 איך משתמשים באתר?</strong> כל מדריך עומד בפני עצמו, אבל מומלץ ללכת לפי הסדר בחלקים הראשונים. אם מדריך צריך משהו ממדריך אחר, זה כתוב בראש העמוד. "יסודות הווב" ו"עזרים" הם חומר עזר: חוזרים אליהם מתי שצריך.
+            <strong>איך משתמשים באתר?</strong> כל מדריך עומד בפני עצמו, אבל בחלקים הראשונים כדאי ללכת לפי הסדר. אם מדריך צריך משהו ממדריך אחר, זה כתוב בראש העמוד. "יסודות הווב" ו"עזרים" הם חומר עזר: חוזרים אליהם מתי שצריך.
         </div>
 
         <div id="guide-index"></div>

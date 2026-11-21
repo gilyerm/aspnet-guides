@@ -86,7 +86,6 @@
     var main = document.querySelector('main');
 
     function guideUrl(g) { return root + 'guides/' + g.slug + '.html'; }
-    function numLabel(g) { return /^[0-9א-ת]+$/.test(g.num) ? 'מדריך ' + g.num : g.num; }
 
     function el(tag, attrs, html) {
         var e = document.createElement(tag);
@@ -119,24 +118,36 @@
         }
     }
 
-    // ---------- רשימת המדריכים (לתפריט ולסרגל הצד) ----------
-    var menuHtml = SECTIONS.map(function (s) {
-        var items = GUIDES.filter(function (g) { return g.section === s.id; }).map(function (g) {
-            var label = '<span class="m-num">' + g.num + '</span>' + g.title;
-            if (!g.ready) return '<li><span class="soon">' + label + ' <small>(בקרוב)</small></span></li>';
-            var cls = g.slug === current ? ' class="current"' : '';
-            return '<li' + cls + '><a href="' + guideUrl(g) + '">' + label + (visited[g.slug] ? ' <span class="tick">✓</span>' : '') + '</a></li>';
+    // ---------- רשימת המדריכים (לתפריט ולסרגל הצד), בנויה כמו Solution Explorer ----------
+    var currentGuide = GUIDES.filter(function (g) { return g.slug === current; })[0];
+    var FOLDERS_KEY = 'aspnet-guides-folders';
+    var folderState = {};
+    try { folderState = JSON.parse(localStorage.getItem(FOLDERS_KEY)) || {}; } catch (e) { }
+    function buildMenu(forSidebar) {
+        return SECTIONS.map(function (s) {
+            var list = GUIDES.filter(function (g) { return g.section === s.id; });
+            var items = list.map(function (g) {
+                var label = '<span class="m-num">' + g.num + '</span><span>' + g.title + '</span>';
+                if (!g.ready) return '<li><span class="soon">' + label + ' <small>(בקרוב)</small></span></li>';
+                var cls = g.slug === current ? ' class="current"' : '';
+                return '<li' + cls + '><a href="' + guideUrl(g) + '"' + (g.slug === current ? ' aria-current="page"' : '') + '>' + label +
+                    (visited[g.slug] ? '<span class="tick" title="כבר פתחתם">✓</span>' : '') + '</a></li>';
+            }).join('');
+            var open = !forSidebar || (s.id in folderState ? folderState[s.id] : (currentGuide ? currentGuide.section === s.id : true));
+            return '<div class="nav-section"><details data-sec="' + s.id + '"' + (open ? ' open' : '') + '>' +
+                '<summary><span>' + s.title + '</span><span class="count">' + list.length + '</span></summary>' +
+                '<ul>' + items + '</ul></details></div>';
         }).join('');
-        return '<div class="nav-section"><h4>' + s.title + '</h4><ul>' + items + '</ul></div>';
-    }).join('');
+    }
+    var menuHtml = buildMenu(false);
 
     // ---------- כותרת עליונה ----------
     var header = el('header', { 'class': 'site-header' },
         '<div class="inner">' +
-        '<a class="brand" href="' + root + 'index.html">🎓 <span>מדריכי ASP.NET Core MVC</span></a>' +
+        '<a class="brand" href="' + root + 'index.html"><span class="brand-mark" aria-hidden="true">MVC</span><span class="brand-text">מדריכי ASP.NET Core MVC</span></a>' +
         '<nav>' +
         (GUIDES.some(function (g) { return g.slug === 'snippets' && g.ready; })
-            ? '<a class="nav-link-snippets" href="' + root + 'guides/snippets.html">📚 קטעי קוד</a>' : '') +
+            ? '<a class="nav-link-snippets" href="' + root + 'guides/snippets.html">ספריית קטעי קוד</a>' : '') +
         '<button type="button" class="header-btn menu-btn" aria-expanded="false">כל המדריכים ▾</button>' +
         '<button type="button" class="header-btn theme-btn" aria-label="החלפת מצב כהה ובהיר"></button>' +
         '</nav>' +
@@ -182,15 +193,32 @@
         }
     }
 
+    // ---------- שביל ניווט מעל הכותרת ----------
+    if (currentGuide && main) {
+        var sec = SECTIONS.filter(function (x) { return x.id === currentGuide.section; })[0];
+        var h1 = main.querySelector('h1');
+        if (h1 && sec) {
+            h1.insertAdjacentElement('beforebegin', el('nav', { 'class': 'crumbs', 'aria-label': 'מיקום באתר' },
+                '<a href="' + root + 'index.html">ראשי</a><span class="sep">/</span>' +
+                '<a href="' + root + 'index.html#sec-' + sec.id + '">' + sec.title + '</a>'));
+        }
+    }
+
     // ---------- פריסה למחשב: סרגל צד עם כל המדריכים, ותוכן עניינים צמוד ----------
     if (current && main) {
         document.body.classList.add('has-sidebar');
         var layout = el('div', { 'class': 'layout' + (tocList ? ' with-toc' : '') });
         var sidebar = el('aside', { 'class': 'sidebar', 'aria-label': 'כל המדריכים' },
-            '<div class="sidebar-title">כל המדריכים</div>' + menuHtml);
+            '<div class="sidebar-title">מפת הקורס</div>' + buildMenu(true));
         main.parentNode.insertBefore(layout, main);
         layout.appendChild(sidebar);
         layout.appendChild(main);
+        sidebar.querySelectorAll('details').forEach(function (d) {
+            d.addEventListener('toggle', function () {
+                folderState[d.getAttribute('data-sec')] = d.open;
+                try { localStorage.setItem(FOLDERS_KEY, JSON.stringify(folderState)); } catch (e) { }
+            });
+        });
         var cur = sidebar.querySelector('li.current');
         if (cur) setTimeout(function () { sidebar.scrollTop = cur.offsetTop - sidebar.clientHeight / 3; }, 0);
 
@@ -437,6 +465,18 @@
                 pager.appendChild(el('a', { href: guideUrl(n), 'class': 'next' }, '<small>המדריך הבא ←</small>' + n.num + '. ' + n.title));
             }
             main.appendChild(pager);
+
+            // פס סטטוס בתחתית המסך (במחשב בלבד)
+            var readyCount = ready.length;
+            var seen = ready.filter(function (g) { return visited[g.slug]; }).length;
+            var bar = el('footer', { 'class': 'statusbar', 'aria-label': 'התקדמות' },
+                '<span class="sb-item" title="נשמר רק בדפדפן הזה">פתחתם ' + seen + ' מתוך ' + readyCount +
+                '<span class="sb-bar"><span style="width:' + Math.round(100 * seen / readyCount) + '%"></span></span></span>' +
+                '<span class="grow"></span>' +
+                (i > 0 ? '<a href="' + guideUrl(ready[i - 1]) + '" title="' + ready[i - 1].title + '">→ הקודם</a>' : '') +
+                '<span class="sb-item">מדריך ' + (i + 1) + ' מתוך ' + readyCount + '</span>' +
+                (i < readyCount - 1 ? '<a href="' + guideUrl(ready[i + 1]) + '" title="' + ready[i + 1].title + '">הבא ←</a>' : ''));
+            document.body.appendChild(bar);
         }
     }
 
@@ -456,7 +496,7 @@
         if (statEl) statEl.textContent = readyGuides.length;
         var tools = el('div', { 'class': 'home-tools' });
         var searchBox = el('div', { 'class': 'search-box' },
-            '<input type="search" placeholder="🔍 חיפוש מדריך (למשל: טופס, Migration, תפריט)" aria-label="חיפוש מדריך">');
+            '<input type="search" placeholder="חיפוש מדריך, למשל: טופס, Migration, תפריט" aria-label="חיפוש מדריך">');
         tools.appendChild(searchBox);
         tools.appendChild(el('div', { 'class': 'progress', title: 'נשמר רק בדפדפן הזה' },
             'פתחתם ' + readCount + ' מתוך ' + readyGuides.length +
@@ -472,13 +512,13 @@
             if (s.note) sec.appendChild(el('p', { 'class': 'section-note' }, s.note));
             var ul = el('ul', { 'class': 'guide-cards' });
             GUIDES.filter(function (g) { return g.section === s.id; }).forEach(function (g) {
-                var inner = '<span class="num">' + numLabel(g) + (visited[g.slug] && g.ready ? ' <span class="tick" title="כבר פתחתם את המדריך הזה">✓ נקרא</span>' : '') + '</span>' +
-                    '<span class="title">' + g.title + '</span>' +
-                    '<span class="desc">' + g.desc + '</span>' +
-                    (g.ready ? '' : '<br><span class="badge">בקרוב</span>');
+                var inner = '<span class="num">' + g.num + '</span>' +
+                    '<span class="title">' + g.title + (g.ready ? '' : ' <span class="badge">(בקרוב)</span>') + '</span>' +
+                    (visited[g.slug] && g.ready ? '<span class="tick" title="כבר פתחתם את המדריך הזה">✓ נקרא</span>' : '') +
+                    '<span class="desc">' + g.desc + '</span>';
                 var li = el('li', { 'class': 'guide-card ' + (g.ready ? 'ready' : 'soon') });
                 li.setAttribute('data-search', (g.num + ' ' + g.title + ' ' + g.desc + ' ' + (g.keywords || '')).toLowerCase());
-                li.innerHTML = g.ready ? '<a href="' + guideUrl(g) + '">' + inner + '</a>' : inner;
+                li.innerHTML = g.ready ? '<a href="' + guideUrl(g) + '">' + inner + '</a>' : '<div class="row">' + inner + '</div>';
                 ul.appendChild(li);
             });
             sec.appendChild(ul);
@@ -502,5 +542,52 @@
         });
     }
 
-    document.body.appendChild(el('footer', { 'class': 'site-footer' }, 'מדריכים לתלמידים · ASP.NET Core MVC'));
+
+    // ---------- דף הבית: חלון עורך שמקליד קוד פעם אחת ----------
+    var heroCode = document.getElementById('hero-code');
+    if (heroCode) {
+        var T = [
+            ['kw', 'public class '], ['ty', 'HomeController'], ['', ' : '], ['ty', 'Controller'], ['', '\n{\n    '],
+            ['cm', '// כתובת: /Home/Index'], ['', '\n    '],
+            ['kw', 'public '], ['ty', 'IActionResult '], ['fn', 'Index'], ['', '()\n    {\n        '],
+            ['', 'ViewData['], ['st', '"Title"'], ['', '] = '], ['st', '"Home"'], ['', ';\n        '],
+            ['ctl', 'return '], ['fn', 'View'], ['', '();\n    }\n}']
+        ];
+        var total = T.reduce(function (n, t) { return n + t[1].length; }, 0);
+        var esc = function (x) { return x.replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+        var paint = function (count, done) {
+            var html = '', left = count, line = 1;
+            var ln = function () { return '<span class="ln">' + line + '</span>'; };
+            html += ln();
+            for (var k = 0; k < T.length && left > 0; k++) {
+                var part = T[k][1].slice(0, left);
+                left -= part.length;
+                var pieces = part.split('\n');
+                pieces.forEach(function (pc, pi) {
+                    if (pi > 0) { line++; html += '\n' + ln(); }
+                    if (pc) html += T[k][0] ? '<span class="' + T[k][0] + '">' + esc(pc) + '</span>' : esc(pc);
+                });
+            }
+            heroCode.innerHTML = html + (done ? '' : '<span class="caret"></span>');
+        };
+        var statusEl = document.getElementById('hero-status');
+        var finish = function () {
+            paint(total, true);
+            if (statusEl) statusEl.textContent = '✓ Build succeeded';
+        };
+        var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (still) finish();
+        else {
+            var shown = 0;
+            paint(0);
+            setTimeout(function step() {
+                shown += 2;
+                if (shown >= total) { finish(); return; }
+                paint(shown);
+                setTimeout(step, 28);
+            }, 500);
+        }
+    }
+
+    document.body.appendChild(el('footer', { 'class': 'site-footer' }, 'מדריכים לתלמידים ללימוד ASP.NET Core MVC'));
 })();
