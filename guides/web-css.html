@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>יסודות CSS</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="web-css">
+<main>
+    <h1>יסודות CSS</h1>
+    <div class="subtitle">איך מעצבים: צבעים, רווחים, סידור בשורה, ועמוד שמתאים לטלפון</div>
+
+    <div class="explanation"><strong>💡 על מה העמוד הזה?</strong> אם HTML הוא השלד, CSS הוא הבגדים: צבעים, גדלים, רווחים ומיקום. Bootstrap (מדריך 9) נותן הרבה עיצוב מוכן, אבל כדי לשנות אותו ולהתאים לאתר שלכם צריך להכיר את הבסיס. איפה שמים את ה-CSS בפרויקט: מדריך 8.
+        <br><br>
+        <strong>✏️ איך עובדים עם העמוד:</strong> בכל תיבה כחולה אפשר <strong>לשנות את הקוד</strong>, והתוצאה מתעדכנת מיד בצד. אם יש לשוניות (HTML / CSS / JavaScript), לחצו עליהן כדי לעבור בין הקבצים. ↺ איפוס מחזיר את הדוגמה למצב ההתחלתי. אי אפשר לשבור כלום, אז תתפרעו!
+    </div>
+
+    <h2>1. איך כותבים כלל CSS</h2>
+<div class="concept"><span class="concept-title">📖 כלל CSS</span>"למי" (סלקטור), ואז בסוגריים מסולסלים "מה לשנות" (תכונה: ערך;).<span class="example">דוגמה: <code class="inline">h1 { color: red; }</code> פירושו "כל ה-h1 בעמוד, בצבע אדום". אל תשכחו את הנקודה-פסיק בסוף כל שורה!</span></div>
+<div class="playground" data-title="נסו: בלשונית CSS שנו את darkblue ל-crimson" data-height="200">
+<textarea data-lang="html">&lt;h1&gt;כותרת&lt;/h1&gt;
+&lt;p&gt;פסקה ראשונה.&lt;/p&gt;
+&lt;p&gt;פסקה שנייה.&lt;/p&gt;</textarea>
+<textarea data-lang="css">h1 {
+    color: darkblue;
+    font-size: 40px;
+}
+
+p {
+    color: gray;
+}</textarea>
+</div>
+    <h2>2. סלקטורים: למי הכלל שייך</h2>
+<table class="simple"><tr><th>סלקטור</th><th>דוגמה</th><th>למי</th></tr><tr><td>שם תגית</td><td><code class="inline">p</code></td><td>כל ה-p בעמוד.</td></tr><tr><td>class (עם נקודה)</td><td><code class="inline">.price</code></td><td>כל מה שיש לו <code class="inline">class=&quot;price&quot;</code>. <strong>הכי נפוץ.</strong></td></tr><tr><td>id (עם סולמית)</td><td><code class="inline">#main-title</code></td><td>התגית היחידה עם <code class="inline">id=&quot;main-title&quot;</code>.</td></tr><tr><td>בתוך</td><td><code class="inline">.card p</code></td><td>כל p שנמצא בתוך משהו עם class="card".</td></tr><tr><td>:hover</td><td><code class="inline">a:hover</code></td><td>קישור, כשהעכבר עליו.</td></tr></table>
+<div class="playground" data-title="נסו: שנו את הצבע של .price, ושימו לב מה משתנה" data-height="300">
+<textarea data-lang="html">&lt;h2 id=&quot;main-title&quot;&gt;המוצרים שלנו&lt;/h2&gt;
+&lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;עט כחול&lt;/p&gt;
+    &lt;p class=&quot;price&quot;&gt;5 ₪&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;מחברת&lt;/p&gt;
+    &lt;p class=&quot;price&quot;&gt;12 ₪&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;פסקה מחוץ לכרטיס&lt;/p&gt;</textarea>
+<textarea data-lang="css">#main-title {
+    color: purple;
+}
+
+.card {
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.card p {
+    margin: 4px 0;
+}
+
+.price {
+    color: green;
+    font-weight: bold;
+}</textarea>
+</div>
+    <h2>3. צבעים, טקסט ורקע</h2>
+<table class="simple"><tr><th>תכונה</th><th>מה היא</th><th>דוגמה</th></tr><tr><td><code class="inline">color</code></td><td>צבע הטקסט</td><td><code class="inline">color: tomato;</code></td></tr><tr><td><code class="inline">background-color</code></td><td>צבע הרקע</td><td><code class="inline">background-color: #f0f8ff;</code></td></tr><tr><td><code class="inline">font-size</code></td><td>גודל הטקסט</td><td><code class="inline">font-size: 20px;</code></td></tr><tr><td><code class="inline">font-weight</code></td><td>עובי</td><td><code class="inline">font-weight: bold;</code></td></tr><tr><td><code class="inline">text-align</code></td><td>יישור</td><td><code class="inline">text-align: center;</code></td></tr><tr><td><code class="inline">font-family</code></td><td>גופן</td><td><code class="inline">font-family: Arial;</code></td></tr></table>
+<div class="concept"><span class="concept-title">📖 איך כותבים צבע</span>בשם (<code class="inline">red</code>, <code class="inline">steelblue</code>), בקוד hex (<code class="inline">#ff6347</code>), או ב-rgb (<code class="inline">rgb(255, 99, 71)</code>). כולם עובדים.<span class="example">טיפ: בגוגל חפשו "color picker", בחרו צבע והעתיקו את קוד ה-hex שלו.</span></div>
+<div class="playground" data-title="נסו: שנו את צבע הרקע לקוד hex משלכם" data-height="200">
+<textarea data-lang="html">&lt;div class=&quot;banner&quot;&gt;
+    &lt;h2&gt;מבצע!&lt;/h2&gt;
+    &lt;p&gt;כל המחברות ב-10 ₪&lt;/p&gt;
+&lt;/div&gt;</textarea>
+<textarea data-lang="css">.banner {
+    background-color: #fff3cd;
+    color: #8a5a00;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.banner h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #d9480f;
+}</textarea>
+</div>
+    <h2>4. Box Model: רווחים ומסגרת</h2>
+<div class="concept"><span class="concept-title">📖 Box Model</span>כל אלמנט בעמוד הוא קופסה, עם שלוש "שכבות" סביב התוכן: <code class="inline">padding</code> (רווח פנימי), <code class="inline">border</code> (מסגרת), ו-<code class="inline">margin</code> (רווח חיצוני).<span class="example">הזיזו את הסליידרים וראו מה כל אחד עושה:</span></div>
+
+<div class="bm-demo" dir="rtl">
+    <div class="bm-controls">
+        <label>margin (רווח מבחוץ): <input type="range" min="0" max="40" value="20" data-prop="margin"> <span>20</span>px</label>
+        <label>border (מסגרת): <input type="range" min="0" max="20" value="4" data-prop="borderWidth"> <span>4</span>px</label>
+        <label>padding (רווח מבפנים): <input type="range" min="0" max="40" value="15" data-prop="padding"> <span>15</span>px</label>
+    </div>
+    <div class="bm-stage"><div class="bm-box">התוכן</div></div>
+    <p class="bm-code" dir="ltr"></p>
+</div>
+<style>
+.bm-demo { border: 2px solid #0ea5e9; border-radius: 10px; padding: 1rem; margin: 1rem 0 1.5rem; background: white; }
+.bm-controls { display: grid; gap: 0.4rem; margin-bottom: 0.8rem; }
+.bm-controls input { vertical-align: middle; width: 160px; }
+.bm-stage { background: repeating-linear-gradient(45deg, #fde68a, #fde68a 6px, #fef3c7 6px, #fef3c7 12px); display: inline-block; }
+.bm-box { background-color: #bfdbfe; border-style: solid; border-color: #1d4ed8; display: inline-block; }
+.bm-code { font-family: Consolas, monospace; text-align: left; margin: 0.6rem 0 0; color: #334155; }
+</style>
+<script>
+(function () {
+    var demo = document.currentScript.previousElementSibling.previousElementSibling;
+    var box = demo.querySelector('.bm-box');
+    function update() {
+        var v = {};
+        demo.querySelectorAll('input').forEach(function (i) {
+            v[i.dataset.prop] = i.value;
+            i.nextElementSibling.textContent = i.value;
+        });
+        box.style.margin = v.margin + 'px';
+        box.style.borderWidth = v.borderWidth + 'px';
+        box.style.padding = v.padding + 'px';
+        demo.querySelector('.bm-code').textContent =
+            '.box { margin: ' + v.margin + 'px; border: ' + v.borderWidth + 'px solid blue; padding: ' + v.padding + 'px; }';
+    }
+    demo.querySelectorAll('input').forEach(function (i) { i.addEventListener('input', update); });
+    update();
+})();
+</script>
+<table class="simple"><tr><th>צבע בהמחשה</th><th>החלק</th></tr>
+<tr><td>🟨 פסים צהובים</td><td><strong>margin</strong>: רווח מחוץ למסגרת, בין הקופסה לשכנים שלה. שקוף.</td></tr>
+<tr><td>🟦 קו כחול כהה</td><td><strong>border</strong>: המסגרת.</td></tr>
+<tr><td>🟦 תכלת</td><td><strong>padding</strong> והתוכן: הרווח בין המסגרת לתוכן מקבל את צבע הרקע של הקופסה.</td></tr>
+</table>
+<div class="playground" data-title="נסו: margin: 0 ו-padding: 40px. מה ההבדל?" data-height="230">
+<textarea data-lang="html">&lt;div class=&quot;box&quot;&gt;קופסה 1&lt;/div&gt;
+&lt;div class=&quot;box&quot;&gt;קופסה 2&lt;/div&gt;</textarea>
+<textarea data-lang="css">.box {
+    background-color: lightblue;
+    padding: 20px;
+    border: 3px solid navy;
+    margin: 15px;
+    border-radius: 10px;
+}</textarea>
+</div>
+<div class="explanation"><strong>💡 קיצורים:</strong> <code class="inline">margin: 10px;</code> = מכל הצדדים. <code class="inline">margin: 10px 20px;</code> = למעלה ולמטה 10, לצדדים 20. <code class="inline">margin-top: 10px;</code> = רק למעלה. אותו דבר ב-padding.</div>
+    <h2>5. גדלים ויחידות</h2>
+<table class="simple"><tr><th>יחידה</th><th>פירוש</th><th>מתי</th></tr><tr><td><code class="inline">px</code></td><td>פיקסלים: גודל קבוע.</td><td>מסגרות, רווחים קטנים.</td></tr><tr><td><code class="inline">%</code></td><td>אחוז מהאלמנט שעוטף.</td><td>רוחב: <code class="inline">width: 50%;</code></td></tr><tr><td><code class="inline">rem</code></td><td>ביחס לגודל הטקסט הבסיסי (1rem ≈ 16px).</td><td>גודלי טקסט.</td></tr><tr><td><code class="inline">vh</code> / <code class="inline">vw</code></td><td>אחוז מגובה / רוחב החלון.</td><td>אזור שתופס מסך שלם: <code class="inline">height: 100vh;</code></td></tr></table>
+<div class="playground" data-title="נסו: שנו 50% ל-80%" data-height="170">
+<textarea data-lang="html">&lt;div class=&quot;half&quot;&gt;אני ברוחב 50%&lt;/div&gt;
+&lt;div class=&quot;limited&quot;&gt;אני ברוחב 100%, אבל לא יותר מ-300px&lt;/div&gt;</textarea>
+<textarea data-lang="css">.half {
+    width: 50%;
+    background-color: khaki;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.limited {
+    width: 100%;
+    max-width: 300px;
+    background-color: lightgreen;
+    padding: 10px;
+}</textarea>
+</div>
+    <h2>6. Flexbox: לסדר דברים בשורה</h2>
+<div class="concept"><span class="concept-title">📖 Flexbox</span>הדרך הכי קלה לסדר כמה דברים אחד ליד השני, ולשלוט ברווחים וביישור. שמים <code class="inline">display: flex;</code> על ה<strong>עוטף</strong>, והילדים שלו מסתדרים בשורה.</div>
+<table class="simple"><tr><th>תכונה (על העוטף)</th><th>ערכים נפוצים</th><th>מה היא עושה</th></tr><tr><td><code class="inline">justify-content</code></td><td><code class="inline">flex-start</code>, <code class="inline">center</code>, <code class="inline">space-between</code>, <code class="inline">space-around</code></td><td>פיזור לאורך השורה.</td></tr><tr><td><code class="inline">align-items</code></td><td><code class="inline">flex-start</code>, <code class="inline">center</code>, <code class="inline">flex-end</code></td><td>יישור לגובה.</td></tr><tr><td><code class="inline">gap</code></td><td><code class="inline">10px</code></td><td>רווח בין הילדים.</td></tr><tr><td><code class="inline">flex-wrap</code></td><td><code class="inline">wrap</code></td><td>אם אין מקום, לרדת לשורה הבאה.</td></tr></table>
+<div class="playground" data-title="נסו: justify-content: center, ואחר כך align-items: flex-start" data-height="200">
+<textarea data-lang="html">&lt;div class=&quot;row&quot;&gt;
+    &lt;div class=&quot;item&quot;&gt;1&lt;/div&gt;
+    &lt;div class=&quot;item tall&quot;&gt;2&lt;/div&gt;
+    &lt;div class=&quot;item&quot;&gt;3&lt;/div&gt;
+&lt;/div&gt;</textarea>
+<textarea data-lang="css">.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    background-color: #eee;
+    padding: 10px;
+    height: 150px;
+}
+
+.item {
+    background-color: coral;
+    color: white;
+    padding: 20px;
+    font-size: 24px;
+}
+
+.tall {
+    padding: 40px 20px;
+}</textarea>
+</div>
+<div class="explanation"><strong>💡 ב-Bootstrap:</strong> אותו דבר בקלאסים: <code class="inline">class=&quot;d-flex justify-content-between align-items-center gap-2&quot;</code>.</div>
+    <h2>7. hover, פינות מעוגלות וצל</h2>
+<div class="playground" data-title="נסו: שנו את 0.3s ל-2s" data-height="140">
+<textarea data-lang="html">&lt;button class=&quot;fancy&quot;&gt;עברו עליי עם העכבר&lt;/button&gt;</textarea>
+<textarea data-lang="css">.fancy {
+    background-color: royalblue;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.fancy:hover {
+    background-color: darkorange;
+    transform: scale(1.1);
+}</textarea>
+</div>
+<table class="simple"><tr><th>תכונה</th><th>מה היא עושה</th></tr><tr><td><code class="inline">:hover</code></td><td>הכלל חל רק כשהעכבר מעל האלמנט.</td></tr><tr><td><code class="inline">border-radius</code></td><td>פינות מעוגלות. <code class="inline">50%</code> על ריבוע = עיגול.</td></tr><tr><td><code class="inline">box-shadow</code></td><td>צל: הזזה לצד, הזזה למטה, טשטוש, צבע.</td></tr><tr><td><code class="inline">transition</code></td><td>השינוי קורה בהדרגה, ולא בבת אחת.</td></tr><tr><td><code class="inline">cursor: pointer</code></td><td>העכבר הופך ליד, כמו על קישור.</td></tr></table>
+    <h2>8. עמוד שמתאים לטלפון</h2>
+<div class="concept"><span class="concept-title">📖 Media Query</span>כלל CSS שחל רק כשהמסך בגודל מסוים. <code class="inline">@media (max-width: 600px) { ... }</code> פירושו "רק כשהמסך צר מ-600 פיקסלים".</div>
+<div class="playground" data-title="נסו: שנו 400px ל-1000px, ותראו את התצוגה של "טלפון"" data-height="200">
+<textarea data-lang="html">&lt;div class=&quot;cards&quot;&gt;
+    &lt;div class=&quot;card&quot;&gt;כרטיס 1&lt;/div&gt;
+    &lt;div class=&quot;card&quot;&gt;כרטיס 2&lt;/div&gt;
+    &lt;div class=&quot;card&quot;&gt;כרטיס 3&lt;/div&gt;
+&lt;/div&gt;
+&lt;p class=&quot;hint&quot;&gt;במסך רחב: שלושה בשורה. במסך צר: אחד מתחת לשני.&lt;/p&gt;</textarea>
+<textarea data-lang="css">.cards {
+    display: flex;
+    gap: 10px;
+}
+
+.card {
+    flex: 1;
+    background-color: plum;
+    padding: 20px;
+    text-align: center;
+}
+
+@media (max-width: 400px) {
+    .cards {
+        flex-direction: column;
+    }
+}</textarea>
+</div>
+<div class="explanation"><strong>💡 ב-Bootstrap:</strong> זה בדיוק מה ש-<code class="inline">col-12 col-md-4</code> עושה בשבילכם (מדריך 9, סעיף 5).</div>
+    <h2>9. CSS משלכם יחד עם Bootstrap</h2>
+<p>הדרך הנכונה לשנות עיצוב של Bootstrap: <strong>לא</strong> לגעת בקבצים של Bootstrap, אלא להוסיף class משלכם ב-<code class="inline">site.css</code>. הוא נטען אחרי Bootstrap, ולכן הכלל שלכם "מנצח".</p>
+<div class="playground" data-title="נסו: שנו את הצבע של .btn-pink" data-height="120" data-bootstrap>
+<textarea data-lang="html">&lt;button class=&quot;btn btn-primary&quot;&gt;כפתור רגיל של Bootstrap&lt;/button&gt;
+&lt;button class=&quot;btn btn-primary btn-pink&quot;&gt;אותו כפתור, עם class משלי&lt;/button&gt;</textarea>
+<textarea data-lang="css">.btn-pink {
+    background-color: hotpink;
+    border-color: hotpink;
+    border-radius: 0;
+}</textarea>
+</div>
+<div class="warning"><strong>⚠️ אם הכלל שלכם לא עובד:</strong> F12 ← Elements, בחרו את האלמנט, ובצד תראו את כל הכללים שחלים עליו. כלל שמחוק בקו הוא כלל ש"הפסיד" לכלל אחר. נסו סלקטור ספציפי יותר (למשל <code class="inline">.card .btn-pink</code>).</div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul><li>כלל CSS: סלקטור { תכונה: ערך; }. הסלקטור הנפוץ ביותר הוא class (<code class="inline">.name</code>).</li>
+<li>צבעים וטקסט: color, background-color, font-size, text-align.</li>
+<li>Box Model: padding בפנים, border מסגרת, margin בחוץ.</li>
+<li>Flexbox מסדר בשורה, ו-@media מתאים לטלפון.</li>
+<li>משנים את Bootstrap עם class משלכם ב-site.css, ולא בקבצים שלו.</li></ul>
+    </div>
+    <p style="margin-top:1.5rem">🔎 <strong>רוצים עוד?</strong> כל התכונות, עם דוגמאות: <a href="https://www.w3schools.com/css/" target="_blank">w3schools CSS</a>. משחק שמלמד Flexbox: <a href="https://flexboxfroggy.com/#he" target="_blank">Flexbox Froggy</a> (יש גם בעברית).</p>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

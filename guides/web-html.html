@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>יסודות HTML</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="web-html">
+<main>
+    <h1>יסודות HTML</h1>
+    <div class="subtitle">התגיות שנשתמש בהן בפרויקט, עם דוגמה חיה לכל אחת</div>
+
+    <div class="explanation"><strong>💡 על מה העמוד הזה?</strong> HTML הוא השלד של כל עמוד: מה יש בו (כותרת, פסקה, תמונה, טופס). כל קובץ cshtml בפרויקט הוא בעצם HTML, עם תוספות של C# (מדריך 5). כאן נעבור על התגיות שבאמת צריך.
+        <br><br>
+        <strong>✏️ איך עובדים עם העמוד:</strong> בכל תיבה כחולה אפשר <strong>לשנות את הקוד</strong>, והתוצאה מתעדכנת מיד בצד. אם יש לשוניות (HTML / CSS / JavaScript), לחצו עליהן כדי לעבור בין הקבצים. ↺ איפוס מחזיר את הדוגמה למצב ההתחלתי. אי אפשר לשבור כלום, אז תתפרעו!
+    </div>
+
+    <h2>1. איך נראית תגית</h2>
+<div class="concept"><span class="concept-title">📖 תגית (Tag)</span>מילה בתוך סוגריים משולשים שאומרת לדפדפן "מה זה". לרוב יש תגית פותחת ותגית סוגרת (עם <code class="inline">/</code>), והתוכן ביניהן.<span class="example">דוגמה: <code class="inline">&lt;p&gt;שלום&lt;/p&gt;</code> היא פסקה עם המילה "שלום". חלק מהתגיות לא סוגרים, כמו <code class="inline">&lt;br&gt;</code> (ירידת שורה) ו-<code class="inline">&lt;img&gt;</code> (תמונה).</span></div>
+<div class="concept"><span class="concept-title">📖 תכונה (Attribute)</span>מידע נוסף שכותבים בתוך התגית הפותחת: <code class="inline">שם=&quot;ערך&quot;</code>.<span class="example">דוגמה: <code class="inline">&lt;a href=&quot;https://google.com&quot;&gt;גוגל&lt;/a&gt;</code>. ה-<code class="inline">href</code> אומר לאן הקישור מוביל.</span></div>
+<div class="explanation"><strong>💡 ומה עם &lt;html&gt;, &lt;head&gt; ו-&lt;body&gt;?</strong> בכל עמוד HTML יש את שלושתם. בפרויקט שלנו הם כתובים פעם אחת ב-<code class="inline">_Layout.cshtml</code> (מדריך 6), ולכן בקבצי ה-View כותבים רק את מה שבתוך ה-body.</div>
+    <h2>2. כותרות וטקסט</h2>
+<table class="simple"><tr><th>תגית</th><th>מה היא</th></tr><tr><td><code class="inline">&lt;h1&gt;</code> עד <code class="inline">&lt;h6&gt;</code></td><td>כותרות. h1 הכי גדולה וחשובה (אחת בעמוד), h6 הכי קטנה.</td></tr><tr><td><code class="inline">&lt;p&gt;</code></td><td>פסקה.</td></tr><tr><td><code class="inline">&lt;strong&gt;</code></td><td>טקסט מודגש (חשוב).</td></tr><tr><td><code class="inline">&lt;em&gt;</code></td><td>טקסט נטוי (הדגשה).</td></tr><tr><td><code class="inline">&lt;br&gt;</code></td><td>ירידת שורה, בלי לסגור.</td></tr><tr><td><code class="inline">&lt;hr&gt;</code></td><td>קו מפריד.</td></tr></table>
+<div class="playground" data-title="נסו: שנו את הטקסטים, או הוסיפו h4" data-height="260">
+<textarea data-lang="html">&lt;h1&gt;כותרת ראשית&lt;/h1&gt;
+&lt;h2&gt;כותרת משנה&lt;/h2&gt;
+&lt;p&gt;זו פסקה רגילה. אפשר להדגיש &lt;strong&gt;מילה חשובה&lt;/strong&gt; או &lt;em&gt;מילה אחרת&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;שורה ראשונה&lt;br&gt;שורה שנייה, באותה פסקה&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3&gt;כותרת קטנה יותר&lt;/h3&gt;</textarea>
+</div>
+    <h2>3. קישורים ותמונות</h2>
+<table class="simple"><tr><th>תגית</th><th>תכונות חשובות</th></tr><tr><td><code class="inline">&lt;a&gt;</code> (קישור)</td><td><code class="inline">href</code>: לאן. <code class="inline">target=&quot;_blank&quot;</code>: פותח בלשונית חדשה.</td></tr><tr><td><code class="inline">&lt;img&gt;</code> (תמונה)</td><td><code class="inline">src</code>: כתובת התמונה. <code class="inline">alt</code>: תיאור (חשוב לנגישות). <code class="inline">width</code>: רוחב.</td></tr></table>
+<div class="playground" data-title="נסו: שנו את הגודל בכתובת התמונה (300x150)" data-height="300">
+<textarea data-lang="html">&lt;p&gt;
+    &lt;a href=&quot;https://www.google.com&quot; target=&quot;_blank&quot;&gt;קישור לגוגל&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;img src=&quot;https://placehold.co/300x150?text=My+Image&quot; alt=&quot;תמונה לדוגמה&quot; width=&quot;300&quot;&gt;
+
+&lt;p&gt;
+    &lt;a href=&quot;https://www.google.com&quot; target=&quot;_blank&quot;&gt;
+        &lt;img src=&quot;https://placehold.co/120x60?text=Click&quot; alt=&quot;תמונה שהיא קישור&quot;&gt;
+    &lt;/a&gt;
+&lt;/p&gt;</textarea>
+</div>
+<div class="explanation"><strong>💡 בפרויקט:</strong> לקישורים בין עמודים באתר משתמשים ב-<code class="inline">asp-controller</code> וב-<code class="inline">asp-action</code> במקום <code class="inline">href</code> (מדריך 6). לתמונות מתיקיית wwwroot כותבים <code class="inline">src=&quot;~/images/...&quot;</code> (מדריך 8).</div>
+    <h2>4. רשימות</h2>
+<table class="simple"><tr><th>תגית</th><th>מה היא</th></tr><tr><td><code class="inline">&lt;ul&gt;</code></td><td>רשימה עם נקודות (לא ממוספרת).</td></tr><tr><td><code class="inline">&lt;ol&gt;</code></td><td>רשימה ממוספרת.</td></tr><tr><td><code class="inline">&lt;li&gt;</code></td><td>פריט אחד ברשימה. תמיד בתוך ul או ol.</td></tr></table>
+<div class="playground" data-title="נסו: הוסיפו פריט לכל רשימה" data-height="300">
+<textarea data-lang="html">&lt;h3&gt;קניות&lt;/h3&gt;
+&lt;ul&gt;
+    &lt;li&gt;חלב&lt;/li&gt;
+    &lt;li&gt;לחם&lt;/li&gt;
+    &lt;li&gt;ביצים&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;שלבים&lt;/h3&gt;
+&lt;ol&gt;
+    &lt;li&gt;פותחים את Visual Studio&lt;/li&gt;
+    &lt;li&gt;יוצרים פרויקט&lt;/li&gt;
+    &lt;li&gt;לוחצים Play&lt;/li&gt;
+&lt;/ol&gt;</textarea>
+</div>
+    <h2>5. div, span, class ו-id</h2>
+<div class="concept"><span class="concept-title">📖 div ו-span</span><code class="inline">&lt;div&gt;</code> היא "קופסה" שעוטפת חלק מהעמוד, ומתחילה בשורה חדשה. <code class="inline">&lt;span&gt;</code> עוטפת חלק קטן בתוך שורה. לבד הן לא עושות כלום: משתמשים בהן כדי לעצב (CSS) או לבחור חלק בעמוד (JavaScript).</div>
+<div class="concept"><span class="concept-title">📖 class ו-id</span><code class="inline">class</code> נותן לתגית "שם קבוצה". הרבה תגיות יכולות לקבל את אותו class. <code class="inline">id</code> נותן לתגית שם <strong>ייחודי</strong>: רק תגית אחת בעמוד.<span class="example">Bootstrap עובד כולו עם class: <code class="inline">&lt;button class=&quot;btn btn-primary&quot;&gt;</code> (מדריך 9).</span></div>
+<div class="playground" data-title="נסו: לחצו על הלשונית CSS ושנו צבעים" data-height="220">
+<textarea data-lang="html">&lt;div class=&quot;box&quot;&gt;
+    אני div עם class בשם box.
+    ובתוכי יש &lt;span class=&quot;highlight&quot;&gt;span מודגש&lt;/span&gt; באמצע שורה.
+&lt;/div&gt;
+
+&lt;div class=&quot;box&quot; id=&quot;special&quot;&gt;
+    גם אני box, אבל יש לי גם id ייחודי.
+&lt;/div&gt;</textarea>
+<textarea data-lang="css">.box {
+    border: 2px solid steelblue;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.highlight {
+    background-color: yellow;
+}
+
+#special {
+    background-color: lavender;
+}</textarea>
+</div>
+    <h2>6. טבלאות</h2>
+<table class="simple"><tr><th>תגית</th><th>מה היא</th></tr><tr><td><code class="inline">&lt;table&gt;</code></td><td>הטבלה כולה.</td></tr><tr><td><code class="inline">&lt;thead&gt;</code> / <code class="inline">&lt;tbody&gt;</code></td><td>חלק הכותרות / חלק הנתונים.</td></tr><tr><td><code class="inline">&lt;tr&gt;</code></td><td>שורה (table row).</td></tr><tr><td><code class="inline">&lt;th&gt;</code></td><td>תא כותרת (מודגש).</td></tr><tr><td><code class="inline">&lt;td&gt;</code></td><td>תא רגיל (table data).</td></tr></table>
+<div class="playground" data-title="נסו: הוסיפו שורה, או עמודה "כמות"" data-height="220">
+<textarea data-lang="html">&lt;table border=&quot;1&quot; cellpadding=&quot;6&quot;&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;שם&lt;/th&gt;
+            &lt;th&gt;מחיר&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;עט&lt;/td&gt;
+            &lt;td&gt;5 ₪&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;מחברת&lt;/td&gt;
+            &lt;td&gt;12 ₪&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;</textarea>
+</div>
+<div class="explanation"><strong>💡 בפרויקט:</strong> את השורות לא כותבים ביד, אלא בונים בלולאה <code class="inline">@foreach</code> מתוך נתונים (מדריך 10), ומעצבים עם <code class="inline">class=&quot;table&quot;</code> של Bootstrap (מדריך 9).</div>
+    <h2>7. טפסים</h2>
+<p>טפסים הם החלק הכי חשוב ב-HTML בשביל הפרויקט: הרשמה, הוספת מוצר, צור קשר. כל שדה הוא <code class="inline">&lt;input&gt;</code> עם <code class="inline">type</code> אחר.</p>
+<table class="simple"><tr><th>תגית / type</th><th>מה היא</th></tr><tr><td><code class="inline">&lt;form&gt;</code></td><td>עוטפת את כל השדות. כשלוחצים על כפתור submit, כל מה שבתוכה נשלח.</td></tr><tr><td><code class="inline">&lt;label for=&quot;...&quot;&gt;</code></td><td>תווית של שדה. ה-<code class="inline">for</code> מחבר אותה ל-<code class="inline">id</code> של השדה (לחיצה על התווית מפעילה את השדה).</td></tr><tr><td><code class="inline">type=&quot;text&quot;</code></td><td>שורת טקסט.</td></tr><tr><td><code class="inline">type=&quot;email&quot;</code>, <code class="inline">type=&quot;password&quot;</code>, <code class="inline">type=&quot;number&quot;</code>, <code class="inline">type=&quot;date&quot;</code></td><td>אימייל, סיסמה (מוסתרת), מספר, תאריך.</td></tr><tr><td><code class="inline">type=&quot;checkbox&quot;</code> / <code class="inline">type=&quot;radio&quot;</code></td><td>תיבת סימון / בחירה אחת מכמה (לכל ה-radio באותה קבוצה אותו <code class="inline">name</code>).</td></tr><tr><td><code class="inline">&lt;select&gt;</code> + <code class="inline">&lt;option&gt;</code></td><td>רשימה נפתחת.</td></tr><tr><td><code class="inline">&lt;textarea&gt;</code></td><td>טקסט ארוך.</td></tr><tr><td><code class="inline">&lt;button type=&quot;submit&quot;&gt;</code></td><td>כפתור ששולח את הטופס.</td></tr></table>
+<div class="playground" data-title="נסו: הוסיפו שדה "טלפון" (type="tel")" data-height="460">
+<textarea data-lang="html">&lt;form&gt;
+    &lt;label for=&quot;name&quot;&gt;שם:&lt;/label&gt;&lt;br&gt;
+    &lt;input type=&quot;text&quot; id=&quot;name&quot; placeholder=&quot;השם שלכם&quot;&gt;&lt;br&gt;&lt;br&gt;
+
+    &lt;label for=&quot;email&quot;&gt;אימייל:&lt;/label&gt;&lt;br&gt;
+    &lt;input type=&quot;email&quot; id=&quot;email&quot;&gt;&lt;br&gt;&lt;br&gt;
+
+    &lt;label for=&quot;age&quot;&gt;גיל:&lt;/label&gt;
+    &lt;input type=&quot;number&quot; id=&quot;age&quot; min=&quot;1&quot; max=&quot;120&quot;&gt;&lt;br&gt;&lt;br&gt;
+
+    &lt;label for=&quot;date&quot;&gt;תאריך:&lt;/label&gt;
+    &lt;input type=&quot;date&quot; id=&quot;date&quot;&gt;&lt;br&gt;&lt;br&gt;
+
+    &lt;label for=&quot;grade&quot;&gt;כיתה:&lt;/label&gt;
+    &lt;select id=&quot;grade&quot;&gt;
+        &lt;option&gt;י&#x27;&lt;/option&gt;
+        &lt;option&gt;י&quot;א&lt;/option&gt;
+        &lt;option&gt;י&quot;ב&lt;/option&gt;
+    &lt;/select&gt;&lt;br&gt;&lt;br&gt;
+
+    &lt;input type=&quot;checkbox&quot; id=&quot;agree&quot;&gt;
+    &lt;label for=&quot;agree&quot;&gt;אני מסכים לתנאים&lt;/label&gt;&lt;br&gt;&lt;br&gt;
+
+    &lt;label for=&quot;msg&quot;&gt;הודעה:&lt;/label&gt;&lt;br&gt;
+    &lt;textarea id=&quot;msg&quot; rows=&quot;3&quot;&gt;&lt;/textarea&gt;&lt;br&gt;&lt;br&gt;
+
+    &lt;button type=&quot;submit&quot;&gt;שליחה&lt;/button&gt;
+&lt;/form&gt;</textarea>
+</div>
+<div class="explanation"><strong>💡 בפרויקט:</strong> במקום <code class="inline">id</code> ו-<code class="inline">name</code> כותבים <code class="inline">asp-for=&quot;Name&quot;</code>, ו-ASP.NET ממלא אותם לבד ומחבר את השדה למודל (מדריך 11). אבל בסוף, בדפדפן, זה בדיוק אותו HTML.</div>
+    <h2>8. תגיות שמתארות את מבנה העמוד</h2>
+<p>תגיות שמתנהגות כמו <code class="inline">&lt;div&gt;</code>, אבל השם שלהן אומר מה התפקיד של החלק. הן עוזרות לקרוא את הקוד, ולמנועי חיפוש ולקוראי מסך להבין את העמוד. כבר תמצאו אותן ב-<code class="inline">_Layout.cshtml</code>:</p>
+<table class="simple"><tr><th>תגית</th><th>התפקיד</th></tr><tr><td><code class="inline">&lt;header&gt;</code></td><td>החלק העליון (לוגו, תפריט).</td></tr><tr><td><code class="inline">&lt;nav&gt;</code></td><td>תפריט ניווט.</td></tr><tr><td><code class="inline">&lt;main&gt;</code></td><td>התוכן הראשי של העמוד.</td></tr><tr><td><code class="inline">&lt;section&gt;</code></td><td>חלק בעמוד, עם נושא משלו.</td></tr><tr><td><code class="inline">&lt;footer&gt;</code></td><td>החלק התחתון.</td></tr></table>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul><li>תגית פותחת וסוגרת, ותכונות כמו <code class="inline">href</code> ו-<code class="inline">src</code>.</li>
+<li>טקסט: h1-h6, p, strong. קישורים ותמונות: a, img. רשימות: ul/ol/li. טבלאות: table/tr/th/td.</li>
+<li>div ו-span עוטפים חלקים, ו-class/id נותנים להם שם לעיצוב ול-JavaScript.</li>
+<li>טפסים: form, label, input עם type, select, textarea, button. בפרויקט asp-for בונה אותם בשבילנו.</li></ul>
+    </div>
+    <p style="margin-top:1.5rem">🔎 <strong>רוצים עוד?</strong> רשימה מלאה של כל התגיות, עם דוגמאות: <a href="https://www.w3schools.com/html/" target="_blank">w3schools HTML</a> או <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element" target="_blank">MDN</a> (באנגלית).</p>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

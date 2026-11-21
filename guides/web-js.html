@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>יסודות JavaScript</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="web-js">
+<main>
+    <h1>יסודות JavaScript</h1>
+    <div class="subtitle">איך גורמים לעמוד להגיב: לחיצות, הקלדה, הצגה והסתרה</div>
+
+    <div class="explanation"><strong>💡 על מה העמוד הזה?</strong> HTML הוא השלד, CSS הבגדים, ו-JavaScript הוא מה שגורם לעמוד <strong>לזוז</strong>: כפתור שעושה משהו, הודעה שמופיעה, טופס שבודק את עצמו. JavaScript רץ בדפדפן, אחרי שהעמוד כבר הגיע מהשרת. איפה שמים אותו בפרויקט: מדריך 8, סעיף 4.
+        <br><br>
+        <strong>✏️ איך עובדים עם העמוד:</strong> בכל תיבה כחולה אפשר <strong>לשנות את הקוד</strong>, והתוצאה מתעדכנת מיד בצד. אם יש לשוניות (HTML / CSS / JavaScript), לחצו עליהן כדי לעבור בין הקבצים. ↺ איפוס מחזיר את הדוגמה למצב ההתחלתי. אי אפשר לשבור כלום, אז תתפרעו!
+    </div>
+
+    <h2>1. הצעד הראשון: לחיצה על כפתור</h2>
+<p>כמעט כל קוד JavaScript באתר עובד ככה: <strong>מוצאים</strong> אלמנט בעמוד, <strong>מחכים</strong> שמשהו יקרה לו (לחיצה), ואז <strong>משנים</strong> משהו.</p>
+<div class="playground" data-title="נסו: שנו את ההודעה, או הוסיפו שורה שמשנה גם את טקסט הכפתור" data-height="150">
+<textarea data-lang="html">&lt;button id=&quot;myBtn&quot;&gt;לחצו עליי&lt;/button&gt;
+&lt;p id=&quot;message&quot;&gt;&lt;/p&gt;</textarea>
+<textarea data-lang="js">// 1. מוצאים את הכפתור לפי ה-id שלו
+var btn = document.getElementById(&quot;myBtn&quot;);
+
+// 2. מחכים ללחיצה
+btn.addEventListener(&quot;click&quot;, function () {
+
+    // 3. משנים את הטקסט של הפסקה
+    document.getElementById(&quot;message&quot;).textContent = &quot;לחצתם! 🎉&quot;;
+});</textarea>
+</div>
+<table class="simple"><tr><th>שורה</th><th>מה היא עושה</th></tr><tr><td><code class="inline">document.getElementById(&quot;myBtn&quot;)</code></td><td>מוצא בעמוד את התגית עם <code class="inline">id=&quot;myBtn&quot;</code>.</td></tr><tr><td><code class="inline">addEventListener(&quot;click&quot;, function () { ... })</code></td><td>"כשלוחצים, תריץ את מה שבסוגריים המסולסלים".</td></tr><tr><td><code class="inline">.textContent = &quot;...&quot;</code></td><td>מחליף את הטקסט שבתוך התגית.</td></tr><tr><td><code class="inline">// ...</code></td><td>הערה. JavaScript מתעלם ממנה.</td></tr></table>
+    <h2>2. משתנים</h2>
+<div class="concept"><span class="concept-title">📖 משתנה</span>"קופסה" עם שם, ששומרת ערך. ב-JavaScript מגדירים עם <code class="inline">let</code> (אפשר לשנות אחר כך) או <code class="inline">const</code> (קבוע).<span class="example">דוגמה: <code class="inline">let count = 0;</code> ואחר כך <code class="inline">count = count + 1;</code>. בשונה מ-C#, לא כותבים את הסוג (int, string).</span></div>
+<div class="playground" data-title="נסו: הוסיפו כפתור "1-"" data-height="150">
+<textarea data-lang="html">&lt;button id=&quot;plus&quot;&gt;+1&lt;/button&gt;
+&lt;button id=&quot;reset&quot;&gt;איפוס&lt;/button&gt;
+&lt;p&gt;לחצתם &lt;strong id=&quot;count&quot;&gt;0&lt;/strong&gt; פעמים&lt;/p&gt;</textarea>
+<textarea data-lang="js">let count = 0;
+
+document.getElementById(&quot;plus&quot;).addEventListener(&quot;click&quot;, function () {
+    count = count + 1;
+    document.getElementById(&quot;count&quot;).textContent = count;
+});
+
+document.getElementById(&quot;reset&quot;).addEventListener(&quot;click&quot;, function () {
+    count = 0;
+    document.getElementById(&quot;count&quot;).textContent = count;
+});</textarea>
+</div>
+    <h2>3. מוצאים אלמנטים</h2>
+<table class="simple"><tr><th>פונקציה</th><th>מה היא מחזירה</th></tr><tr><td><code class="inline">document.getElementById(&quot;x&quot;)</code></td><td>האלמנט עם <code class="inline">id=&quot;x&quot;</code>.</td></tr><tr><td><code class="inline">document.querySelector(&quot;.card&quot;)</code></td><td>האלמנט <strong>הראשון</strong> שמתאים לסלקטור CSS (כמו בעמוד ה-CSS).</td></tr><tr><td><code class="inline">document.querySelectorAll(&quot;.card&quot;)</code></td><td><strong>כל</strong> האלמנטים שמתאימים. עוברים עליהם עם <code class="inline">forEach</code>.</td></tr></table>
+<div class="playground" data-title="נסו: החליפו querySelectorAll ב-querySelector. מה השתנה?" data-height="190">
+<textarea data-lang="html">&lt;p class=&quot;item&quot;&gt;פריט א&lt;/p&gt;
+&lt;p class=&quot;item&quot;&gt;פריט ב&lt;/p&gt;
+&lt;p class=&quot;item&quot;&gt;פריט ג&lt;/p&gt;
+&lt;button id=&quot;paint&quot;&gt;צבעו את כולם&lt;/button&gt;</textarea>
+<textarea data-lang="js">document.getElementById(&quot;paint&quot;).addEventListener(&quot;click&quot;, function () {
+    document.querySelectorAll(&quot;.item&quot;).forEach(function (p) {
+        p.style.color = &quot;crimson&quot;;
+        p.style.fontWeight = &quot;bold&quot;;
+    });
+});</textarea>
+</div>
+    <h2>4. משנים עיצוב עם classList</h2>
+<p>אפשר לשנות עיצוב ישירות (<code class="inline">element.style.color = &quot;red&quot;</code>), אבל עדיף להגדיר class ב-CSS, ורק להוסיף או להוריד אותו ב-JavaScript:</p>
+<table class="simple"><tr><th>פונקציה</th><th>מה היא עושה</th></tr><tr><td><code class="inline">element.classList.add(&quot;x&quot;)</code></td><td>מוסיפה את ה-class.</td></tr><tr><td><code class="inline">element.classList.remove(&quot;x&quot;)</code></td><td>מורידה.</td></tr><tr><td><code class="inline">element.classList.toggle(&quot;x&quot;)</code></td><td>אם יש, מורידה. אם אין, מוסיפה. מושלם לכפתורי "הפעל/כבה".</td></tr></table>
+<div class="playground" data-title="נסו: בלשונית CSS שנו את הצבעים של .dark" data-height="190">
+<textarea data-lang="html">&lt;button id=&quot;mode&quot;&gt;🌙 מצב לילה&lt;/button&gt;
+&lt;div class=&quot;page&quot;&gt;
+    &lt;h3&gt;כותרת&lt;/h3&gt;
+    &lt;p&gt;טקסט כלשהו בעמוד.&lt;/p&gt;
+&lt;/div&gt;</textarea>
+<textarea data-lang="css">.page {
+    padding: 15px;
+    transition: all 0.4s;
+}
+
+.page.dark {
+    background-color: #222;
+    color: white;
+}</textarea>
+<textarea data-lang="js">document.getElementById(&quot;mode&quot;).addEventListener(&quot;click&quot;, function () {
+    document.querySelector(&quot;.page&quot;).classList.toggle(&quot;dark&quot;);
+});</textarea>
+</div>
+    <h2>5. הצגה והסתרה</h2>
+<div class="playground" data-title="נסו: הוסיפו עוד שאלה ותשובה" data-height="130">
+<textarea data-lang="html">&lt;button id=&quot;toggle&quot;&gt;הצג תשובה&lt;/button&gt;
+&lt;p id=&quot;answer&quot; hidden&gt;התשובה היא 42 🙂&lt;/p&gt;</textarea>
+<textarea data-lang="js">var btn = document.getElementById(&quot;toggle&quot;);
+var answer = document.getElementById(&quot;answer&quot;);
+
+btn.addEventListener(&quot;click&quot;, function () {
+    answer.hidden = !answer.hidden;
+    btn.textContent = answer.hidden ? &quot;הצג תשובה&quot; : &quot;הסתר תשובה&quot;;
+});</textarea>
+</div>
+<div class="concept"><span class="concept-title">📖 מה זה ? :</span>תנאי מקוצר: <code class="inline">תנאי ? אם-כן : אם-לא</code>. כאן: אם התשובה מוסתרת, הכפתור אומר "הצג". אחרת, "הסתר".</div>
+    <h2>6. אירועים נוספים: הקלדה</h2>
+<p>חוץ מ-<code class="inline">&quot;click&quot;</code> יש עוד אירועים. <code class="inline">&quot;input&quot;</code> קורה בכל פעם שהמשתמש מקליד בשדה:</p>
+<div class="playground" data-title="נסו: הקלידו שם" data-height="130">
+<textarea data-lang="html">&lt;label for=&quot;name&quot;&gt;איך קוראים לכם?&lt;/label&gt;
+&lt;input type=&quot;text&quot; id=&quot;name&quot;&gt;
+&lt;p id=&quot;greet&quot;&gt;&lt;/p&gt;</textarea>
+<textarea data-lang="js">document.getElementById(&quot;name&quot;).addEventListener(&quot;input&quot;, function () {
+    var name = this.value;
+    document.getElementById(&quot;greet&quot;).textContent = name ? &quot;שלום, &quot; + name + &quot;!&quot; : &quot;&quot;;
+});</textarea>
+</div>
+<table class="simple"><tr><th>אירוע</th><th>מתי</th></tr><tr><td><code class="inline">click</code></td><td>לחיצה.</td></tr><tr><td><code class="inline">input</code></td><td>כל הקלדה בשדה.</td></tr><tr><td><code class="inline">change</code></td><td>שינוי של select או checkbox.</td></tr><tr><td><code class="inline">submit</code></td><td>שליחת טופס.</td></tr><tr><td><code class="inline">mouseover</code></td><td>העכבר נכנס לאלמנט.</td></tr></table>
+    <h2>7. רשימות ולולאות</h2>
+<p>מערך (<code class="inline">[ ]</code>) הוא רשימה. לולאה עוברת עליו ובונה HTML לכל פריט:</p>
+<div class="playground" data-title="נסו: הוסיפו משימות, או שנו את המשימות ההתחלתיות" data-height="220">
+<textarea data-lang="html">&lt;input type=&quot;text&quot; id=&quot;newItem&quot; placeholder=&quot;משימה חדשה&quot;&gt;
+&lt;button id=&quot;add&quot;&gt;הוסף&lt;/button&gt;
+&lt;ul id=&quot;list&quot;&gt;&lt;/ul&gt;</textarea>
+<textarea data-lang="js">let tasks = [&quot;לקנות חלב&quot;, &quot;לעשות שיעורי בית&quot;];
+
+function showTasks() {
+    var list = document.getElementById(&quot;list&quot;);
+    list.innerHTML = &quot;&quot;;
+    tasks.forEach(function (task) {
+        var li = document.createElement(&quot;li&quot;);
+        li.textContent = task;
+        list.appendChild(li);
+    });
+}
+
+document.getElementById(&quot;add&quot;).addEventListener(&quot;click&quot;, function () {
+    var input = document.getElementById(&quot;newItem&quot;);
+    if (input.value !== &quot;&quot;) {
+        tasks.push(input.value);
+        input.value = &quot;&quot;;
+        showTasks();
+    }
+});
+
+showTasks();</textarea>
+</div>
+<table class="simple"><tr><th>קוד</th><th>מה הוא עושה</th></tr><tr><td><code class="inline">tasks.push(x)</code></td><td>מוסיף פריט לסוף המערך.</td></tr><tr><td><code class="inline">document.createElement(&quot;li&quot;)</code></td><td>יוצר תגית חדשה (עוד לא בעמוד).</td></tr><tr><td><code class="inline">list.appendChild(li)</code></td><td>מכניס אותה לעמוד, בסוף הרשימה.</td></tr><tr><td><code class="inline">function showTasks() { ... }</code></td><td>פונקציה משלנו, שאפשר לקרוא לה כמה פעמים.</td></tr></table>
+    <h2>8. בדיקת טופס לפני שליחה</h2>
+<div class="playground" data-title="נסו: שלחו עם שם קצר, ואז עם שם ארוך" data-height="150">
+<textarea data-lang="html">&lt;form id=&quot;signup&quot;&gt;
+    &lt;input type=&quot;text&quot; id=&quot;user&quot; placeholder=&quot;שם משתמש&quot;&gt;
+    &lt;button type=&quot;submit&quot;&gt;הרשמה&lt;/button&gt;
+    &lt;p id=&quot;error&quot; style=&quot;color:red&quot;&gt;&lt;/p&gt;
+&lt;/form&gt;</textarea>
+<textarea data-lang="js">document.getElementById(&quot;signup&quot;).addEventListener(&quot;submit&quot;, function (event) {
+    var user = document.getElementById(&quot;user&quot;).value;
+
+    if (user.length &lt; 3) {
+        event.preventDefault();   // עוצר את שליחת הטופס
+        document.getElementById(&quot;error&quot;).textContent = &quot;שם המשתמש חייב להיות לפחות 3 תווים&quot;;
+    } else {
+        event.preventDefault();   // (רק בדוגמה הזאת, כדי לא לצאת מהעמוד)
+        document.getElementById(&quot;error&quot;).textContent = &quot;&quot;;
+        alert(&quot;נשלח! 🎉&quot;);
+    }
+});</textarea>
+</div>
+<div class="warning"><strong>⚠️ חשוב:</strong> בדיקה ב-JavaScript היא רק לנוחות. משתמש יכול לעקוף אותה, ולכן תמיד בודקים <strong>גם בשרת</strong>. בפרויקט, ASP.NET עושה את שתי הבדיקות בשבילכם (מדריך 12).</div>
+    <h2>9. חלונות קופצים</h2>
+<table class="simple"><tr><th>פונקציה</th><th>מה היא עושה</th></tr><tr><td><code class="inline">alert(&quot;טקסט&quot;)</code></td><td>הודעה עם כפתור "אישור".</td></tr><tr><td><code class="inline">confirm(&quot;בטוחים?&quot;)</code></td><td>שאלה עם "אישור" ו"ביטול". מחזירה <code class="inline">true</code> או <code class="inline">false</code>.</td></tr></table>
+<div class="playground" data-title="נסו: לחצו, ובחרו פעם "אישור" ופעם "ביטול"" data-height="120">
+<textarea data-lang="html">&lt;button id=&quot;del&quot;&gt;מחיקה&lt;/button&gt;
+&lt;p id=&quot;status&quot;&gt;&lt;/p&gt;</textarea>
+<textarea data-lang="js">document.getElementById(&quot;del&quot;).addEventListener(&quot;click&quot;, function () {
+    if (confirm(&quot;בטוחים שרוצים למחוק?&quot;)) {
+        document.getElementById(&quot;status&quot;).textContent = &quot;נמחק ✔&quot;;
+    } else {
+        document.getElementById(&quot;status&quot;).textContent = &quot;בוטל&quot;;
+    }
+});</textarea>
+</div>
+<div class="explanation"><strong>💡 בפרויקט:</strong> חלון אישור לפני מחיקה, בשורה אחת: בספריית קטעי הקוד, "חלון אישור לפני מחיקה". ו-JavaScript שמדבר עם השרת בלי לטעון את העמוד: מתקדם ד.</div>
+    <h2>10. כשמשהו לא עובד</h2>
+<p>ב-JavaScript, שגיאה אחת עוצרת את כל הקוד שאחריה, ובדרך כלל <strong>לא רואים אותה בעמוד</strong>. איפה מוצאים אותה:</p>
+<ul><li><strong>בעמוד הזה:</strong> שגיאה תופיע בפס אדום מתחת לתוצאה. נסו לכתוב בדוגמה <code class="inline">getElementByid</code> (עם d קטנה).</li><li><strong>באתר שלכם:</strong> F12 ← Console. השגיאה מופיעה שם באדום, עם הקובץ ומספר השורה.</li></ul>
+<table class="simple"><tr><th>שגיאה נפוצה</th><th>הסיבה</th></tr><tr><td><code class="inline">Cannot read properties of null</code></td><td>ה-id בקוד לא זהה ל-id בתגית, או שהסקריפט רץ לפני שהתגית קיימת.</td></tr><tr><td><code class="inline">... is not a function</code></td><td>טעות כתיב בשם פונקציה. JavaScript רגיש לאותיות גדולות: <code class="inline">getElementById</code> ולא <code class="inline">getElementByid</code>.</td></tr><tr><td><code class="inline">... is not defined</code></td><td>משתנה שלא הוגדר, או טעות כתיב בשם שלו.</td></tr></table>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul><li>מוצאים אלמנט (getElementById / querySelector), מחכים לאירוע (addEventListener), ומשנים משהו (textContent, classList).</li>
+<li>משתנים עם let ו-const. מערכים עם [ ], ו-forEach עובר עליהם.</li>
+<li>hidden מסתיר, classList.toggle מחליף עיצוב.</li>
+<li>בדיקה ב-JavaScript היא לנוחות. הבדיקה האמיתית בשרת.</li>
+<li>שגיאות רואים ב-F12 ← Console.</li></ul>
+    </div>
+    <p style="margin-top:1.5rem">🔎 <strong>רוצים עוד?</strong> מדריך מלא: <a href="https://www.w3schools.com/js/" target="_blank">w3schools JavaScript</a>, או <a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript" target="_blank">MDN</a> (באנגלית).</p>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

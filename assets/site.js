@@ -4,6 +4,7 @@
 (function () {
     var SECTIONS = [
         { id: 'start', title: 'התחלה וכלים', note: 'מכאן מתחילים: הקמת הפרויקט והכלים שנעבוד איתם כל הזמן.' },
+        { id: 'web', title: 'יסודות הווב: HTML, CSS ו-JavaScript', note: 'חומר עזר עם דוגמאות שאפשר לשנות ולראות את התוצאה מיד. חזרו לכאן בכל פעם שמשהו לא ברור.' },
         { id: 'pages', title: 'בניית עמודים', note: 'איך אתר MVC עובד, ואיך בונים ומעצבים עמודים.' },
         { id: 'data', title: 'נתונים', note: 'מודלים, טפסים ומסד נתונים.' },
         { id: 'users', title: 'תמונות ומשתמשים', note: '' },
@@ -20,6 +21,13 @@
           keywords: 'Solution Explorer Error List Output localhost Hot Reload IntelliSense קיצורי מקלדת NuGet חבילה Package Manager Console SQL Server Object Explorer Apply Migrations Register LocalDB דיבאג הרצה עצירה' },
         { num: '3', slug: '03-git-github', section: 'start', title: 'Git ו-GitHub', desc: 'שמירת גיבוי ב-GitHub בלחיצות כפתור, ומעבר בין מחשבים', ready: true,
           keywords: 'Commit Push Pull Clone מאגר Repository גיבוי בית בית ספר Update-Database gitignore Conflict' },
+
+        { num: 'HTML', slug: 'web-html', section: 'web', title: 'יסודות HTML', desc: 'תגיות, קישורים ותמונות, רשימות, טבלאות וטפסים, עם דוגמאות חיות', ready: true,
+          keywords: 'תגית tag h1 p a img ul li table tr td form input label select textarea div span class id' },
+        { num: 'CSS', slug: 'web-css', section: 'web', title: 'יסודות CSS', desc: 'צבעים, רווחים (Box Model), Flexbox, hover, התאמה לטלפון ו-Bootstrap', ready: true,
+          keywords: 'עיצוב color background margin padding border flex flexbox hover media query responsive selector סלקטור rem px' },
+        { num: 'JS', slug: 'web-js', section: 'web', title: 'יסודות JavaScript', desc: 'לחיצות, הקלדה, הצגה והסתרה, רשימות ובדיקת טופס, עם דוגמאות חיות', ready: true,
+          keywords: 'getElementById querySelector addEventListener click textContent classList toggle hidden let const forEach alert confirm' },
 
         { num: '4', slug: '04-how-mvc-works', section: 'pages', title: 'איך אתר MVC עובד', desc: 'התמונה הכללית: כתובת, Controller, View ודפדפן', ready: true,
           keywords: 'Model View Controller Action בקשה כתובת URL ניתוב Routing return View' },
@@ -199,6 +207,90 @@
         };
         document.head.appendChild(prismScript);
     }
+
+    // ---------- נסו בעצמכם: עורך חי עם תוצאה ----------
+    // <div class="playground" data-title="..." data-height="220" data-bootstrap>
+    //   <textarea data-lang="html">...</textarea> <textarea data-lang="css">...</textarea> <textarea data-lang="js">...</textarea>
+    // </div>
+    var pgCount = 0;
+    var BOOTSTRAP_CSS = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css';
+    document.querySelectorAll('.playground').forEach(function (pg) {
+        var id = 'pg' + (++pgCount);
+        var langs = ['html', 'css', 'js'];
+        var names = { html: 'HTML', css: 'CSS', js: 'JavaScript' };
+        var original = {}, current = {};
+        langs.forEach(function (l) {
+            var t = pg.querySelector('textarea[data-lang="' + l + '"]');
+            if (t) { original[l] = t.value.replace(/^\n/, ''); current[l] = original[l]; }
+        });
+        var present = langs.filter(function (l) { return l in original; });
+        var active = present[0];
+
+        var bar = el('div', { 'class': 'pg-bar' },
+            '<span class="pg-title">✏️ ' + (pg.getAttribute('data-title') || 'נסו בעצמכם') + '</span>' +
+            '<span class="pg-tabs">' + present.map(function (l) {
+                return '<button type="button" data-tab="' + l + '"' + (l === active ? ' class="active"' : '') + '>' + names[l] + '</button>';
+            }).join('') + '</span>' +
+            '<span class="pg-actions"><button type="button" data-act="reset">↺ איפוס</button></span>');
+        var editor = el('textarea', { 'class': 'pg-editor', spellcheck: 'false', 'aria-label': 'עורך קוד' });
+        editor.value = current[active];
+        var frame = el('iframe', { 'class': 'pg-frame', sandbox: 'allow-scripts allow-modals', title: 'תוצאה' });
+        frame.style.height = (pg.getAttribute('data-height') || 220) + 'px';
+        editor.style.minHeight = (pg.getAttribute('data-height') || 220) + 'px';
+        var result = el('div', { 'class': 'pg-result' }, '<div class="pg-result-label">👀 התוצאה (מתעדכנת תוך כדי הקלדה)</div>');
+        result.appendChild(frame);
+        var body = el('div', { 'class': 'pg-body' });
+        body.appendChild(editor);
+        body.appendChild(result);
+        var err = el('div', { 'class': 'pg-error' });
+        pg.appendChild(bar); pg.appendChild(body); pg.appendChild(err);
+
+        function render() {
+            err.className = 'pg-error';
+            var js = (current.js || '').replace(/<\/script/gi, '<\\/script');
+            frame.srcdoc = '<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="utf-8">' +
+                (pg.hasAttribute('data-bootstrap') ? '<link rel="stylesheet" href="' + BOOTSTRAP_CSS + '">' : '') +
+                '<style>body{font-family:system-ui,-apple-system,Arial,sans-serif;margin:0;padding:12px;line-height:1.5}</style>' +
+                '<style>' + (current.css || '') + '</style></head><body>' + (current.html || '') +
+                '<script>window.onerror=function(m){parent.postMessage({pg:"' + id + '",err:String(m)},"*");};<\/script>' +
+                (js ? '<script>' + js + '<\/script>' : '') + '</body></html>';
+        }
+        var timer;
+        editor.addEventListener('input', function () {
+            current[active] = editor.value;
+            clearTimeout(timer);
+            timer = setTimeout(render, 350);
+        });
+        editor.addEventListener('keydown', function (e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                var s = editor.selectionStart, en = editor.selectionEnd;
+                editor.value = editor.value.slice(0, s) + '    ' + editor.value.slice(en);
+                editor.selectionStart = editor.selectionEnd = s + 4;
+                editor.dispatchEvent(new Event('input'));
+            }
+        });
+        bar.addEventListener('click', function (e) {
+            var b = e.target.closest('button');
+            if (!b) return;
+            if (b.getAttribute('data-tab')) {
+                active = b.getAttribute('data-tab');
+                editor.value = current[active];
+                bar.querySelectorAll('[data-tab]').forEach(function (x) { x.classList.toggle('active', x === b); });
+            } else if (b.getAttribute('data-act') === 'reset') {
+                present.forEach(function (l) { current[l] = original[l]; });
+                editor.value = current[active];
+                render();
+            }
+        });
+        window.addEventListener('message', function (e) {
+            if (e.data && e.data.pg === id) {
+                err.textContent = '⚠️ שגיאה ב-JavaScript: ' + e.data.err;
+                err.className = 'pg-error show';
+            }
+        });
+        render();
+    });
 
     // ---------- כפתור העתקה לכל בלוק קוד ----------
     document.querySelectorAll('pre.code-block').forEach(function (pre) {
