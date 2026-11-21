@@ -258,3 +258,110 @@ summary:hover { color: var(--purple); }
 .guide-card .badge { display: inline-block; font-size: 0.78rem; background: #e2e8f0; color: #475569; padding: 0.05rem 0.5rem; border-radius: 99px; margin-top: 0.4rem; }
 
 .site-footer { text-align: center; color: var(--muted); font-size: 0.9rem; padding: 2rem 1rem; }
+
+/* ---------- Header menu ---------- */
+.menu-btn {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 6px;
+    padding: 0.3rem 0.8rem;
+    font-family: inherit;
+    font-size: 0.98rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+.menu-btn:hover { background: rgba(255,255,255,0.25); }
+.site-header nav { align-items: center; }
+.guide-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    background: white;
+    color: var(--text);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    max-height: 75vh;
+    overflow-y: auto;
+    border-bottom: 3px solid var(--purple);
+}
+.guide-menu .inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 0.5rem 1.5rem;
+    align-items: start;
+    padding: 1rem;
+    max-width: 1000px;
+}
+.guide-menu h4 { color: var(--purple); margin: 0.4rem 0 0.3rem; font-size: 1rem; }
+.guide-menu ul { list-style: none; padding: 0; margin: 0; }
+.guide-menu li { padding: 0.2rem 0; font-size: 0.95rem; }
+.guide-menu a { color: var(--text); font-weight: 400; }
+.guide-menu a:hover { color: var(--purple); text-decoration: underline; }
+.guide-menu li.current a { font-weight: 700; color: var(--purple); }
+.guide-menu li.soon { color: #94a3b8; }
+.guide-menu .m-num { display: inline-block; min-width: 1.6em; color: var(--muted); }
+.tick { color: #16a34a; font-weight: 700; font-size: 0.85em; }
+
+/* ---------- Table of contents ---------- */
+.toc {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 1.5rem;
+}
+.toc ul { margin: 0.4rem 0 0; padding-inline-start: 1.2rem; columns: 2; column-gap: 2rem; }
+.toc li { margin: 0.15rem 0; break-inside: avoid; }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+main h2[id] { scroll-margin-top: 4.5rem; }
+
+/* ---------- Back to top ---------- */
+.to-top {
+    position: fixed;
+    bottom: 1.2rem;
+    left: 1.2rem;
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 50%;
+    border: 0;
+    background: var(--purple);
+    color: white;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+.to-top.show { opacity: 0.9; pointer-events: auto; }
+.to-top:hover { opacity: 1; }
+
+/* ---------- Home search ---------- */
+.search-box input {
+    width: 100%;
+    font-family: inherit;
+    font-size: 1.05rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: white;
+}
+.search-box input:focus { outline: 2px solid var(--purple); border-color: transparent; }
+.no-results { text-align: center; color: var(--muted); margin-top: 2rem; }
+.guide-card .tick { margin-right: 0.4rem; }
+
+/* ---------- Phones ---------- */
+@media (max-width: 600px) {
+    .site-header { padding: 0.5rem 0.8rem; }
+    .site-header .inner { flex-wrap: nowrap; }
+    .site-header .brand { font-size: 1rem; }
+    .site-header .brand span { display: none; }
+    .site-header .brand::after { content: "מדריכי MVC"; }
+    .site-header nav { gap: 0.6rem; font-size: 0.9rem; }
+    .menu-btn { font-size: 0.9rem; padding: 0.25rem 0.6rem; }
+    h1 { font-size: 1.8rem; }
+    .toc ul { columns: 1; }
+    main { padding-top: 1.2rem; }
+}
