@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 12: בדיקת קלט</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="12-validation">
+<main>
+    <h1>מדריך 12: בדיקת קלט</h1>
+    <div class="subtitle">"שדה חובה", "אימייל לא תקין": איך מוודאים שהמשתמש מילא את הטופס נכון</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> בטופס ממדריך 11 אפשר לשמור מוצר בלי שם, או במחיר של מינוס 50. במדריך הזה נגדיר כללים (שם חובה, מחיר חיובי), והאתר יבדוק אותם לבד ויציג הודעות שגיאה בעברית ליד כל שדה.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מדריך 11 (טפסים) הוא <strong>תנאי מקדים</strong>. צריך את טופס הוספת המוצר.
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Validation (בדיקת קלט)</span>
+        בדיקה שהמידע שהמשתמש הזין הגיוני, <strong>לפני</strong> ששומרים אותו.
+        <span class="example">דוגמה: בהרשמה לאתר, אם תקלידו אימייל בלי @, תקבלו הודעה "אימייל לא תקין" ולא תוכלו להמשיך. זה Validation.</span>
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. כותבים את הכללים במודל</h2>
+    <p>את הכללים כותבים ישירות על ה-Properties במודל, בתוך סוגריים מרובעים.</p>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Attribute (תגית)</span>
+        הערה בסוגריים מרובעים מעל קוד, שמוסיפה לו מידע או התנהגות. כבר ראינו כאלה: <code class="inline">[HttpPost]</code> במדריך 11.
+        <span class="example">דוגמה: <code class="inline">[Required]</code> מעל <code class="inline">Name</code> אומר "השדה הזה חובה".</span>
+    </div>
+
+    <p>פתחו את <code class="inline">Models/Product.cs</code>. בראש הקובץ, מעל השורה <code class="inline">namespace</code>, הוסיפו:</p>
+<pre class="code-block">using System.ComponentModel.DataAnnotations;</pre>
+    <p>ואז החליפו את ה-Properties (רק את השורות שבתוך המחלקה) ב:</p>
+<pre class="code-block">public int Id { get; set; }
+
+[Required(ErrorMessage = "נא להזין שם מוצר")]
+[StringLength(50, ErrorMessage = "השם יכול להיות עד 50 תווים")]
+[Display(Name = "שם המוצר")]
+public string Name { get; set; } = "";
+
+[Required(ErrorMessage = "נא להזין מחיר")]
+[Range(0.1, 10000, ErrorMessage = "המחיר חייב להיות בין 0.1 ל-10,000")]
+[Display(Name = "מחיר")]
+public decimal Price { get; set; }
+
+[StringLength(500, ErrorMessage = "התיאור יכול להיות עד 500 תווים")]
+[Display(Name = "תיאור")]
+public string? Description { get; set; }</pre>
+
+    <h3>הכללים הנפוצים</h3>
+    <table class="simple">
+        <tr><th>Attribute</th><th>מה הוא בודק</th></tr>
+        <tr><td><code class="inline">[Required]</code></td><td>שדה חובה. אי אפשר להשאיר ריק.</td></tr>
+        <tr><td><code class="inline">[StringLength(50)]</code></td><td>טקסט עד 50 תווים. אפשר גם מינימום: <code class="inline">[StringLength(50, MinimumLength = 2)]</code>.</td></tr>
+        <tr><td><code class="inline">[Range(1, 100)]</code></td><td>מספר בין 1 ל-100.</td></tr>
+        <tr><td><code class="inline">[EmailAddress]</code></td><td>כתובת אימייל תקינה.</td></tr>
+        <tr><td><code class="inline">[Phone]</code></td><td>מספר טלפון.</td></tr>
+        <tr><td><code class="inline">[Compare("Password")]</code></td><td>זהה לשדה אחר (למשל "אימות סיסמה").</td></tr>
+        <tr><td><code class="inline">[Display(Name = "...")]</code></td><td>לא בודק כלום. קובע את השם של השדה שיוצג בתווית (label).</td></tr>
+    </table>
+    <p>לכל אחד מהם אפשר להוסיף <code class="inline">ErrorMessage = "..."</code> עם הודעה בעברית. בלי זה, ההודעה תהיה באנגלית.</p>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. בודקים ב-Controller</h2>
+    <p>ASP.NET בודק את הכללים לבד כשהטופס מגיע, ושומר את התוצאה ב-<code class="inline">ModelState</code>. אנחנו רק צריכים להחליט מה לעשות אם משהו לא תקין.</p>
+    <p>ב-<code class="inline">ProductsController</code>, ב-Create של ה-POST, הוסיפו בהתחלה את הבדיקה:</p>
+<pre class="code-block">[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Create(Product product)
+{
+    if (!ModelState.IsValid)
+    {
+        return View(product);
+    }
+
+    product.Id = products.Max(p =&gt; p.Id) + 1;
+    products.Add(product);
+    return RedirectToAction("Index");
+}</pre>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: ModelState</span>
+        "הדוח" של הבדיקה. <code class="inline">ModelState.IsValid</code> הוא <code class="inline">true</code> אם כל הכללים עברו, ו-<code class="inline">false</code> אם משהו נכשל. הסימן <code class="inline">!</code> פירושו "לא", אז <code class="inline">if (!ModelState.IsValid)</code> פירושו "אם הטופס <strong>לא</strong> תקין".
+        <span class="example">אם לא תקין, מחזירים את אותו טופס עם מה שהמשתמש כבר מילא (<code class="inline">return View(product)</code>), כדי שלא יצטרך להקליד הכול מחדש, ועם הודעות השגיאה.</span>
+    </div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. מציגים את ההודעות בטופס</h2>
+    <p>החליפו את התוכן של <code class="inline">Views/Products/Create.cshtml</code> ב:</p>
+<pre class="code-block">@model Product
+@{
+    ViewData["Title"] = "מוצר חדש";
+}
+
+&lt;h1&gt;הוספת מוצר&lt;/h1&gt;
+
+&lt;form asp-action="Create" method="post"&gt;
+    &lt;div asp-validation-summary="ModelOnly" class="text-danger"&gt;&lt;/div&gt;
+
+    &lt;div class="mb-3"&gt;
+        &lt;label asp-for="Name" class="form-label"&gt;&lt;/label&gt;
+        &lt;input asp-for="Name" class="form-control" /&gt;
+        &lt;span asp-validation-for="Name" class="text-danger"&gt;&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;div class="mb-3"&gt;
+        &lt;label asp-for="Price" class="form-label"&gt;&lt;/label&gt;
+        &lt;input asp-for="Price" class="form-control" /&gt;
+        &lt;span asp-validation-for="Price" class="text-danger"&gt;&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;div class="mb-3"&gt;
+        &lt;label asp-for="Description" class="form-label"&gt;&lt;/label&gt;
+        &lt;textarea asp-for="Description" class="form-control"&gt;&lt;/textarea&gt;
+        &lt;span asp-validation-for="Description" class="text-danger"&gt;&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;button type="submit" class="btn btn-success"&gt;שמירה&lt;/button&gt;
+    &lt;a asp-action="Index" class="btn btn-secondary"&gt;ביטול&lt;/a&gt;
+&lt;/form&gt;
+
+@section Scripts {
+    &lt;partial name="_ValidationScriptsPartial" /&gt;
+}</pre>
+
+    <table class="simple">
+        <tr><th>מה חדש</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">&lt;span asp-validation-for="Name"&gt;</code></td><td>המקום שבו תופיע הודעת השגיאה של השדה Name. אם אין שגיאה, הוא ריק.</td></tr>
+        <tr><td><code class="inline">&lt;label asp-for="Name"&gt;&lt;/label&gt;</code></td><td>הפעם התווית ריקה, והיא לוקחת את הטקסט מה-<code class="inline">[Display(Name = "...")]</code> שבמודל.</td></tr>
+        <tr><td><code class="inline">asp-validation-summary="ModelOnly"</code></td><td>מקום להודעות כלליות שלא שייכות לשדה מסוים (נשתמש בזה בהמשך).</td></tr>
+        <tr><td><code class="inline">_ValidationScriptsPartial</code></td><td>JavaScript שבודק את הכללים כבר בדפדפן, עוד לפני שהטופס נשלח. ההודעה מופיעה מיד, בלי להמתין לשרת.</td></tr>
+    </table>
+
+    <div class="checkpoint">פתחו את הטופס ולחצו "שמירה" בלי למלא כלום. ליד השם והמחיר מופיעות הודעות באדום, בעברית. נסו גם מחיר 0 או 99999.</div>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. למה בודקים פעמיים?</h2>
+    <p>הבדיקה קורית בשני מקומות: בדפדפן (בזכות <code class="inline">_ValidationScriptsPartial</code>) ובשרת (בזכות <code class="inline">ModelState.IsValid</code>).</p>
+    <ul>
+        <li><strong>בדפדפן:</strong> נוח למשתמש. ההודעה מופיעה מיד.</li>
+        <li><strong>בשרת:</strong> בשביל הביטחון. משתמש שמבין קצת יכול לכבות את ה-JavaScript או לשלוח בקשה בלי הטופס בכלל. לכן <strong>אסור לוותר</strong> על הבדיקה ב-Controller.</li>
+    </ul>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>קו אדום מתחת ל-<code class="inline">[Required]</code>:</strong> חסרה השורה <code class="inline">using System.ComponentModel.DataAnnotations;</code> בראש המודל.</li>
+            <li><strong>המוצר נשמר למרות שהשדות ריקים:</strong> חסרה הבדיקה <code class="inline">if (!ModelState.IsValid)</code> ב-Controller.</li>
+            <li><strong>ההודעות מופיעות רק אחרי שליחה, ולא מיד:</strong> חסר ה-<code class="inline">@section Scripts</code> עם <code class="inline">_ValidationScriptsPartial</code> בסוף ה-View.</li>
+            <li><strong>חלק מההודעות באנגלית:</strong> לכל Attribute צריך <code class="inline">ErrorMessage</code> משלו. הודעה כמו "The field ... must be a number" מופיעה כשמקלידים אותיות בשדה של מספר.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>הוסיפו כללים לתכונה <code class="inline">Stock</code> (אם הוספתם אותה): חובה, בין 0 ל-1000, עם הודעות בעברית.</li>
+            <li>בטופס "צור קשר" (מהתרגיל במדריך 11): השם חובה ובין 2 ל-30 תווים, האימייל חובה ותקין, וההודעה חובה ועד 1000 תווים.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>את הכללים כותבים במודל, עם Attributes כמו <code class="inline">[Required]</code>, <code class="inline">[Range]</code> ו-<code class="inline">[StringLength]</code>, וכל אחד עם <code class="inline">ErrorMessage</code> בעברית.</li>
+            <li>ב-Controller בודקים <code class="inline">ModelState.IsValid</code>, ואם לא תקין מחזירים את הטופס.</li>
+            <li>ב-View מוסיפים <code class="inline">asp-validation-for</code> ליד כל שדה, ו-<code class="inline">_ValidationScriptsPartial</code> לבדיקה מיידית בדפדפן.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

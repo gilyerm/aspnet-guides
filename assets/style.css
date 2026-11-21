@@ -376,3 +376,9 @@ main h2[id] { scroll-margin-top: 4.5rem; }
 .flow .step.browser b { color: #0369a1; }
 .flow[dir="ltr"] .step span { direction: rtl; display: block; }
 .toc ul { list-style: none; padding-inline-start: 0.3rem; }
+
+/* החלק בקוד שצריך לשנות */
+pre.code-block .change { background: #4d3d00; color: #ffe08a; border-radius: 3px; padding: 0 2px; }
+.change-note { font-size: 0.95rem; color: #92400e; }
+.change-note::before { content: "✏️ "; }
+pre.code-block { padding-top: 2.4rem; }

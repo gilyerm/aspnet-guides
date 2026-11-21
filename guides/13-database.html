@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 13: מסד נתונים</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="13-database">
+<main>
+    <h1>מדריך 13: מסד נתונים</h1>
+    <div class="subtitle">טבלה משלכם במסד הנתונים: המידע נשמר גם אחרי שסוגרים את האתר</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> במדריכים 10 ו-11 המוצרים נשמרו ברשימה בזיכרון, ונעלמו בכל פעם שעצרנו את האתר. עכשיו נשמור אותם במסד הנתונים, באותו מקום שבו כבר נשמרים המשתמשים של האתר.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מדריך 10 (מודלים) הוא <strong>תנאי מקדים</strong>: צריך את המודל <code class="inline">Product</code>. אם עשיתם גם את מדריכים 11 ו-12, הטופס ימשיך לעבוד. מומלץ גם להכיר את Package Manager Console ואת SQL Server Object Explorer ממדריך 2.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. שלושה מושגים</h2>
+    <div class="concept">
+        <span class="concept-title">📖 DbContext</span>
+        המחלקה שמחברת את הקוד שלנו למסד הנתונים. בפרויקט שלכם כבר יש אחת, בשם <code class="inline">ApplicationDbContext</code>, בתיקייה <code class="inline">Data</code>. דרכה נוצרו טבלאות המשתמשים.
+    </div>
+    <div class="concept">
+        <span class="concept-title">📖 DbSet</span>
+        שורה ב-DbContext שאומרת "תיצור טבלה לסוג הזה". כל DbSet הוא טבלה אחת.
+        <span class="example">דוגמה: <code class="inline">public DbSet&lt;Product&gt; Products { get; set; }</code> פירושו "צור טבלה בשם Products, שכל שורה בה היא Product".</span>
+    </div>
+    <div class="concept">
+        <span class="concept-title">📖 Migration</span>
+        קובץ עם "הוראות בנייה" למסד הנתונים: אילו טבלאות ועמודות להוסיף או לשנות. בכל פעם שמשנים מודל, יוצרים Migration חדש ומריצים אותו.
+        <span class="example">דוגמה: כמו הוראות הרכבה של רהיט מאיקאה. Add-Migration כותב את ההוראות, ו-Update-Database מרכיב לפיהן.</span>
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. מכינים את המודל</h2>
+    <p>מסד הנתונים צריך לדעת כמה ספרות לשמור למחיר. ב-<code class="inline">Models/Product.cs</code>:</p>
+    <ul class="step-list">
+        <li>בראש הקובץ הוסיפו:
+<pre class="code-block">using System.ComponentModel.DataAnnotations.Schema;</pre>
+        </li>
+        <li>מעל השורה <code class="inline">public decimal Price { get; set; }</code> הוסיפו:
+<pre class="code-block">[Column(TypeName = "decimal(10,2)")]</pre>
+            זה אומר: עד 10 ספרות, מתוכן 2 אחרי הנקודה (אגורות).
+        </li>
+    </ul>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. מוסיפים DbSet</h2>
+    <ul class="step-list">
+        <li>פתחו את <code class="inline">Data/ApplicationDbContext.cs</code>. תראו מחלקה עם פונקציה אחת בתוכה (שמתחילה ב-<code class="inline">public ApplicationDbContext(</code>).</li>
+        <li>מתחת לפונקציה הזאת, עדיין בתוך המחלקה, הוסיפו:
+<pre class="code-block">public DbSet&lt;Product&gt; Products { get; set; }</pre>
+        </li>
+        <li>אם <code class="inline">Product</code> מסומן באדום: עמדו עליו, <span class="keyboard">Ctrl+.</span>, ובחרו את ה-<code class="inline">using</code>.</li>
+    </ul>
+    <p>הקובץ ייראה בערך כך:</p>
+<pre class="code-block">public class ApplicationDbContext : IdentityDbContext
+{
+    public ApplicationDbContext(DbContextOptions&lt;ApplicationDbContext&gt; options)
+        : base(options)
+    {
+    }
+
+    public DbSet&lt;Product&gt; Products { get; set; }
+}</pre>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. Migration: יוצרים את הטבלה</h2>
+    <ul class="step-list">
+        <li><strong>עצרו את האתר</strong> אם הוא רץ.</li>
+        <li>פתחו את Package Manager Console: <strong>Tools ← NuGet Package Manager ← Package Manager Console</strong>.</li>
+        <li>הקלידו ולחצו <span class="keyboard">Enter</span>:
+<pre class="code-block">Add-Migration AddProducts</pre>
+            <code class="inline">AddProducts</code> הוא שם שאתם בוחרים, שמתאר את השינוי (באנגלית, בלי רווחים). חכו שתופיע ההודעה <code class="inline">To undo this action, use Remove-Migration</code>. בתיקייה <code class="inline">Data/Migrations</code> נוצר קובץ חדש עם השם שבחרתם.
+        </li>
+        <li>עכשיו הקלידו ולחצו <span class="keyboard">Enter</span>:
+<pre class="code-block">Update-Database</pre>
+            חכו להודעה <code class="inline">Done.</code>
+        </li>
+    </ul>
+    <div class="checkpoint">פתחו את SQL Server Object Explorer (מדריך 2, סעיף 7), לחצו על כפתור הרענון (🔄), ופתחו את <strong>Tables</strong> של מסד הנתונים. יש טבלה חדשה: <strong>dbo.Products</strong>, עם עמודות Id, Name, Price ו-Description.</div>
+
+    <div class="warning">
+        <strong>⚠️ שני כללי ברזל:</strong>
+        <ul>
+            <li><strong>לא מוחקים את התיקייה Migrations</strong> ולא קבצים בתוכה. מסד הנתונים "זוכר" אילו Migrations כבר רצו, ומחיקה תשבש את הכול.</li>
+            <li><strong>לא משנים את מבנה הטבלאות ידנית</strong> ב-SQL Server Object Explorer. כל שינוי במבנה עובר דרך המודל ו-Migration.</li>
+        </ul>
+    </div>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. ה-Controller עובד עם מסד הנתונים</h2>
+    <p>עכשיו נחליף את הרשימה שבזיכרון במסד הנתונים. פתחו את <code class="inline">ProductsController.cs</code>, ו<strong>החליפו את כל מה שבתוך המחלקה</strong> (מהסוגר המסולסל אחרי <code class="inline">public class ProductsController : Controller</code> ועד הסוגר שסוגר אותה) ב:</p>
+<pre class="code-block">private readonly ApplicationDbContext _context;
+
+public ProductsController(ApplicationDbContext context)
+{
+    _context = context;
+}
+
+public IActionResult Index()
+{
+    var products = _context.Products.ToList();
+    return View(products);
+}
+
+public IActionResult Details(int id)
+{
+    var product = _context.Products.Find(id);
+    if (product == null)
+    {
+        return NotFound();
+    }
+    return View(product);
+}
+
+public IActionResult Create()
+{
+    return View();
+}
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Create(Product product)
+{
+    if (!ModelState.IsValid)
+    {
+        return View(product);
+    }
+
+    _context.Products.Add(product);
+    _context.SaveChanges();
+    return RedirectToAction("Index");
+}</pre>
+    <p><code class="inline">ApplicationDbContext</code> יסומן באדום. <span class="keyboard">Ctrl+.</span> יוסיף בראש הקובץ <code class="inline">using <span class="change">MyProject</span>.Data;</code>.</p>
+
+    <table class="simple">
+        <tr><th>מה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">_context</code></td><td>החיבור למסד הנתונים. מעכשיו, כל עבודה עם המוצרים עוברת דרכו.</td></tr>
+        <tr><td><code class="inline">public ProductsController(ApplicationDbContext context)</code></td><td>בנאי (Constructor): פונקציה שרצה כשה-Controller נוצר. ASP.NET "מגיש" לה את החיבור למסד הנתונים, ואנחנו שומרים אותו ב-<code class="inline">_context</code>. לא צריך להבין לעומק, רק להעתיק.</td></tr>
+        <tr><td><code class="inline">_context.Products.ToList()</code></td><td>"תביא את כל השורות מטבלת Products, כרשימה".</td></tr>
+        <tr><td><code class="inline">_context.Products.Find(id)</code></td><td>"תביא את המוצר שה-Id שלו הוא id".</td></tr>
+        <tr><td><code class="inline">_context.Products.Add(product)</code></td><td>"תכין את המוצר הזה להוספה".</td></tr>
+        <tr><td><code class="inline">_context.SaveChanges()</code></td><td><strong>"עכשיו תשמור באמת".</strong> בלי השורה הזאת, שום דבר לא נכתב למסד הנתונים!</td></tr>
+    </table>
+    <div class="explanation">
+        <strong>💡 ומה עם ה-Id?</strong> שימו לב שהשורה <code class="inline">product.Id = products.Max(...) + 1</code> נעלמה. מסד הנתונים נותן לכל שורה חדשה Id בעצמו (1, 2, 3...).
+    </div>
+
+    <div class="checkpoint">הריצו ונכנסו ל-<code class="inline">/Products</code>. הרשימה ריקה (המוצרים הישנים היו רק בזיכרון). הוסיפו שני מוצרים בטופס. <strong>עכשיו עצרו את האתר והריצו שוב:</strong> המוצרים עדיין שם! אפשר לראות אותם גם ב-SQL Server Object Explorer, בקליק ימני על dbo.Products ← View Data.</div>
+
+    <!-- ===================== 6 ===================== -->
+    <h2>6. שינוי מודל בהמשך</h2>
+    <p>כל פעם שמשנים מודל שיש לו טבלה (מוסיפים Property, מוחקים, משנים סוג), חוזרים על אותם שני צעדים:</p>
+    <div class="flow">
+        <div class="step"><b>1. משנים</b><span>את המודל</span></div>
+        <div class="arrow">←</div>
+        <div class="step"><b>2. Add-Migration</b><span>עם שם חדש שמתאר את השינוי</span></div>
+        <div class="arrow">←</div>
+        <div class="step"><b>3. Update-Database</b><span>מעדכן את הטבלה</span></div>
+    </div>
+    <p>לדוגמה, אחרי שמוסיפים ל-<code class="inline">Product</code> את <code class="inline">public int Stock { get; set; }</code>:</p>
+<pre class="code-block">Add-Migration AddProductStock
+Update-Database</pre>
+    <p>(מקלידים כל שורה בנפרד, ולוחצים <span class="keyboard">Enter</span> אחרי כל אחת.) לכל Migration צריך שם אחר.</p>
+
+    <div class="warning">
+        <strong>⚠️ זכרו: מסד הנתונים נמצא על המחשב, לא בפרויקט.</strong> במחשב אחר (אחרי Clone או העתקה) מריצים <code class="inline">Update-Database</code>, וכל הטבלאות נוצרות שם. הן יהיו ריקות: הנתונים עצמם לא עוברים. ראו מדריך 3, סעיף 4.
+    </div>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>"Invalid object name 'Products'":</strong> הטבלה לא קיימת במסד הנתונים. שכחתם להריץ <code class="inline">Update-Database</code>.</li>
+            <li><strong>"The model for context 'ApplicationDbContext' has pending changes":</strong> שיניתם מודל, אבל לא יצרתם לו Migration. הריצו קודם <code class="inline">Add-Migration</code> עם שם חדש, ורק אחר כך <code class="inline">Update-Database</code>.</li>
+            <li><strong>"Build failed":</strong> יש שגיאות בקוד. הפקודות לא ירוצו עד שתתקנו אותן (פתחו את Error List).</li>
+            <li><strong>"The process cannot access the file" או שהפקודה נתקעת:</strong> האתר עדיין רץ. עצרו אותו ונסו שוב.</li>
+            <li><strong>"The term 'Add-Migration' is not recognized":</strong> חסרה החבילה <code class="inline">Microsoft.EntityFrameworkCore.Tools</code>. התקינו אותה ב-NuGet (מדריך 2, סעיף 6), עם גרסה שמתאימה לגרסת ה-.NET.</li>
+            <li><strong>הנתונים לא נשמרים:</strong> חסר <code class="inline">_context.SaveChanges();</code> אחרי ה-<code class="inline">Add</code>.</li>
+            <li><strong>טעיתם ב-Migration ועוד לא הרצתם Update-Database:</strong> <code class="inline">Remove-Migration</code> מוחק את ה-Migration האחרון בצורה בטוחה.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>הוסיפו ל-<code class="inline">Product</code> את <code class="inline">Stock</code> (אם עוד לא הוספתם), צרו Migration והריצו אותו. בדקו ב-SQL Server Object Explorer שנוספה עמודה.</li>
+            <li>הוסיפו שדה למלאי בטופס, הוסיפו מוצר, ובדקו שהמלאי נשמר.</li>
+            <li>בונוס: העבירו גם את טופס "צור קשר" (מתרגיל 11) למסד הנתונים: <code class="inline">DbSet</code>, Migration, ושינוי ה-Controller.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>טבלה חדשה = <code class="inline">DbSet</code> ב-<code class="inline">ApplicationDbContext</code>, ואז <code class="inline">Add-Migration</code> ו-<code class="inline">Update-Database</code>.</li>
+            <li>כל שינוי במודל = Migration חדש. לא מוחקים את תיקיית Migrations.</li>
+            <li>ב-Controller: <code class="inline">ToList()</code> מביא הכול, <code class="inline">Find(id)</code> מביא אחד, <code class="inline">Add</code> ואחריו <code class="inline">SaveChanges()</code> שומר.</li>
+            <li>מסד הנתונים נמצא ב-LocalDB על המחשב. במחשב אחר מריצים <code class="inline">Update-Database</code>.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 10: מודלים</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="10-models">
+<main>
+    <h1>מדריך 10: מודלים</h1>
+    <div class="subtitle">מחלקה שמייצגת מידע, ואיך מעבירים מידע מה-Controller לעמוד</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> עד עכשיו כל הטקסט בעמודים היה כתוב ישירות ב-HTML. אבל באתר אמיתי מציגים <strong>מידע</strong>: רשימת מוצרים, פרטים של משתמש, הזמנות. במדריך הזה נגדיר איך נראה "מוצר", ניצור כמה מוצרים, ונציג אותם בטבלה ובעמוד פרטים.
+        <br><br>
+        <strong>מה צריך לפני:</strong> Controller בשם <code class="inline">ProductsController</code> עם View בשם <code class="inline">Index</code>. אם אין לכם, צרו אותם לפי מדריך 7, סעיף 4. מומלץ לקרוא קודם גם את מדריך 4 (איך אתר MVC עובד).
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. מה זה מודל?</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Model (מודל)</span>
+        מחלקה ב-C# שמתארת סוג אחד של מידע: מה יש לו. מודל לא עושה כלום בעצמו, הוא רק "תבנית" למידע.
+        <span class="example">דוגמה: לכל מוצר בחנות יש מספר מזהה, שם, מחיר ותיאור. אז נגדיר מודל בשם <code class="inline">Product</code> עם ארבעת הפרטים האלה. כל מוצר אמיתי (עט, מחברת) הוא "עותק" של התבנית הזאת, עם ערכים משלו.</span>
+    </div>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Property (תכונה)</span>
+        פרט אחד במודל. נכתב כך: <code class="inline">public string Name { get; set; }</code>. יש בו שלושה חלקים: הסוג (<code class="inline">string</code> = טקסט), השם (<code class="inline">Name</code>), ו-<code class="inline">{ get; set; }</code>, שאומר "אפשר לקרוא את הערך ולשנות אותו".
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. יוצרים את המודל Product</h2>
+    <ul class="step-list">
+        <li>ב-Solution Explorer, קליק ימני על התיקייה <strong>Models</strong> ← <strong>Add</strong> ← <strong>Class</strong>.</li>
+        <li>תנו שם <code class="inline">Product.cs</code> (ביחיד, באות גדולה) ולחצו <strong>Add</strong>.</li>
+        <li>נפתח קובץ עם <code class="inline">public class Product</code> (אם כתוב רק <code class="inline">class Product</code>, הוסיפו לפניו <code class="inline">public</code>). <strong>בין הסוגריים המסולסלים של המחלקה</strong>, הדביקו:
+<pre class="code-block">public int Id { get; set; }
+public string Name { get; set; } = "";
+public decimal Price { get; set; }
+public string? Description { get; set; }</pre>
+        </li>
+    </ul>
+    <p>הקובץ יראה בערך כך (השם שאחרי <code class="inline">namespace</code> הוא שם הפרויקט שלכם, ואותו לא משנים):</p>
+<pre class="code-block">namespace <span class="change">MyProject</span>.Models
+{
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public decimal Price { get; set; }
+        public string? Description { get; set; }
+    }
+}</pre>
+
+    <table class="simple">
+        <tr><th>שורה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">int Id</code></td><td>מספר שלם שמזהה כל מוצר. לכל מוצר מספר אחר. כמו תעודת זהות.</td></tr>
+        <tr><td><code class="inline">string Name ... = ""</code></td><td>טקסט. ה-<code class="inline">= ""</code> נותן ערך התחלתי ריק, כדי שהשם לא יהיה "כלום".</td></tr>
+        <tr><td><code class="inline">decimal Price</code></td><td>מספר עשרוני (כמו 12.90). משתמשים ב-decimal לכסף.</td></tr>
+        <tr><td><code class="inline">string? Description</code></td><td>טקסט. סימן השאלה אומר "מותר שלא יהיה תיאור בכלל".</td></tr>
+    </table>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. יוצרים מוצרים ב-Controller</h2>
+    <p>עדיין אין לנו מסד נתונים (הוא יגיע במדריך 13), אז בינתיים נשמור את המוצרים ברשימה בתוך ה-Controller.</p>
+    <ul class="step-list">
+        <li>פתחו את <code class="inline">Controllers/ProductsController.cs</code>.</li>
+        <li>מחקו את ה-Action בשם <code class="inline">Index</code> שכבר קיים, ובמקומו (בתוך המחלקה) הדביקו:
+<pre class="code-block">private static List&lt;Product&gt; products = new List&lt;Product&gt;
+{
+    new Product { Id = 1, Name = "עט", Price = 5, Description = "עט כחול" },
+    new Product { Id = 2, Name = "מחברת", Price = 12, Description = "מחברת 80 דפים" },
+    new Product { Id = 3, Name = "תיק", Price = 150, Description = "תיק גב לבית הספר" }
+};
+
+public IActionResult Index()
+{
+    return View(products);
+}</pre>
+        </li>
+        <li>המילה <code class="inline">Product</code> תסומן בקו אדום, כי ה-Controller לא מכיר את התיקייה Models. עמדו עליה ולחצו <span class="keyboard">Ctrl+.</span>, ובחרו את האפשרות שמתחילה ב-<code class="inline">using</code>. בראש הקובץ תתווסף השורה <code class="inline">using <span class="change">MyProject</span>.Models;</code>, והקו האדום ייעלם.</li>
+    </ul>
+
+    <table class="simple">
+        <tr><th>מה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">List&lt;Product&gt;</code></td><td>רשימה של מוצרים (ראינו <code class="inline">List</code> במדריך 5).</td></tr>
+        <tr><td><code class="inline">new Product { Id = 1, ... }</code></td><td>יוצרים מוצר אחד וממלאים לו ערכים.</td></tr>
+        <tr><td><code class="inline">static</code></td><td>הרשימה נשמרת כל עוד האתר רץ. בלי <code class="inline">static</code>, היא הייתה נוצרת מחדש בכל כניסה לעמוד. (כשעוצרים את האתר, הרשימה חוזרת למצב ההתחלתי. מסד נתונים יפתור את זה.)</td></tr>
+        <tr><td><code class="inline">return View(products);</code></td><td><strong>החדש והחשוב:</strong> מחזירים את ה-View, ושולחים אליו את רשימת המוצרים.</td></tr>
+    </table>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. מציגים את המוצרים בעמוד</h2>
+    <p>פתחו את <code class="inline">Views/Products/Index.cshtml</code>, מחקו את כל התוכן והדביקו:</p>
+<pre class="code-block">@model List&lt;Product&gt;
+@{
+    ViewData["Title"] = "מוצרים";
+}
+
+&lt;h1&gt;המוצרים שלנו&lt;/h1&gt;
+
+&lt;table class="table table-striped"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;שם&lt;/th&gt;
+            &lt;th&gt;מחיר&lt;/th&gt;
+            &lt;th&gt;&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        @foreach (var product in Model)
+        {
+            &lt;tr&gt;
+                &lt;td&gt;@product.Name&lt;/td&gt;
+                &lt;td&gt;@product.Price ₪&lt;/td&gt;
+                &lt;td&gt;&lt;a asp-action="Details" asp-route-id="@product.Id"&gt;פרטים&lt;/a&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+        }
+    &lt;/tbody&gt;
+&lt;/table&gt;</pre>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: ‎@model ו-Model</span>
+        השורה הראשונה, <code class="inline">@model List&lt;Product&gt;</code>, אומרת לעמוד: "אתה הולך לקבל רשימה של מוצרים". אחר כך, בכל מקום בעמוד, <code class="inline">Model</code> (באות גדולה) הוא המידע שה-Controller שלח ב-<code class="inline">return View(products)</code>.
+        <span class="example">שימו לב להבדל: <code class="inline">@model</code> באות קטנה מופיע פעם אחת בראש הקובץ ואומר <strong>מה הסוג</strong>. <code class="inline">Model</code> באות גדולה הוא <strong>המידע עצמו</strong>.</span>
+    </div>
+
+    <div class="checkpoint">היכנסו ל-<code class="inline">/Products</code>. מופיעה טבלה עם שלושת המוצרים. הוסיפו מוצר רביעי לרשימה ב-Controller, והריצו שוב: הוא יופיע בטבלה בלי שנגעתם ב-View.</div>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. עמוד פרטים של מוצר אחד</h2>
+    <p>בטבלה יש קישור "פרטים". ה-<code class="inline">asp-route-id="@product.Id"</code> מוסיף לכתובת את המספר של המוצר, למשל <code class="inline">/Products/Details/2</code>. עכשיו ניצור את העמוד הזה.</p>
+
+    <h3>ה-Action</h3>
+    <p>ב-<code class="inline">ProductsController</code>, מתחת ל-Index, הוסיפו:</p>
+<pre class="code-block">public IActionResult Details(int id)
+{
+    var product = products.FirstOrDefault(p =&gt; p.Id == id);
+    if (product == null)
+    {
+        return NotFound();
+    }
+    return View(product);
+}</pre>
+    <table class="simple">
+        <tr><th>מה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">Details(int id)</code></td><td>ה-Action מקבל את המספר מהכתובת. בכתובת <code class="inline">/Products/Details/2</code>, המשתנה <code class="inline">id</code> יהיה 2.</td></tr>
+        <tr><td><code class="inline">FirstOrDefault(p =&gt; p.Id == id)</code></td><td>"חפש ברשימה את המוצר הראשון שה-Id שלו שווה ל-id". אם אין כזה, מקבלים <code class="inline">null</code> (כלום).</td></tr>
+        <tr><td><code class="inline">return NotFound();</code></td><td>אם המוצר לא נמצא, מחזירים שגיאה 404 במקום לקרוס.</td></tr>
+        <tr><td><code class="inline">return View(product);</code></td><td>הפעם שולחים ל-View מוצר <strong>אחד</strong>, לא רשימה.</td></tr>
+    </table>
+
+    <h3>ה-View</h3>
+    <p>קליק ימני על <code class="inline">Details</code> ← <strong>Add View</strong> ← <strong>Razor View - Empty</strong> ← שם <code class="inline">Details.cshtml</code>. החליפו את התוכן ב:</p>
+<pre class="code-block">@model Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+&lt;h1&gt;@Model.Name&lt;/h1&gt;
+&lt;p&gt;@Model.Description&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;מחיר:&lt;/strong&gt; @Model.Price ₪&lt;/p&gt;
+
+&lt;a asp-action="Index" class="btn btn-secondary"&gt;חזרה לרשימה&lt;/a&gt;</pre>
+    <p>הפעם <code class="inline">@model Product</code> (מוצר אחד), ולכן כותבים ישר <code class="inline">@Model.Name</code>, בלי לולאה.</p>
+    <div class="checkpoint">לחצו "פרטים" ליד אחד המוצרים. נפתח עמוד עם השם, התיאור והמחיר שלו. נסו גם <code class="inline">/Products/Details/99</code>: תקבלו 404, כי אין מוצר כזה.</div>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>"The type or namespace name 'Product' could not be found":</strong> ב-Controller: חסרה שורת <code class="inline">using</code> (סעיף 3, <span class="keyboard">Ctrl+.</span>). ב-View: בדקו שבקובץ <code class="inline">Views/_ViewImports.cshtml</code> יש שורה <code class="inline">@using <span class="change">MyProject</span>.Models</code> עם שם הפרויקט שלכם.</li>
+            <li><strong>NullReferenceException בעמוד:</strong> ה-View מנסה להשתמש ב-<code class="inline">Model</code>, אבל ה-Controller לא שלח כלום. בדקו שכתוב <code class="inline">return View(products);</code> ולא רק <code class="inline">return View();</code>.</li>
+            <li><strong>"The model item passed into the ViewDataDictionary is of type ... but this ViewDataDictionary instance requires ...":</strong> הסוג ב-<code class="inline">@model</code> לא מתאים למה שה-Controller שלח. ל-Index שולחים רשימה (<code class="inline">List&lt;Product&gt;</code>), ל-Details מוצר אחד (<code class="inline">Product</code>).</li>
+            <li><strong>אחרי עצירת האתר המוצרים שהוספתם נעלמו:</strong> זה צפוי. הרשימה חיה רק בזיכרון. במדריך 13 נשמור אותה במסד נתונים.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>הוסיפו למודל <code class="inline">Product</code> תכונה חדשה: <code class="inline">public int Stock { get; set; }</code> (כמה יחידות במלאי). תנו לכל מוצר ברשימה ערך, והציגו אותו בטבלה ובעמוד הפרטים.</li>
+            <li>בעמוד הפרטים, אם המלאי הוא 0, הציגו "אזל מהמלאי" באדום (רמז: <code class="inline">@if</code> ממדריך 5, ו-<code class="inline">text-danger</code> ממדריך 9).</li>
+            <li>בונוס: צרו מודל משלכם (למשל <code class="inline">Book</code> עם כותרת, סופר ושנה), Controller שמחזיק רשימה של ספרים, ועמוד שמציג אותם.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>מודל הוא מחלקה בתיקייה <code class="inline">Models</code> שמתארת סוג של מידע, עם Properties.</li>
+            <li>ה-Controller שולח מידע ל-View עם <code class="inline">return View(המידע)</code>.</li>
+            <li>ה-View מצהיר מה הוא מקבל עם <code class="inline">@model</code>, ומשתמש במידע דרך <code class="inline">Model</code>.</li>
+            <li><code class="inline">asp-route-id</code> מוסיף מספר לכתובת, וה-Action מקבל אותו כפרמטר <code class="inline">int id</code>.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

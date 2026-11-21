@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 14: קשרים בין טבלאות</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="14-relationships">
+<main>
+    <h1>מדריך 14: קשרים בין טבלאות</h1>
+    <div class="subtitle">קטגוריה עם הרבה מוצרים: איך מחברים טבלה אחת לאחרת</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> בכמעט כל אתר, המידע מחובר: למוצר יש קטגוריה, להזמנה יש משתמש, לתגובה יש פוסט. במדריך הזה נוסיף קטגוריות, נחבר כל מוצר לקטגוריה, ונבחר קטגוריה מרשימה נפתחת בטופס.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מדריך 13 (מסד נתונים) הוא <strong>תנאי מקדים</strong>: צריך טבלת Products במסד הנתונים, ו-<code class="inline">ProductsController</code> שעובד איתה.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. מה זה קשר "אחד לרבים"?</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: קשר אחד לרבים (One-to-Many)</span>
+        לכל קטגוריה יכולים להיות <strong>הרבה</strong> מוצרים, אבל לכל מוצר יש קטגוריה <strong>אחת</strong>.
+        <span class="example">דוגמאות נוספות: לכיתה הרבה תלמידים, ולכל תלמיד כיתה אחת. למשתמש הרבה הזמנות, ולכל הזמנה משתמש אחד.</span>
+    </div>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: מפתח זר (Foreign Key)</span>
+        עמודה בטבלה אחת ששומרת את ה-Id של שורה בטבלה אחרת. ככה מחברים ביניהן.
+        <span class="example">דוגמה: בטבלת המוצרים תהיה עמודה <code class="inline">CategoryId</code>. אם במוצר "עט" כתוב שם 2, פירוש הדבר שהעט שייך לקטגוריה שה-Id שלה 2 (למשל "ציוד כתיבה").</span>
+    </div>
+
+    <table class="simple">
+        <tr><th colspan="2">Categories</th><th style="border:0;background:none"></th><th colspan="3">Products</th></tr>
+        <tr><th>Id</th><th>Name</th><th style="border:0;background:none"></th><th>Id</th><th>Name</th><th>CategoryId</th></tr>
+        <tr><td>1</td><td>תיקים</td><td style="border:0"></td><td>1</td><td>עט</td><td><strong>2</strong></td></tr>
+        <tr><td>2</td><td>ציוד כתיבה</td><td style="border:0"></td><td>2</td><td>מחברת</td><td><strong>2</strong></td></tr>
+        <tr><td></td><td></td><td style="border:0"></td><td>3</td><td>תיק גב</td><td><strong>1</strong></td></tr>
+    </table>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. המודלים</h2>
+    <h3>מודל חדש: Category</h3>
+    <p>קליק ימני על <strong>Models</strong> ← <strong>Add</strong> ← <strong>Class</strong> ← <code class="inline">Category.cs</code>. בראש הקובץ הוסיפו <code class="inline">using System.ComponentModel.DataAnnotations;</code>, ובתוך המחלקה הדביקו:</p>
+<pre class="code-block">public int Id { get; set; }
+
+[Required(ErrorMessage = "נא להזין שם קטגוריה")]
+[Display(Name = "קטגוריה")]
+public string Name { get; set; } = "";
+
+public List&lt;Product&gt; Products { get; set; } = new List&lt;Product&gt;();</pre>
+    <p>השורה האחרונה היא הצד של ה"רבים": לכל קטגוריה יש רשימה של מוצרים.</p>
+
+    <h3>שינוי ב-Product</h3>
+    <p>ב-<code class="inline">Models/Product.cs</code>, הוסיפו בתוך המחלקה (ואם בראש הקובץ אין <code class="inline">using System.ComponentModel.DataAnnotations;</code>, הוסיפו גם אותו):</p>
+<pre class="code-block">[Display(Name = "קטגוריה")]
+public int? CategoryId { get; set; }
+
+public Category? Category { get; set; }</pre>
+
+    <table class="simple">
+        <tr><th>שורה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">int? CategoryId</code></td><td>המפתח הזר: ה-Id של הקטגוריה. ה-<code class="inline">?</code> אומר שמותר שלמוצר לא תהיה קטגוריה. זה חשוב, כי למוצרים שכבר קיימים במסד הנתונים עוד אין קטגוריה.</td></tr>
+        <tr><td><code class="inline">Category? Category</code></td><td>הקטגוריה עצמה, כאובייקט שלם. בזכותה אפשר לכתוב <code class="inline">product.Category.Name</code> ולקבל את שם הקטגוריה.</td></tr>
+    </table>
+    <div class="explanation">
+        <strong>💡 השמות חשובים:</strong> בזכות השם <code class="inline">CategoryId</code> (שם ה-Property <code class="inline">Category</code> ועוד <code class="inline">Id</code>), Entity Framework מבין לבד שזה מפתח זר לטבלת הקטגוריות.
+    </div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. מסד הנתונים</h2>
+    <ul class="step-list">
+        <li>ב-<code class="inline">Data/ApplicationDbContext.cs</code>, מתחת ל-<code class="inline">DbSet</code> של המוצרים, הוסיפו:
+<pre class="code-block">public DbSet&lt;Category&gt; Categories { get; set; }</pre>
+        </li>
+        <li>עצרו את האתר, ובחלון Package Manager Console הריצו (כל שורה בנפרד):
+<pre class="code-block">Add-Migration AddCategories
+Update-Database</pre>
+        </li>
+    </ul>
+    <div class="checkpoint">ב-SQL Server Object Explorer (אחרי רענון): נוספה טבלה <strong>dbo.Categories</strong>, ובטבלה <strong>dbo.Products</strong> נוספה עמודה <strong>CategoryId</strong>.</div>
+
+    <h3>מוסיפים כמה קטגוריות</h3>
+    <p>עוד אין לנו עמוד להוספת קטגוריות (במדריך 15 ניצור אחד בלחיצת כפתור), אז נוסיף אותן ישירות בטבלה:</p>
+    <ul class="step-list">
+        <li>ב-SQL Server Object Explorer, קליק ימני על <strong>dbo.Categories</strong> ← <strong>View Data</strong>.</li>
+        <li>בשורה הריקה בתחתית, הקלידו שם קטגוריה בעמודה <strong>Name</strong> (את Id משאירים ריק, הוא יתמלא לבד) ולחצו <span class="keyboard">Enter</span>.</li>
+        <li>הוסיפו כך 2-3 קטגוריות.</li>
+    </ul>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. רשימה נפתחת בטופס</h2>
+    <p>כדי לבחור קטגוריה בטופס, ה-Controller צריך לשלוח לו את רשימת הקטגוריות. ב-<code class="inline">ProductsController</code>, שנו את שני ה-<code class="inline">Create</code>:</p>
+<pre class="code-block">public IActionResult Create()
+{
+    ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
+    return View();
+}
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Create(Product product)
+{
+    if (!ModelState.IsValid)
+    {
+        ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
+        return View(product);
+    }
+
+    _context.Products.Add(product);
+    _context.SaveChanges();
+    return RedirectToAction("Index");
+}</pre>
+    <p><code class="inline">SelectList</code> יסומן באדום. <span class="keyboard">Ctrl+.</span> יוסיף <code class="inline">using Microsoft.AspNetCore.Mvc.Rendering;</code>.</p>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: ViewBag</span>
+        "שקית" שאפשר לשים בה מידע נוסף בשביל ה-View, חוץ מה-Model. ה-Model כאן הוא המוצר, ואת רשימת הקטגוריות שמים ב-ViewBag.
+    </div>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: SelectList</span>
+        רשימה מוכנה בשביל <code class="inline">&lt;select&gt;</code>. <code class="inline">"Id"</code> הוא הערך שנשמר כשבוחרים, ו-<code class="inline">"Name"</code> הוא הטקסט שהמשתמש רואה.
+    </div>
+    <div class="warning">
+        <strong>⚠️ למה פעמיים?</strong> אם הטופס לא תקין, מחזירים אותו שוב, וגם אז צריך את רשימת הקטגוריות. אם תשכחו את השורה ב-POST, הרשימה הנפתחת תהיה ריקה אחרי שגיאה.
+    </div>
+
+    <p>ב-<code class="inline">Views/Products/Create.cshtml</code>, הוסיפו בתוך הטופס, לפני כפתור השמירה:</p>
+<pre class="code-block">&lt;div class="mb-3"&gt;
+    &lt;label asp-for="CategoryId" class="form-label"&gt;&lt;/label&gt;
+    &lt;select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"&gt;
+        &lt;option value=""&gt;-- בחרו קטגוריה --&lt;/option&gt;
+    &lt;/select&gt;
+&lt;/div&gt;</pre>
+    <div class="checkpoint">בטופס הוספת מוצר יש רשימה נפתחת עם הקטגוריות שהוספתם. הוסיפו מוצר עם קטגוריה, ובדקו ב-View Data של dbo.Products שבעמודה CategoryId נשמר המספר הנכון.</div>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. מציגים את שם הקטגוריה ברשימה</h2>
+    <p>כברירת מחדל, כשמביאים מוצרים, Entity Framework <strong>לא</strong> מביא איתם את הקטגוריה (כדי לחסוך). צריך לבקש את זה במפורש עם <code class="inline">Include</code>. ב-Index של <code class="inline">ProductsController</code>, שנו את השורה הראשונה:</p>
+<pre class="code-block">var products = _context.Products.Include(p =&gt; p.Category).ToList();</pre>
+    <p>(אם <code class="inline">Include</code> באדום: <span class="keyboard">Ctrl+.</span> יוסיף <code class="inline">using Microsoft.EntityFrameworkCore;</code>.)</p>
+
+    <div class="concept">
+        <span class="concept-title">📖 מה זה p =&gt; p.Category?</span>
+        דרך קצרה לכתוב "לכל מוצר p, קח את ה-Category שלו". כאן היא אומרת ל-Include מה להביא יחד עם המוצרים.
+    </div>
+
+    <p>ב-<code class="inline">Views/Products/Index.cshtml</code>, הוסיפו עמודה לטבלה. בשורת הכותרות <code class="inline">&lt;th&gt;קטגוריה&lt;/th&gt;</code>, ובתוך הלולאה:</p>
+<pre class="code-block">&lt;td&gt;@product.Category?.Name&lt;/td&gt;</pre>
+    <div class="concept">
+        <span class="concept-title">📖 למה ?. ולא סתם נקודה?</span>
+        <code class="inline">?.</code> אומר "אם יש קטגוריה, קח את השם שלה. אם אין, אל תעשה כלום". למוצרים בלי קטגוריה, נקודה רגילה הייתה גורמת לשגיאה (NullReferenceException).
+    </div>
+    <div class="checkpoint">ברשימת המוצרים יש עמודת קטגוריה. למוצרים הישנים (בלי קטגוריה) היא ריקה.</div>
+
+    <!-- ===================== 6 ===================== -->
+    <h2>6. הכיוון השני: כל המוצרים בקטגוריה</h2>
+    <p>אפשר גם להתחיל מקטגוריה ולקבל את כל המוצרים שלה. הוסיפו ל-<code class="inline">ProductsController</code>:</p>
+<pre class="code-block">public IActionResult ByCategory(int id)
+{
+    var category = _context.Categories
+        .Include(c =&gt; c.Products)
+        .FirstOrDefault(c =&gt; c.Id == id);
+
+    if (category == null)
+    {
+        return NotFound();
+    }
+    return View(category);
+}</pre>
+    <p>וצרו לו View (קליק ימני ← Add View ← Razor View - Empty ← <code class="inline">ByCategory.cshtml</code>):</p>
+<pre class="code-block">@model Category
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+&lt;h1&gt;@Model.Name&lt;/h1&gt;
+
+@if (Model.Products.Count == 0)
+{
+    &lt;p&gt;אין עדיין מוצרים בקטגוריה הזאת.&lt;/p&gt;
+}
+
+&lt;ul&gt;
+    @foreach (var product in Model.Products)
+    {
+        &lt;li&gt;@product.Name: @product.Price ₪&lt;/li&gt;
+    }
+&lt;/ul&gt;</pre>
+    <div class="checkpoint">היכנסו ל-<code class="inline">/Products/ByCategory/1</code>. מופיעים כל המוצרים של הקטגוריה הראשונה.</div>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>Update-Database נכשל עם שגיאה על FOREIGN KEY:</strong> כנראה כתבתם <code class="inline">int CategoryId</code> בלי סימן שאלה. המוצרים הקיימים לא יכולים לקבל קטגוריה שלא קיימת. הוסיפו <code class="inline">?</code>, ואז הריצו <code class="inline">Remove-Migration</code>, ושוב <code class="inline">Add-Migration</code> ו-<code class="inline">Update-Database</code>.</li>
+            <li><strong>הרשימה הנפתחת ריקה:</strong> אין קטגוריות בטבלה (סעיף 3), או ששכחתם את שורת ה-<code class="inline">ViewBag</code> ב-Action.</li>
+            <li><strong>עמודת הקטגוריה תמיד ריקה, גם למוצרים חדשים:</strong> חסר <code class="inline">.Include(p =&gt; p.Category)</code> ב-Index.</li>
+            <li><strong>NullReferenceException בעמוד הרשימה:</strong> כתבתם <code class="inline">product.Category.Name</code> במקום <code class="inline">product.Category?.Name</code>.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>בעמוד הפרטים של מוצר (<code class="inline">Details</code>), הציגו גם את שם הקטגוריה. (רמז: גם שם צריך <code class="inline">Include</code>, ובמקום <code class="inline">Find</code> משתמשים ב-<code class="inline">FirstOrDefault(p =&gt; p.Id == id)</code>.)</li>
+            <li>הפכו את שם הקטגוריה ברשימת המוצרים לקישור לעמוד <code class="inline">ByCategory</code> שלה.</li>
+            <li>בונוס: צרו קשר משלכם. למשל, מודל <code class="inline">Review</code> (ביקורת) עם טקסט וציון, כשלכל מוצר יש הרבה ביקורות.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>קשר אחד לרבים: במודל של ה"אחד" יש רשימה (<code class="inline">List&lt;Product&gt;</code>), ובמודל של ה"רבים" יש מפתח זר (<code class="inline">CategoryId</code>) ואובייקט (<code class="inline">Category</code>).</li>
+            <li><code class="inline">int?</code> מאפשר מוצר בלי קטגוריה, וזה מונע שגיאות עם נתונים שכבר קיימים.</li>
+            <li>רשימה נפתחת: <code class="inline">SelectList</code> ב-<code class="inline">ViewBag</code>, ו-<code class="inline">&lt;select asp-for asp-items&gt;</code> בטופס.</li>
+            <li>כדי לקבל גם את המידע המחובר צריך <code class="inline">Include</code>, ומציגים עם <code class="inline">?.</code>.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

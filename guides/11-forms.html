@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 11: טפסים</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="11-forms">
+<main>
+    <h1>מדריך 11: טפסים</h1>
+    <div class="subtitle">ממלאים טופס בדפדפן, והמידע מגיע לשרת</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> עד עכשיו המידע זרם בכיוון אחד: מהשרת לדפדפן. בטופס זה הפוך: המשתמש מקליד משהו, לוחץ "שמירה", והמידע נשלח לשרת. נבנה טופס להוספת מוצר חדש.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מדריך 10 (מודלים) הוא <strong>תנאי מקדים</strong>. צריך את המודל <code class="inline">Product</code> ואת <code class="inline">ProductsController</code> עם רשימת המוצרים.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. GET ו-POST</h2>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: GET ו-POST</span>
+        שני סוגים של בקשות שהדפדפן שולח לשרת. <strong>GET</strong> אומר "תביא לי עמוד" (קישור, הקלדת כתובת). <strong>POST</strong> אומר "הנה מידע, תעשה איתו משהו" (שליחת טופס).
+        <span class="example">דוגמה: כשנכנסים לעמוד "הוספת מוצר", הדפדפן שולח GET ומקבל טופס ריק. כשלוחצים "שמירה", הדפדפן שולח POST עם מה שהקלדתם.</span>
+    </div>
+    <p>לכן לטופס יש <strong>שני</strong> Actions באותו שם:</p>
+    <div class="flow">
+        <div class="step browser"><b>נכנסים לעמוד</b><span>GET ‏/Products/Create</span></div>
+        <div class="arrow">←</div>
+        <div class="step"><b>Action 1</b><span>מחזיר טופס ריק</span></div>
+        <div class="arrow">←</div>
+        <div class="step browser"><b>ממלאים ולוחצים "שמירה"</b><span>POST ‏/Products/Create</span></div>
+        <div class="arrow">←</div>
+        <div class="step"><b>Action 2</b><span>מקבל את המוצר ושומר</span></div>
+    </div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. ה-Actions ב-Controller</h2>
+    <p>ב-<code class="inline">ProductsController</code>, הוסיפו (בתוך המחלקה, אחרי ה-Actions הקיימים):</p>
+<pre class="code-block">// GET: מציג טופס ריק
+public IActionResult Create()
+{
+    return View();
+}
+
+// POST: מקבל את מה שהמשתמש מילא
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Create(Product product)
+{
+    product.Id = products.Max(p =&gt; p.Id) + 1;
+    products.Add(product);
+    return RedirectToAction("Index");
+}</pre>
+
+    <table class="simple">
+        <tr><th>מה</th><th>הסבר</th></tr>
+        <tr><td><code class="inline">// ...</code></td><td>הערה. C# מתעלמת ממנה, היא רק בשבילנו.</td></tr>
+        <tr><td><code class="inline">[HttpPost]</code></td><td>"ה-Action הזה מטפל רק בבקשות POST", כלומר רק בשליחת הטופס. בלי זה, לא היה ברור איזה מה-Create לבחור.</td></tr>
+        <tr><td><code class="inline">[ValidateAntiForgeryToken]</code></td><td>הגנה: מוודא שהטופס נשלח מהאתר שלכם, ולא מאתר זדוני שמנסה לשלוח בשמכם. תמיד שמים את זה על POST.</td></tr>
+        <tr><td><code class="inline">Create(Product product)</code></td><td>הקסם: ASP.NET לוקח את השדות שמילאו בטופס, ובונה מהם אובייקט <code class="inline">Product</code> מוכן.</td></tr>
+        <tr><td><code class="inline">products.Max(p =&gt; p.Id) + 1</code></td><td>נותנים למוצר החדש מספר: הגבוה ביותר ברשימה, ועוד 1.</td></tr>
+        <tr><td><code class="inline">RedirectToAction("Index")</code></td><td>אחרי השמירה, שולחים את המשתמש לרשימת המוצרים.</td></tr>
+    </table>
+
+    <div class="concept">
+        <span class="concept-title">📖 למה Redirect ולא סתם return View?</span>
+        אחרי שליחת טופס, אם המשתמש ירענן את העמוד, הדפדפן ישלח את הטופס <strong>שוב</strong>, והמוצר יתווסף פעמיים. <code class="inline">RedirectToAction</code> מעביר את הדפדפן לעמוד חדש (בבקשת GET), ואז רענון פשוט טוען שוב את הרשימה.
+    </div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. הטופס</h2>
+    <p>קליק ימני על <code class="inline">Create</code> (הראשון, בלי ה-<code class="inline">[HttpPost]</code>) ← <strong>Add View</strong> ← <strong>Razor View - Empty</strong> ← שם <code class="inline">Create.cshtml</code>. החליפו את התוכן ב:</p>
+<pre class="code-block">@model Product
+@{
+    ViewData["Title"] = "מוצר חדש";
+}
+
+&lt;h1&gt;הוספת מוצר&lt;/h1&gt;
+
+&lt;form asp-action="Create" method="post"&gt;
+    &lt;div class="mb-3"&gt;
+        &lt;label asp-for="Name" class="form-label"&gt;שם המוצר&lt;/label&gt;
+        &lt;input asp-for="Name" class="form-control" /&gt;
+    &lt;/div&gt;
+
+    &lt;div class="mb-3"&gt;
+        &lt;label asp-for="Price" class="form-label"&gt;מחיר&lt;/label&gt;
+        &lt;input asp-for="Price" class="form-control" /&gt;
+    &lt;/div&gt;
+
+    &lt;div class="mb-3"&gt;
+        &lt;label asp-for="Description" class="form-label"&gt;תיאור&lt;/label&gt;
+        &lt;textarea asp-for="Description" class="form-control"&gt;&lt;/textarea&gt;
+    &lt;/div&gt;
+
+    &lt;button type="submit" class="btn btn-success"&gt;שמירה&lt;/button&gt;
+    &lt;a asp-action="Index" class="btn btn-secondary"&gt;ביטול&lt;/a&gt;
+&lt;/form&gt;</pre>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: asp-for</span>
+        מחבר שדה בטופס ל-Property במודל. <code class="inline">asp-for="Name"</code> אומר "השדה הזה הוא ה-Name של המוצר". כך ASP.NET יודע לבנות את ה-<code class="inline">Product</code> כשהטופס מגיע לשרת.
+        <span class="example">דוגמה: <code class="inline">&lt;input asp-for="Price" /&gt;</code> הופך בדפדפן ל-<code class="inline">&lt;input name="Price" ... /&gt;</code>. כשהטופס נשלח, הערך של השדה Price נכנס ל-<code class="inline">product.Price</code>.</span>
+    </div>
+
+    <p>ולבסוף, כפתור שמוביל לטופס. בראש <code class="inline">Views/Products/Index.cshtml</code>, מתחת ל-<code class="inline">&lt;h1&gt;</code>, הוסיפו:</p>
+<pre class="code-block">&lt;a asp-action="Create" class="btn btn-primary mb-3"&gt;הוספת מוצר&lt;/a&gt;</pre>
+
+    <div class="checkpoint">היכנסו ל-<code class="inline">/Products</code>, לחצו "הוספת מוצר", מלאו את הטופס ולחצו "שמירה". חזרתם לרשימה, והמוצר החדש מופיע בה!</div>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. מציצים מאחורי הקלעים</h2>
+    <p>בעמוד הטופס, לחצו בדפדפן <span class="keyboard">Ctrl+U</span> ומצאו את ה-<code class="inline">&lt;form&gt;</code>. תראו:</p>
+    <ul>
+        <li>לכל שדה יש <code class="inline">name="Name"</code>, <code class="inline">name="Price"</code> וכו'. זה מה ש-<code class="inline">asp-for</code> יצר.</li>
+        <li>יש שדה נסתר בשם <code class="inline">__RequestVerificationToken</code> עם קוד ארוך. זו ההגנה שה-<code class="inline">[ValidateAntiForgeryToken]</code> בודק. הטופס הוסיף אותה לבד.</li>
+    </ul>
+
+    <div class="warning">
+        <strong>⚠️ שימו לב:</strong> כרגע אפשר לשמור מוצר בלי שם, או עם מחיר שלילי. במדריך 12 (בדיקת קלט) נלמד לחסום את זה, ולהציג הודעות שגיאה בעברית.
+    </div>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>המוצר נשמר, אבל השם או המחיר ריקים:</strong> הערך ב-<code class="inline">asp-for</code> לא זהה לשם ה-Property במודל. בדקו אותיות גדולות וקטנות: <code class="inline">Name</code> ולא <code class="inline">name</code>.</li>
+            <li><strong>שגיאה 400 (Bad Request) אחרי לחיצה על "שמירה":</strong> חסר שדה ההגנה. ודאו שה-<code class="inline">&lt;form&gt;</code> כתוב עם <code class="inline">asp-action</code> (ולא <code class="inline">action</code> רגיל), כי רק אז השדה נוסף לבד.</li>
+            <li><strong>לחיצה על "שמירה" לא עושה כלום, או מגיעה ל-404:</strong> בדקו שהכפתור הוא <code class="inline">type="submit"</code> ונמצא <strong>בתוך</strong> ה-<code class="inline">&lt;form&gt;</code>, ושיש Action עם <code class="inline">[HttpPost]</code>.</li>
+            <li><strong>"Sequence contains no elements":</strong> הרשימה ריקה, ואין מה לחשב ממנו <code class="inline">Max</code>. ודאו שיש לפחות מוצר אחד ברשימה ההתחלתית.</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>אם הוספתם במדריך 10 את התכונה <code class="inline">Stock</code> (מלאי), הוסיפו לה שדה בטופס.</li>
+            <li>בנו טופס "צור קשר" חדש: מודל <code class="inline">ContactMessage</code> עם שם, אימייל והודעה, Controller ששומר את ההודעות ברשימה <code class="inline">static</code>, ועמוד שמציג את כל ההודעות שהתקבלו.</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>לטופס יש שני Actions באותו שם: אחד מציג אותו (GET), ואחד עם <code class="inline">[HttpPost]</code> מקבל אותו.</li>
+            <li><code class="inline">asp-for</code> מחבר כל שדה ל-Property במודל, ו-ASP.NET בונה מהטופס אובייקט מוכן.</li>
+            <li>על כל POST שמים <code class="inline">[ValidateAntiForgeryToken]</code>, והטופס מוסיף את ההגנה לבד.</li>
+            <li>אחרי שמירה עושים <code class="inline">RedirectToAction</code>, כדי שרענון לא ישלח את הטופס שוב.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

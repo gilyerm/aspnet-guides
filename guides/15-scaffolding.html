@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מדריך 15: הכול בלחיצת כפתור</title>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="15-scaffolding">
+<main>
+    <h1>מדריך 15: הכול בלחיצת כפתור</h1>
+    <div class="subtitle">Scaffolding: עמודי הצגה, הוספה, עריכה ומחיקה שנוצרים לבד</div>
+
+    <div class="explanation">
+        <strong>💡 על מה המדריך הזה?</strong> במדריכים 10 עד 14 כתבנו ביד Controller ועמודים להצגה ולהוספה של מוצרים. זה חשוב כדי להבין איך זה עובד. אבל Visual Studio יודעת ליצור את כל זה לבד, כולל עריכה ומחיקה, בלחיצת כפתור. בפרויקט אמיתי זה חוסך שעות.
+        <br><br>
+        <strong>מה צריך לפני:</strong> מדריך 13 (מסד נתונים) הוא <strong>תנאי מקדים</strong>: צריך מודל שיש לו <code class="inline">DbSet</code> ב-<code class="inline">ApplicationDbContext</code>, וטבלה במסד הנתונים. בדוגמה נשתמש ב-<code class="inline">Category</code> ממדריך 14, אבל זה עובד עם כל מודל.
+    </div>
+
+    <div class="concept">
+        <span class="concept-title">📖 מושג: Scaffolding (פיגומים)</span>
+        יצירה אוטומטית של קוד: Visual Studio מסתכלת על המודל, ויוצרת Controller וחמישה עמודים מוכנים.
+        <span class="example">השם בא מפיגומים של בניין: מבנה זמני שמקימים מהר, ואחר כך מתאימים ומשפרים. ככה גם כאן: מקבלים עמודים שעובדים, ואז משנים אותם לפי הטעם.</span>
+    </div>
+    <div class="concept">
+        <span class="concept-title">📖 מושג: CRUD</span>
+        ראשי תיבות של ארבע הפעולות הבסיסיות על מידע: <strong>C</strong>reate (הוספה), <strong>R</strong>ead (הצגה), <strong>U</strong>pdate (עריכה), <strong>D</strong>elete (מחיקה). Scaffolding יוצר את כל הארבע.
+    </div>
+
+    <!-- ===================== 1 ===================== -->
+    <h2>1. יוצרים Controller עם עמודים</h2>
+    <ul class="step-list">
+        <li><strong>עצרו את האתר</strong>, ולחצו <span class="keyboard">Ctrl+Shift+B</span> (Build). ודאו שאין שגיאות ב-Error List. Scaffolding לא יעבוד אם יש שגיאות בקוד.</li>
+        <li>ב-Solution Explorer, קליק ימני על <strong>Controllers</strong> ← <strong>Add</strong> ← <strong>New Scaffolded Item</strong>.</li>
+        <li>בצד, בחרו <strong>MVC</strong>, ובמרכז בחרו <strong>MVC Controller with views, using Entity Framework</strong>. לחצו <strong>Add</strong>.</li>
+        <li>בחלון שנפתח:
+            <ul>
+                <li><strong>Model class:</strong> בחרו <code class="inline">Category</code>.</li>
+                <li><strong>DbContext class:</strong> בחרו <code class="inline">ApplicationDbContext</code>.</li>
+                <li>השאירו מסומנים את <strong>Generate views</strong>, <strong>Reference script libraries</strong> ו-<strong>Use a layout page</strong>.</li>
+                <li><strong>Controller name:</strong> יופיע <code class="inline">CategoriesController</code>. השאירו אותו.</li>
+            </ul>
+        </li>
+        <li>לחצו <strong>Add</strong>. בפעם הראשונה Visual Studio עשויה להתקין חבילות NuGet. זה לוקח קצת זמן, חכו בסבלנות.</li>
+    </ul>
+    <div class="screenshot">כאן תבוא תמונה של חלון Add MVC Controller with views, using Entity Framework, עם השדות ממולאים</div>
+
+    <div class="checkpoint">נוצרו: הקובץ <code class="inline">Controllers/CategoriesController.cs</code>, והתיקייה <code class="inline">Views/Categories</code> עם חמישה קבצים: Index, Details, Create, Edit, Delete.</div>
+
+    <!-- ===================== 2 ===================== -->
+    <h2>2. מנסים</h2>
+    <p>הריצו את האתר והיכנסו ל-<code class="inline">/Categories</code>.</p>
+    <table class="simple">
+        <tr><th>מה רואים</th><th>מה זה עושה</th><th>העמוד</th></tr>
+        <tr><td>טבלה עם כל הקטגוריות</td><td>הצגה (Read)</td><td>Index</td></tr>
+        <tr><td>הקישור <strong>Create New</strong></td><td>הוספה (Create)</td><td>Create</td></tr>
+        <tr><td>הקישור <strong>Edit</strong> בכל שורה</td><td>עריכה (Update)</td><td>Edit</td></tr>
+        <tr><td>הקישור <strong>Details</strong> בכל שורה</td><td>הצגה של פריט אחד</td><td>Details</td></tr>
+        <tr><td>הקישור <strong>Delete</strong> בכל שורה</td><td>מחיקה, אחרי עמוד אישור (Delete)</td><td>Delete</td></tr>
+    </table>
+    <div class="checkpoint">הוסיפו קטגוריה, ערכו את השם שלה, ומחקו אותה. הכול עובד ונשמר במסד הנתונים, ולא כתבתם שורת קוד אחת!</div>
+
+    <!-- ===================== 3 ===================== -->
+    <h2>3. קוראים את הקוד שנוצר</h2>
+    <p>פתחו את <code class="inline">CategoriesController.cs</code>. רוב הקוד דומה למה שכתבנו בעצמנו במדריכים 11 ו-13, עם כמה תוספות:</p>
+    <table class="simple">
+        <tr><th>מה רואים</th><th>מה זה</th></tr>
+        <tr><td><code class="inline">async</code>, <code class="inline">await</code>, <code class="inline">Task&lt;IActionResult&gt;</code>, <code class="inline">ToListAsync()</code></td><td>גרסה "אסינכרונית" של אותו קוד: בזמן שהשרת מחכה למסד הנתונים, הוא יכול לטפל בבקשות של משתמשים אחרים. <strong>זה תקין, אל תיבהלו.</strong> מבחינתנו, זה עושה בדיוק אותו דבר כמו <code class="inline">ToList()</code>.</td></tr>
+        <tr><td><code class="inline">int? id</code> ו-<code class="inline">if (id == null) return NotFound();</code></td><td>בדיקה שבכתובת באמת יש מספר. אם מישהו נכנס ל-<code class="inline">/Categories/Edit</code> בלי מספר, הוא יקבל 404 במקום שגיאה.</td></tr>
+        <tr><td><code class="inline">[Bind("Id,Name")]</code></td><td>הגנה: רק השדות האלה יילקחו מהטופס. גם אם מישהו "מוסיף" לטופס שדה אחר, הוא לא ייכנס.</td></tr>
+        <tr><td><code class="inline">DeleteConfirmed</code></td><td>המחיקה בשני שלבים: עמוד Delete (GET) שואל "בטוחים?", ורק לחיצה על הכפתור שם (POST) באמת מוחקת.</td></tr>
+        <tr><td><code class="inline">_context.Update(category)</code></td><td>שמירת שינויים בעריכה. כמו <code class="inline">Add</code>, אבל לשורה שכבר קיימת.</td></tr>
+    </table>
+
+    <!-- ===================== 4 ===================== -->
+    <h2>4. מתאימים את העמודים</h2>
+    <p>העמודים שנוצרו באנגלית ובסגנון בסיסי. הם קבצי cshtml רגילים, ואפשר לשנות בהם הכול:</p>
+    <ul class="step-list">
+        <li><strong>תרגום:</strong> בכל אחד מחמשת הקבצים ב-<code class="inline">Views/Categories</code>, החליפו את הטקסטים באנגלית. לדוגמה: <code class="inline">Create New</code> ← הוספת קטגוריה, <code class="inline">Edit</code> ← עריכה, <code class="inline">Details</code> ← פרטים, <code class="inline">Delete</code> ← מחיקה, <code class="inline">Back to List</code> ← חזרה לרשימה, <code class="inline">Save</code> ← שמירה, <code class="inline">Create</code> ← הוספה, <code class="inline">Are you sure you want to delete this?</code> ← בטוחים שרוצים למחוק?. גם הכותרות (<code class="inline">&lt;h1&gt;</code>) ו-<code class="inline">ViewData["Title"]</code>.</li>
+        <li><strong>שמות העמודות:</strong> הכותרות בטבלה מגיעות מה-<code class="inline">[Display(Name = "...")]</code> שבמודל. אם הוספתם אותו במדריכים 12 ו-14, הן כבר בעברית.</li>
+        <li><strong>עיצוב:</strong> אפשר להוסיף קלאסים של Bootstrap (מדריך 9). למשל, להפוך את הקישורים לכפתורים: <code class="inline">class="btn btn-sm btn-primary"</code>.</li>
+        <li><strong>קישור בתפריט:</strong> הוסיפו ב-<code class="inline">_Layout.cshtml</code> קישור עם <code class="inline">asp-controller="Categories" asp-action="Index"</code> (מדריך 6).</li>
+    </ul>
+
+    <!-- ===================== 5 ===================== -->
+    <h2>5. Scaffolding למודל עם קשר</h2>
+    <p>אם עושים Scaffolding למודל שיש בו מפתח זר (כמו <code class="inline">Product</code> עם <code class="inline">CategoryId</code>), Visual Studio יוצרת רשימה נפתחת לבד. יש רק דבר אחד לתקן: ברשימה יופיעו מספרים (Id) במקום שמות.</p>
+    <p>ב-Controller שנוצר, חפשו שורות כאלה (הן מופיעות בכמה Actions):</p>
+<pre class="code-block">ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id");</pre>
+    <p>ושנו בכל אחת את ה-<code class="inline">"Id"</code> <strong>השני</strong> ל-<code class="inline">"Name"</code>:</p>
+<pre class="code-block">ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");</pre>
+
+    <div class="warning">
+        <strong>⚠️ כבר יש לכם ProductsController?</strong> Scaffolding לא יכול ליצור Controller בשם שכבר קיים. אם תרצו לנסות על מוצרים, תנו שם אחר (למשל <code class="inline">ProductsAdminController</code>, כעמודי ניהול), או מחקו קודם את הישן.
+    </div>
+
+    <div class="warning">
+        <strong>⚠️ חשוב לפני שמעלים את האתר:</strong> כרגע <strong>כל אחד</strong> יכול להוסיף, לערוך ולמחוק. במדריך 17 (עבודה עם משתמשים) נלמד לחסום את העמודים האלה, כך שרק מנהל יוכל להיכנס אליהם.
+    </div>
+
+    <!-- ===================== troubleshooting ===================== -->
+    <div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>"There was an error running the selected code generator":</strong> הסיבה הנפוצה היא שגיאות בקוד. עשו Build (<span class="keyboard">Ctrl+Shift+B</span>) ותקנו את כל השגיאות. ודאו שהאתר לא רץ.</li>
+            <li><strong>שגיאה על גרסאות של חבילות:</strong> ב-Manage NuGet Packages, בלשונית <strong>Installed</strong>, ודאו שכל החבילות שמתחילות ב-<code class="inline">Microsoft.EntityFrameworkCore</code> וב-<code class="inline">Microsoft.VisualStudio.Web.CodeGeneration</code> באותה גרסה ראשית כמו ה-.NET (למשל 10.x.x).</li>
+            <li><strong>המודל לא מופיע ברשימה של Model class:</strong> עשו Build ונסו שוב.</li>
+            <li><strong>"Invalid object name 'Categories'" כשנכנסים לעמוד:</strong> אין טבלה. הוספתם <code class="inline">DbSet</code>, אבל לא הרצתם <code class="inline">Add-Migration</code> ו-<code class="inline">Update-Database</code> (מדריך 13).</li>
+        </ul>
+    </div>
+
+    <div class="exercise">
+        <h3>✏️ תרגיל</h3>
+        <ol>
+            <li>תרגמו לעברית את חמשת העמודים של הקטגוריות, והפכו את הקישורים בטבלה לכפתורי Bootstrap.</li>
+            <li>צרו מודל חדש משלכם (למשל <code class="inline">Event</code> עם שם, תאריך ומקום), הוסיפו לו <code class="inline">DbSet</code> ו-Migration, ועשו לו Scaffolding.</li>
+            <li>השוו את ה-<code class="inline">Create</code> שנוצר ל-<code class="inline">Create</code> שכתבתם ב-ProductsController. מה דומה? מה שונה?</li>
+        </ol>
+    </div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul>
+            <li>Scaffolding יוצר Controller וחמישה עמודים (CRUD) ממודל שיש לו טבלה: קליק ימני על Controllers ← Add ← New Scaffolded Item ← MVC Controller with views, using Entity Framework.</li>
+            <li>הקוד שנוצר דומה למה שכתבנו ביד, עם <code class="inline">async</code>/<code class="inline">await</code>, שעושה אותו דבר.</li>
+            <li>העמודים הם cshtml רגילים: מתרגמים, מעצבים ומוסיפים לתפריט.</li>
+            <li>ברשימה נפתחת שנוצרה לבד, מחליפים <code class="inline">"Id", "Id"</code> ב-<code class="inline">"Id", "Name"</code>.</li>
+        </ul>
+    </div>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>
