@@ -682,7 +682,7 @@ public IActionResult PageNotFound()
             'השורה התחתונה של האתר.',
             [('ב-_Layout.cshtml, בתוך ה-footer', '''
 <div class="container text-center">
-    &copy; 2026 · האתר של דנה ·
+    &copy; 2027 · האתר של גיל ·
     <a asp-controller="Home" asp-action="Privacy">פרטיות</a> ·
     <a href="mailto:dana@example.com">צרו קשר</a>
 </div>''')]),
