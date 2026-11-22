@@ -242,6 +242,24 @@
         }
     }
 
+    // ---------- טבלאות: עטיפה שגוללת הצידה, ובטלפון שורות שהופכות לכרטיסים ----------
+    document.querySelectorAll('main table.simple').forEach(function (t) {
+        var wrap = el('div', { 'class': 'table-wrap' });
+        t.parentNode.insertBefore(wrap, t);
+        wrap.appendChild(t);
+        if (t.classList.contains('fill')) return;
+        var rows = t.querySelectorAll('tr');
+        var head = rows[0];
+        if (!head || head.querySelector('td')) return;
+        var labels = [].map.call(head.children, function (c) { return c.textContent.trim(); });
+        if (labels.length < 3) return;
+        head.classList.add('head-row');
+        t.classList.add('stack');
+        [].slice.call(rows, 1).forEach(function (r) {
+            [].forEach.call(r.children, function (c, i) { if (labels[i]) c.setAttribute('data-label', labels[i]); });
+        });
+    });
+
     // ---------- צביעת קוד (Prism, שמור בתיקייה assets/vendor) ----------
     function detectLanguage(text) {
         var t = text.trim();

@@ -419,11 +419,15 @@ pre.code-block .change { background: #574800; color: #FFE45C; border-radius: 2px
 /* =====================================================================
    טבלאות
    ===================================================================== */
-table.simple { border-collapse: collapse; width: 100%; margin: 1rem 0 1.4rem; font-size: 0.95rem; }
-table.simple th, table.simple td { border-bottom: 1px solid var(--line); padding: 0.6rem 0.7rem; text-align: right; vertical-align: top; overflow-wrap: anywhere; }
-table.simple th { font-weight: 700; border-bottom: 2px solid var(--line-strong); background: var(--page-2); }
-table.simple tbody tr:hover td, table.simple tr:hover td { background: var(--page-2); }
-table.fill td { height: 2.4rem; border: 1px solid var(--line); }
+.table-wrap { margin: 1rem 0 1.4rem; overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--page); }
+table.simple { border-collapse: collapse; width: 100%; margin: 0; font-size: 0.95rem; }
+table.simple th, table.simple td { border-bottom: 1px solid var(--line); padding: 0.6rem 0.8rem; text-align: right; vertical-align: top; overflow-wrap: break-word; }
+table.simple tr:last-child > td { border-bottom: 0; }
+table.simple th { font-weight: 700; border-bottom: 1px solid var(--line-strong); background: var(--page-2); white-space: nowrap; }
+table.simple tr:hover > td { background: var(--page-2); }
+table.simple td:first-child { font-weight: 500; }
+table.fill td { height: 2.4rem; }
+table.fill td + td, table.fill th + th { border-right: 1px solid var(--line); }
 
 /* =====================================================================
    התיקיות (מדריך 1)
@@ -624,8 +628,18 @@ html[data-theme="dark"] .bm-code { color: var(--muted) !important; }
     .toc ul, .toc.deep ul ul { columns: 1; }
     .guide-pager { flex-direction: column; }
     .guide-pager a { max-width: none; }
-    table.simple { font-size: 0.9rem; }
-    table.simple th, table.simple td { padding: 0.45rem; }
+    table.simple { font-size: 0.92rem; }
+    table.simple th, table.simple td { padding: 0.5rem 0.6rem; }
+
+    /* טבלאות עם 3 עמודות ומעלה: כל שורה הופכת לכרטיס קטן */
+    .table-wrap:has(> table.stack) { border: 0; background: none; overflow: visible; }
+    main table.simple.stack, main table.simple.stack tbody, main table.simple.stack tr, main table.simple.stack td { display: block; width: auto; }
+    main table.simple.stack tr.head-row { display: none; }
+    main table.simple.stack tr { border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.8rem; margin-bottom: 0.6rem; background: var(--page); }
+    main table.simple.stack td { border: 0; padding: 0.15rem 0; text-align: right !important; white-space: normal !important; background: none !important; }
+    main table.simple.stack td:empty { display: none; }
+    main table.simple.stack td:first-child { font-weight: 700; padding-bottom: 0.3rem; }
+    main table.simple.stack td[data-label]:not(:first-child)::before { content: attr(data-label) ": "; color: var(--muted); font-weight: 500; }
     .step-list > li { padding-right: 2.5rem; }
     .editor pre { font-size: 0.78rem; min-height: 0; padding-right: 0.8rem; }
     .editor .ln { width: 1.6rem; padding-right: 0.6rem; }
