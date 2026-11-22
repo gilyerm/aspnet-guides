@@ -332,6 +332,19 @@
     //   <textarea data-lang="html">...</textarea> <textarea data-lang="css">...</textarea> <textarea data-lang="js">...</textarea>
     // </div>
     var pgCount = 0;
+    // סידור העורך והתוצאה: זה ליד זה או אחד מעל השני. הבחירה נשמרת ומשפיעה על כל העורכים באתר
+    var PG_LAYOUT_KEY = 'aspnet-guides-pg-layout';
+    var pgLayout = 'side';
+    try { pgLayout = localStorage.getItem(PG_LAYOUT_KEY) === 'stack' ? 'stack' : 'side'; } catch (e) { }
+    function setPgLayout(mode) {
+        pgLayout = mode;
+        try { localStorage.setItem(PG_LAYOUT_KEY, mode); } catch (e) { }
+        document.querySelectorAll('.playground').forEach(function (x) {
+            x.classList.toggle('pg-side', mode === 'side');
+            x.classList.toggle('pg-stack', mode === 'stack');
+            x.querySelectorAll('[data-layout]').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-layout') === mode); });
+        });
+    }
     var BOOTSTRAP_CSS = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css';
     document.querySelectorAll('.playground').forEach(function (pg) {
         var id = 'pg' + (++pgCount);
@@ -345,12 +358,23 @@
         var present = langs.filter(function (l) { return l in original; });
         var active = present[0];
 
+        // המשימה: שורה מעל העורך, כי זו הוראה לתלמיד ולא חלק מהחלון
+        var task = el('p', { 'class': 'pg-task' }, '<span aria-hidden="true">✏️</span> ' + (pg.getAttribute('data-title') || 'נסו בעצמכם: שנו את הקוד וראו מה קורה'));
+        pg.parentNode.insertBefore(task, pg);
+
+        // שורת הלשוניות: כמו קבצים פתוחים ב-Visual Studio
+        var FILES = { html: 'index.html', css: 'style.css', js: 'script.js' };
         var bar = el('div', { 'class': 'pg-bar' },
-            '<span class="pg-title">✏️ ' + (pg.getAttribute('data-title') || 'נסו בעצמכם') + '</span>' +
-            '<span class="pg-tabs">' + present.map(function (l) {
-                return '<button type="button" data-tab="' + l + '"' + (l === active ? ' class="active"' : '') + '>' + names[l] + '</button>';
+            '<span class="pg-tabs" role="tablist">' + present.map(function (l) {
+                return '<button type="button" role="tab" data-tab="' + l + '" aria-selected="' + (l === active) + '" title="' + names[l] + '"' +
+                    (l === active ? ' class="active"' : '') + '><span class="pg-file pg-file-' + l + '" aria-hidden="true"></span>' + FILES[l] + '</button>';
             }).join('') + '</span>' +
-            '<span class="pg-actions"><button type="button" data-act="reset">↺ איפוס</button></span>');
+            '<span class="pg-actions">' +
+            '<span class="pg-layout" role="group" aria-label="סידור">' +
+            '<button type="button" data-layout="side" title="זה ליד זה" aria-label="זה ליד זה"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M8 2.5v11"/></svg></button>' +
+            '<button type="button" data-layout="stack" title="אחד מעל השני" aria-label="אחד מעל השני"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M1.5 8h13"/></svg></button>' +
+            '</span>' +
+            '<button type="button" class="pg-reset" data-act="reset" title="החזרת הקוד המקורי">↺ איפוס</button></span>');
         var editor = el('textarea', { 'class': 'pg-editor', spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', 'aria-label': 'עורך קוד' });
         editor.value = current[active];
         // שכבת צבעים מתחת לתיבת הטקסט: מקלידים בתיבה (שהטקסט שלה שקוף) ורואים את הקוד הצבוע מתחתיה
@@ -378,15 +402,25 @@
         withPrism(paintCode);
         var frame = el('iframe', { 'class': 'pg-frame', sandbox: 'allow-scripts allow-modals', title: 'תוצאה' });
         frame.style.height = (pg.getAttribute('data-height') || 220) + 'px';
-        editor.style.minHeight = (pg.getAttribute('data-height') || 220) + 'px';
-        var result = el('div', { 'class': 'pg-result' }, '<div class="pg-result-label">👀 התוצאה (מתעדכנת תוך כדי הקלדה)</div>');
+        // העורך גבוה מספיק כדי להראות את כל הקוד (עד גבול), גם כשהתוצאה קטנה
+        var maxLines = Math.max.apply(null, present.map(function (l) { return original[l].split('\n').length; }));
+        var fitHeight = Math.min(Math.round(maxLines * 21.9 + 30), 460);
+        editor.style.minHeight = Math.max(+(pg.getAttribute('data-height') || 220), fitHeight, 140) + 'px';
+        // התוצאה: בתוך "חלון דפדפן"
+        var result = el('div', { 'class': 'pg-result' },
+            '<div class="pg-chrome" aria-hidden="true"><span class="pg-dots"><i></i><i></i><i></i></span>' +
+            '<span class="pg-url">localhost</span><span class="pg-live">מתעדכן תוך כדי הקלדה</span></div>');
         result.appendChild(frame);
+        var editorPane = el('div', { 'class': 'pg-pane' });
+        editorPane.appendChild(bar);
+        editorPane.appendChild(codeBox);
         var body = el('div', { 'class': 'pg-body' });
-        body.appendChild(codeBox);
+        body.appendChild(editorPane);
         body.appendChild(result);
+        pg.classList.add('pg-' + pgLayout);
         var err = el('div', { 'class': 'pg-error' });
         var con = el('div', { 'class': 'pg-console' });
-        pg.appendChild(bar); pg.appendChild(body); pg.appendChild(err); pg.appendChild(con);
+        pg.appendChild(body); pg.appendChild(err); pg.appendChild(con);
 
         function render() {
             err.className = 'pg-error';
@@ -424,11 +458,16 @@
         bar.addEventListener('click', function (e) {
             var b = e.target.closest('button');
             if (!b) return;
-            if (b.getAttribute('data-tab')) {
+            if (b.getAttribute('data-layout')) {
+                setPgLayout(b.getAttribute('data-layout'));
+            } else if (b.getAttribute('data-tab')) {
                 active = b.getAttribute('data-tab');
                 editor.value = current[active];
                 paintCode();
-                bar.querySelectorAll('[data-tab]').forEach(function (x) { x.classList.toggle('active', x === b); });
+                bar.querySelectorAll('[data-tab]').forEach(function (x) {
+                    x.classList.toggle('active', x === b);
+                    x.setAttribute('aria-selected', x === b);
+                });
             } else if (b.getAttribute('data-act') === 'reset') {
                 present.forEach(function (l) { current[l] = original[l]; });
                 editor.value = current[active];
@@ -444,7 +483,7 @@
             } else if (e.data.con === 'clear') {
                 con.innerHTML = '';
             } else if (e.data.con) {
-                if (!con.childNodes.length) con.appendChild(el('div', { 'class': 'pg-console-title' }, '🖥️ Console (כמו F12 ← Console)'));
+                if (!con.childNodes.length) con.appendChild(el('div', { 'class': 'pg-console-title' }, 'Console (כמו F12 ← Console בדפדפן)'));
                 var line = el('div', { 'class': 'pg-line pgl-' + e.data.con });
                 var d = e.data.data;
                 if (e.data.con === 'table' && d && typeof d === 'object') {
@@ -476,6 +515,7 @@
         });
         render();
     });
+    if (pgCount) setPgLayout(pgLayout);
 
     // ---------- כפתור העתקה לכל בלוק קוד ----------
     document.querySelectorAll('pre.code-block').forEach(function (pre) {
