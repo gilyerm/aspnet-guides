@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap חלק ב': רכיבים שזזים</title>
+    <script src="../assets/theme-init.js"></script>
+    <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-guide="09b-bootstrap-components">
+<main>
+    <h1>Bootstrap חלק ב': רכיבים שזזים</h1>
+    <div class="subtitle">קרוסלה, חלון קופץ, שאלות נפתחות, לשוניות, תפריט צד והודעות, בלי לכתוב JavaScript</div>
+
+    <div class="explanation"><strong>💡 על מה העמוד הזה?</strong> ב<a href="09-bootstrap.html">מדריך 9</a> ראינו רכיבים שרק נראים טוב: כפתורים, כרטיסים, טבלאות. כאן נכיר רכיבים ש<strong>עושים</strong> משהו: נפתחים, מתחלפים וקופצים. ל-Bootstrap יש קובץ JavaScript משלו שמפעיל אותם, ולכן לרובם מספיק HTML עם כמה תכונות מיוחדות.
+        <br><br>
+        <strong>✏️ איך עובדים עם העמוד:</strong> בכל עורך קוד אפשר <strong>לשנות את הקוד</strong>, והתוצאה מתעדכנת מיד בחלון הדפדפן שלידו. אם יש כמה קבצים (index.html, style.css, script.js), לחצו על השם שלהם כדי לעבור ביניהם. ↺ איפוס מחזיר את הדוגמה למצב ההתחלתי, ושני הכפתורים הקטנים לידו מסדרים את העורך והתוצאה זה ליד זה או אחד מעל השני. אי אפשר לשבור כלום, אז תתפרעו!
+    </div>
+
+    <h2>1. איך זה עובד: תכונות data-bs</h2>
+<div class="concept"><span class="concept-title">📖 data-bs-...</span>תכונות שכותבים בתוך תגית HTML, ו"מדברות" עם ה-JavaScript של Bootstrap. <code class="inline">data-bs-toggle</code> אומר <strong>מה</strong> לעשות (לפתוח חלון, להחליף לשונית), ו-<code class="inline">data-bs-target</code> אומר <strong>על מי</strong>, לפי ה-<code class="inline">id</code> שלו עם <code class="inline">#</code> לפניו.<span class="example">דוגמה: <code class="inline">&lt;button data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#myModal&quot;&gt;</code> פירושו "כשלוחצים, פתח את החלון שה-id שלו myModal".</span></div>
+<p>בפרויקט שלכם זה כבר עובד, בלי להתקין כלום: בסוף <code class="inline">Views/Shared/_Layout.cshtml</code> יש שורה שטוענת את ה-JavaScript של Bootstrap. בדקו שהיא שם:</p>
+<pre class="code-block" data-lang="cshtml">&lt;script src=&quot;~/lib/bootstrap/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;</pre>
+<div class="warning"><strong>⚠️ חשוב: כל id פעם אחת בעמוד.</strong> אם יש שני רכיבים עם אותו <code class="inline">id</code>, הכפתור יפתח את הלא נכון (או אף אחד). זה קורה בעיקר בתוך <code class="inline">@foreach</code>, ולכן שם מוסיפים ל-id את המספר של הפריט, למשל <code class="inline">id=&quot;delete-@product.Id&quot;</code> (סעיף 3).</div>
+    <h2>2. קרוסלה (Carousel): שקופיות מתחלפות</h2>
+<p>מתאים לבאנר בדף הבית, או לכמה תמונות של אותו מוצר.</p>
+<div class="playground" data-title="נסו: שנו את 3000 ל-1000 (שנייה אחת לשקופית). ואז הוסיפו שקופית רביעית" data-height="300" data-bootstrap>
+<textarea data-lang="html">&lt;div id=&quot;mainCarousel&quot; class=&quot;carousel slide&quot; data-bs-ride=&quot;carousel&quot;&gt;
+    &lt;!-- הנקודות למטה --&gt;
+    &lt;div class=&quot;carousel-indicators&quot;&gt;
+        &lt;button type=&quot;button&quot; data-bs-target=&quot;#mainCarousel&quot; data-bs-slide-to=&quot;0&quot; class=&quot;active&quot;&gt;&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-bs-target=&quot;#mainCarousel&quot; data-bs-slide-to=&quot;1&quot;&gt;&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-bs-target=&quot;#mainCarousel&quot; data-bs-slide-to=&quot;2&quot;&gt;&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- השקופיות --&gt;
+    &lt;div class=&quot;carousel-inner&quot;&gt;
+        &lt;div class=&quot;carousel-item active&quot; data-bs-interval=&quot;3000&quot;&gt;
+            &lt;img src=&quot;https://placehold.co/800x320/5c2d91/ffffff?text=Sale&quot; class=&quot;d-block w-100&quot; alt=&quot;מבצע&quot;&gt;
+            &lt;div class=&quot;carousel-caption&quot;&gt;
+                &lt;h5&gt;מבצע סוף שנה&lt;/h5&gt;
+                &lt;p&gt;20% הנחה על הכול&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;carousel-item&quot; data-bs-interval=&quot;3000&quot;&gt;
+            &lt;img src=&quot;https://placehold.co/800x320/0d6efd/ffffff?text=New&quot; class=&quot;d-block w-100&quot; alt=&quot;חדש&quot;&gt;
+            &lt;div class=&quot;carousel-caption&quot;&gt;
+                &lt;h5&gt;הגיעו מוצרים חדשים&lt;/h5&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;carousel-item&quot; data-bs-interval=&quot;3000&quot;&gt;
+            &lt;img src=&quot;https://placehold.co/800x320/198754/ffffff?text=Delivery&quot; class=&quot;d-block w-100&quot; alt=&quot;משלוח&quot;&gt;
+            &lt;div class=&quot;carousel-caption&quot;&gt;
+                &lt;h5&gt;משלוח חינם מעל 100 ₪&lt;/h5&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- החצים --&gt;
+    &lt;button class=&quot;carousel-control-prev&quot; type=&quot;button&quot; data-bs-target=&quot;#mainCarousel&quot; data-bs-slide=&quot;prev&quot;&gt;
+        &lt;span class=&quot;carousel-control-prev-icon&quot;&gt;&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;button class=&quot;carousel-control-next&quot; type=&quot;button&quot; data-bs-target=&quot;#mainCarousel&quot; data-bs-slide=&quot;next&quot;&gt;
+        &lt;span class=&quot;carousel-control-next-icon&quot;&gt;&lt;/span&gt;
+    &lt;/button&gt;
+&lt;/div&gt;</textarea>
+</div>
+<table class="simple"><tr><th>חלק</th><th>מה הוא עושה</th></tr><tr><td><code class="inline">carousel slide</code></td><td>העטיפה של הכול. <code class="inline">slide</code> = אנימציה של החלקה (<code class="inline">carousel-fade</code> = היעלמות).</td></tr><tr><td><code class="inline">data-bs-ride=&quot;carousel&quot;</code></td><td>מתחילה להתחלף לבד כשהעמוד נטען. בלי זה, רק החצים מחליפים.</td></tr><tr><td><code class="inline">carousel-item active</code></td><td>שקופית. <code class="inline">active</code> = השקופית שמופיעה ראשונה. <strong>חייבת להיות בדיוק אחת כזו.</strong></td></tr><tr><td><code class="inline">data-bs-interval=&quot;3000&quot;</code></td><td>כמה זמן כל שקופית מוצגת, באלפיות שנייה (3000 = 3 שניות).</td></tr><tr><td><code class="inline">carousel-caption</code></td><td>טקסט מעל התמונה.</td></tr><tr><td><code class="inline">carousel-indicators</code>, <code class="inline">carousel-control-prev/next</code></td><td>הנקודות והחצים. אפשר למחוק אותם אם לא צריך.</td></tr></table>
+<h3>קרוסלה של מוצרים מהמסד</h3>
+<p>בפרויקט, השקופיות מגיעות מהמסד עם לולאה. הבעיה: רק לשקופית <strong>הראשונה</strong> צריך <code class="inline">active</code>. לכן משתמשים ב-<code class="inline">for</code> עם מונה <code class="inline">i</code>, ובודקים <code class="inline">i == 0</code>:</p>
+<pre class="code-block" data-lang="cshtml">@model List&lt;Product&gt;
+
+&lt;div id=&quot;productsCarousel&quot; class=&quot;carousel slide&quot; data-bs-ride=&quot;carousel&quot;&gt;
+    &lt;div class=&quot;carousel-inner&quot;&gt;
+        @for (int i = 0; i &lt; Model.Count; i++)
+        {
+            var product = Model[i];
+            &lt;div class=&quot;carousel-item @(i == 0 ? &quot;active&quot; : &quot;&quot;)&quot;&gt;
+                &lt;img src=&quot;@product.ImageUrl&quot; class=&quot;d-block w-100&quot; alt=&quot;@product.Name&quot; /&gt;
+                &lt;div class=&quot;carousel-caption&quot;&gt;
+                    &lt;h5&gt;@product.Name&lt;/h5&gt;
+                    &lt;p&gt;@product.Price ₪&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        }
+    &lt;/div&gt;
+    &lt;button class=&quot;carousel-control-prev&quot; type=&quot;button&quot; data-bs-target=&quot;#productsCarousel&quot; data-bs-slide=&quot;prev&quot;&gt;
+        &lt;span class=&quot;carousel-control-prev-icon&quot;&gt;&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;button class=&quot;carousel-control-next&quot; type=&quot;button&quot; data-bs-target=&quot;#productsCarousel&quot; data-bs-slide=&quot;next&quot;&gt;
+        &lt;span class=&quot;carousel-control-next-icon&quot;&gt;&lt;/span&gt;
+    &lt;/button&gt;
+&lt;/div&gt;</pre>
+<p class="change-note"><code class="inline">@(i == 0 ? &quot;active&quot; : &quot;&quot;)</code> פירושו: "אם זו השקופית הראשונה, כתוב active, אחרת אל תכתוב כלום". <code class="inline">ImageUrl</code> מגיע מ<a href="16-images.html">מדריך 16</a>. אם אין לכם תמונות, מחקו את שורת ה-<code class="inline">&lt;img&gt;</code> ותנו ל-<code class="inline">carousel-item</code> גובה וצבע רקע.</p>
+<div class="checkpoint">הקרוסלה מופיעה ומתחלפת? אם היא <strong>לא מופיעה בכלל</strong>, כנראה אף שקופית לא קיבלה <code class="inline">active</code>, או שהרשימה ריקה (אין מוצרים במסד).</div>
+    <h2>3. חלון קופץ (Modal)</h2>
+<p>חלון שמופיע מעל העמוד, והרקע מאחוריו מתכהה. מתאים לפרטים נוספים, לטופס קצר, ובעיקר לשאלה "בטוחים?" לפני מחיקה.</p>
+<div class="playground" data-title="נסו: הוסיפו modal-dialog-centered ל-class של modal-dialog, כדי שהחלון יופיע באמצע המסך" data-height="300" data-bootstrap>
+<textarea data-lang="html">&lt;button type=&quot;button&quot; class=&quot;btn btn-primary m-3&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#infoModal&quot;&gt;
+    פרטים על המשלוח
+&lt;/button&gt;
+
+&lt;div class=&quot;modal fade&quot; id=&quot;infoModal&quot; tabindex=&quot;-1&quot;&gt;
+    &lt;div class=&quot;modal-dialog&quot;&gt;
+        &lt;div class=&quot;modal-content&quot;&gt;
+            &lt;div class=&quot;modal-header&quot;&gt;
+                &lt;h5 class=&quot;modal-title&quot;&gt;משלוחים&lt;/h5&gt;
+                &lt;button type=&quot;button&quot; class=&quot;btn-close&quot; data-bs-dismiss=&quot;modal&quot;&gt;&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;modal-body&quot;&gt;
+                &lt;p&gt;משלוח עד הבית תוך 3 ימי עסקים. מעל 100 ₪ המשלוח חינם.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;modal-footer&quot;&gt;
+                &lt;button type=&quot;button&quot; class=&quot;btn btn-secondary&quot; data-bs-dismiss=&quot;modal&quot;&gt;סגירה&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</textarea>
+</div>
+<table class="simple"><tr><th>חלק</th><th>מה הוא עושה</th></tr><tr><td><code class="inline">data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#infoModal&quot;</code></td><td>על הכפתור: פותח את החלון שה-id שלו infoModal.</td></tr><tr><td><code class="inline">modal fade</code> + <code class="inline">id</code></td><td>החלון עצמו (מוסתר עד שפותחים אותו). <code class="inline">fade</code> = מופיע בהדרגה.</td></tr><tr><td><code class="inline">modal-header / modal-body / modal-footer</code></td><td>כותרת, תוכן וכפתורים בתחתית.</td></tr><tr><td><code class="inline">data-bs-dismiss=&quot;modal&quot;</code></td><td>על כפתור: סוגר את החלון.</td></tr></table>
+<h3>בפרויקט: "בטוחים שרוצים למחוק?"</h3>
+<p>חלון אחד לכל מוצר, בתוך ה-<code class="inline">@foreach</code>. בגלל זה ה-id כולל את <code class="inline">@product.Id</code>: כך לכל מוצר יש חלון משלו, והכפתור פותח את הנכון.</p>
+<pre class="code-block" data-lang="cshtml">@foreach (var product in Model)
+{
+    &lt;tr&gt;
+        &lt;td&gt;@product.Name&lt;/td&gt;
+        &lt;td&gt;
+            &lt;button type=&quot;button&quot; class=&quot;btn btn-sm btn-danger&quot;
+                    data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#delete-@product.Id&quot;&gt;
+                מחיקה
+            &lt;/button&gt;
+
+            &lt;div class=&quot;modal fade&quot; id=&quot;delete-@product.Id&quot; tabindex=&quot;-1&quot;&gt;
+                &lt;div class=&quot;modal-dialog modal-dialog-centered&quot;&gt;
+                    &lt;div class=&quot;modal-content&quot;&gt;
+                        &lt;div class=&quot;modal-header&quot;&gt;
+                            &lt;h5 class=&quot;modal-title&quot;&gt;מחיקת מוצר&lt;/h5&gt;
+                            &lt;button type=&quot;button&quot; class=&quot;btn-close&quot; data-bs-dismiss=&quot;modal&quot;&gt;&lt;/button&gt;
+                        &lt;/div&gt;
+                        &lt;div class=&quot;modal-body&quot;&gt;
+                            בטוחים שרוצים למחוק את &lt;strong&gt;@product.Name&lt;/strong&gt;? אי אפשר לבטל את זה.
+                        &lt;/div&gt;
+                        &lt;div class=&quot;modal-footer&quot;&gt;
+                            &lt;button type=&quot;button&quot; class=&quot;btn btn-secondary&quot; data-bs-dismiss=&quot;modal&quot;&gt;ביטול&lt;/button&gt;
+                            &lt;form asp-action=&quot;Delete&quot; asp-route-id=&quot;@product.Id&quot; method=&quot;post&quot;&gt;
+                                &lt;button type=&quot;submit&quot; class=&quot;btn btn-danger&quot;&gt;כן, למחוק&lt;/button&gt;
+                            &lt;/form&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+}</pre>
+<p class="change-note">הטופס שבתוך החלון שולח ל-Action בשם <code class="inline">Delete</code> עם POST. ה-Action הזה צריך להיות קיים ב-Controller (בספריית קטעי הקוד: <a href="snippets.html">"הוספה, עריכה ומחיקה"</a>).</p>
+    <h2>4. שאלות נפתחות (Accordion)</h2>
+<p>רשימה של כותרות, וכל אחת נפתחת כשלוחצים עליה. מושלם לעמוד "שאלות נפוצות".</p>
+<div class="playground" data-title="נסו: מחקו את שלושת ה-data-bs-parent=&quot;#faq&quot;. עכשיו אפשר לפתוח כמה שאלות בבת אחת" data-height="300" data-bootstrap>
+<textarea data-lang="html">&lt;div class=&quot;accordion&quot; id=&quot;faq&quot;&gt;
+    &lt;div class=&quot;accordion-item&quot;&gt;
+        &lt;h2 class=&quot;accordion-header&quot;&gt;
+            &lt;button class=&quot;accordion-button&quot; type=&quot;button&quot; data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#q1&quot;&gt;
+                כמה זמן לוקח משלוח?
+            &lt;/button&gt;
+        &lt;/h2&gt;
+        &lt;div id=&quot;q1&quot; class=&quot;accordion-collapse collapse show&quot; data-bs-parent=&quot;#faq&quot;&gt;
+            &lt;div class=&quot;accordion-body&quot;&gt;עד 3 ימי עסקים.&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;accordion-item&quot;&gt;
+        &lt;h2 class=&quot;accordion-header&quot;&gt;
+            &lt;button class=&quot;accordion-button collapsed&quot; type=&quot;button&quot; data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#q2&quot;&gt;
+                אפשר להחזיר מוצר?
+            &lt;/button&gt;
+        &lt;/h2&gt;
+        &lt;div id=&quot;q2&quot; class=&quot;accordion-collapse collapse&quot; data-bs-parent=&quot;#faq&quot;&gt;
+            &lt;div class=&quot;accordion-body&quot;&gt;כן, תוך 14 יום מהקנייה.&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;accordion-item&quot;&gt;
+        &lt;h2 class=&quot;accordion-header&quot;&gt;
+            &lt;button class=&quot;accordion-button collapsed&quot; type=&quot;button&quot; data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#q3&quot;&gt;
+                איך משלמים?
+            &lt;/button&gt;
+        &lt;/h2&gt;
+        &lt;div id=&quot;q3&quot; class=&quot;accordion-collapse collapse&quot; data-bs-parent=&quot;#faq&quot;&gt;
+            &lt;div class=&quot;accordion-body&quot;&gt;בכרטיס אשראי או ב-Bit.&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</textarea>
+</div>
+<table class="simple"><tr><th>חלק</th><th>מה הוא עושה</th></tr><tr><td><code class="inline">data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#q1&quot;</code></td><td>על הכותרת: פותח וסוגר את התשובה שה-id שלה q1.</td></tr><tr><td><code class="inline">collapse show</code></td><td>התשובה. <code class="inline">show</code> = פתוחה כבר בהתחלה.</td></tr><tr><td><code class="inline">collapsed</code></td><td>על הכפתור של שאלה סגורה (כדי שהחץ יצביע לכיוון הנכון).</td></tr><tr><td><code class="inline">data-bs-parent=&quot;#faq&quot;</code></td><td>כשפותחים שאלה אחת, האחרות נסגרות.</td></tr></table>
+    <h2>5. לשוניות (Tabs)</h2>
+<p>כמה "עמודים" באותו מקום, ומחליפים ביניהם בלי לטעון את העמוד מחדש. למשל בעמוד מוצר: תיאור, מפרט וביקורות.</p>
+<div class="playground" data-title="נסו: החליפו nav-tabs ב-nav-pills" data-height="200" data-bootstrap>
+<textarea data-lang="html">&lt;ul class=&quot;nav nav-tabs&quot; role=&quot;tablist&quot;&gt;
+    &lt;li class=&quot;nav-item&quot;&gt;
+        &lt;button class=&quot;nav-link active&quot; data-bs-toggle=&quot;tab&quot; data-bs-target=&quot;#desc&quot; type=&quot;button&quot;&gt;תיאור&lt;/button&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;nav-item&quot;&gt;
+        &lt;button class=&quot;nav-link&quot; data-bs-toggle=&quot;tab&quot; data-bs-target=&quot;#specs&quot; type=&quot;button&quot;&gt;מפרט&lt;/button&gt;
+    &lt;/li&gt;
+    &lt;li class=&quot;nav-item&quot;&gt;
+        &lt;button class=&quot;nav-link&quot; data-bs-toggle=&quot;tab&quot; data-bs-target=&quot;#reviews&quot; type=&quot;button&quot;&gt;ביקורות&lt;/button&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;tab-content border border-top-0 p-3&quot;&gt;
+    &lt;div class=&quot;tab-pane fade show active&quot; id=&quot;desc&quot;&gt;תיק גב עמיד למים, עם תא למחשב נייד.&lt;/div&gt;
+    &lt;div class=&quot;tab-pane fade&quot; id=&quot;specs&quot;&gt;נפח: 25 ליטר. משקל: 700 גרם.&lt;/div&gt;
+    &lt;div class=&quot;tab-pane fade&quot; id=&quot;reviews&quot;&gt;⭐⭐⭐⭐⭐ &quot;התיק הכי נוח שהיה לי!&quot;&lt;/div&gt;
+&lt;/div&gt;</textarea>
+</div>
+<p>כמו בקרוסלה: הלשונית הראשונה וגם התוכן הראשון מקבלים <code class="inline">active</code> (והתוכן גם <code class="inline">show</code>).</p>
+    <h2>6. תפריט שנשלף מהצד (Offcanvas)</h2>
+<p>חלונית שנכנסת מצד המסך. מתאים לעגלת קניות, לסינון מוצרים, או לתפריט בטלפון.</p>
+<div class="playground" data-title="נסו: החליפו offcanvas-end ב-offcanvas-start, ואחר כך ב-offcanvas-bottom" data-height="300" data-bootstrap>
+<textarea data-lang="html">&lt;button class=&quot;btn btn-success m-3&quot; type=&quot;button&quot; data-bs-toggle=&quot;offcanvas&quot; data-bs-target=&quot;#cart&quot;&gt;
+    🛒 העגלה שלי
+&lt;/button&gt;
+
+&lt;div class=&quot;offcanvas offcanvas-end&quot; tabindex=&quot;-1&quot; id=&quot;cart&quot;&gt;
+    &lt;div class=&quot;offcanvas-header&quot;&gt;
+        &lt;h5 class=&quot;offcanvas-title&quot;&gt;העגלה שלי&lt;/h5&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn-close&quot; data-bs-dismiss=&quot;offcanvas&quot;&gt;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;offcanvas-body&quot;&gt;
+        &lt;ul class=&quot;list-group mb-3&quot;&gt;
+            &lt;li class=&quot;list-group-item d-flex justify-content-between&quot;&gt;תיק גב &lt;span&gt;89 ₪&lt;/span&gt;&lt;/li&gt;
+            &lt;li class=&quot;list-group-item d-flex justify-content-between&quot;&gt;מחברת &lt;span&gt;12 ₪&lt;/span&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button class=&quot;btn btn-primary w-100&quot;&gt;לתשלום&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</textarea>
+</div>
+<p><code class="inline">offcanvas-end</code> = מהסוף של השורה. באתר בעברית (מימין לשמאל) הסוף הוא <strong>שמאל</strong>, ו-<code class="inline">offcanvas-start</code> נכנס מימין.</p>
+    <h2>7. הודעה קופצת (Toast) והסבר צף (Tooltip)</h2>
+<p>שני רכיבים ש-Bootstrap לא מפעיל לבד, ולכן צריך שורה או שתיים של JavaScript.</p>
+<h3>Toast: "המוצר נוסף לעגלה"</h3>
+<div class="playground" data-title="נסו: לחצו על הכפתור. ואז שנו text-bg-success ל-text-bg-danger" data-height="200" data-bootstrap>
+<textarea data-lang="html">&lt;button id=&quot;addBtn&quot; class=&quot;btn btn-primary m-3&quot;&gt;הוספה לעגלה&lt;/button&gt;
+
+&lt;div class=&quot;toast-container position-fixed bottom-0 start-0 p-3&quot;&gt;
+    &lt;div id=&quot;cartToast&quot; class=&quot;toast text-bg-success&quot;&gt;
+        &lt;div class=&quot;toast-body d-flex justify-content-between&quot;&gt;
+            ✓ המוצר נוסף לעגלה
+            &lt;button type=&quot;button&quot; class=&quot;btn-close btn-close-white&quot; data-bs-dismiss=&quot;toast&quot;&gt;&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</textarea>
+<textarea data-lang="js">document.getElementById(&quot;addBtn&quot;).addEventListener(&quot;click&quot;, function () {
+    var toast = bootstrap.Toast.getOrCreateInstance(document.getElementById(&quot;cartToast&quot;));
+    toast.show();
+});</textarea>
+</div>
+<p class="change-note"><code class="inline">bootstrap.Toast.getOrCreateInstance(...)</code> לוקח את ה-div של ההודעה, ו-<code class="inline">.show()</code> מציג אותה. אחרי 5 שניות היא נעלמת לבד.</p>
+<h3>Tooltip: הסבר קטן כשהעכבר מעל</h3>
+<div class="playground" data-title="נסו: עברו עם העכבר על הכפתורים. ואז שנו את הטקסט ב-data-bs-title" data-height="160" data-bootstrap>
+<textarea data-lang="html">&lt;div class=&quot;p-4&quot;&gt;
+    &lt;button class=&quot;btn btn-outline-danger&quot; data-bs-toggle=&quot;tooltip&quot; data-bs-title=&quot;מחיקת המוצר&quot;&gt;🗑️&lt;/button&gt;
+    &lt;button class=&quot;btn btn-outline-primary&quot; data-bs-toggle=&quot;tooltip&quot; data-bs-title=&quot;עריכה&quot;&gt;✏️&lt;/button&gt;
+    &lt;button class=&quot;btn btn-outline-secondary&quot; data-bs-toggle=&quot;tooltip&quot; data-bs-placement=&quot;bottom&quot; data-bs-title=&quot;אני מופיע למטה&quot;&gt;⬇️&lt;/button&gt;
+&lt;/div&gt;</textarea>
+<textarea data-lang="js">// מפעיל את כל ה-tooltips בעמוד
+document.querySelectorAll(&#x27;[data-bs-toggle=&quot;tooltip&quot;]&#x27;).forEach(function (el) {
+    new bootstrap.Tooltip(el);
+});</textarea>
+</div>
+<p class="change-note">בפרויקט, את שלוש השורות של ה-JavaScript שמים פעם אחת ב-<code class="inline">wwwroot/js/site.js</code>, וכל כפתור עם <code class="inline">data-bs-toggle=&quot;tooltip&quot;</code> באתר יקבל הסבר.</p>
+    <h2>8. תוספות קטנות שעושות הרבה</h2>
+<p>אלה לא זזים, אבל הם הופכים אתר לנראה מקצועי, וכולם עובדים עם CSS בלבד:</p>
+<div class="playground" data-title="נסו: שנו את 60% ל-90%, ולחצו על שדה האימייל" data-height="280" data-bootstrap>
+<textarea data-lang="html">&lt;div class=&quot;p-3&quot;&gt;
+    &lt;!-- Badge: מספר קטן ליד כפתור --&gt;
+    &lt;button class=&quot;btn btn-primary position-relative&quot;&gt;
+        🛒 עגלה
+        &lt;span class=&quot;position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger&quot;&gt;3&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;span class=&quot;badge text-bg-success ms-3&quot;&gt;חדש!&lt;/span&gt;
+
+    &lt;!-- Spinner: &quot;טוען...&quot; --&gt;
+    &lt;div class=&quot;d-flex align-items-center gap-2 my-3&quot;&gt;
+        &lt;div class=&quot;spinner-border spinner-border-sm text-primary&quot;&gt;&lt;/div&gt; טוען מוצרים...
+    &lt;/div&gt;
+
+    &lt;!-- Progress: פס התקדמות --&gt;
+    &lt;div class=&quot;progress mb-3&quot;&gt;
+        &lt;div class=&quot;progress-bar&quot; style=&quot;width: 60%&quot;&gt;60%&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Floating label: התווית &quot;צפה&quot; מעל השדה --&gt;
+    &lt;div class=&quot;form-floating&quot;&gt;
+        &lt;input type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;mail&quot; placeholder=&quot;name@example.com&quot;&gt;
+        &lt;label for=&quot;mail&quot;&gt;אימייל&lt;/label&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</textarea>
+</div>
+<table class="simple"><tr><th>רכיב</th><th>class עיקרי</th><th>מתי</th></tr><tr><td>Badge</td><td><code class="inline">badge text-bg-danger</code></td><td>מספר על אייקון (פריטים בעגלה), תגית "חדש" או "מבצע".</td></tr><tr><td>Spinner</td><td><code class="inline">spinner-border</code></td><td>כשמשהו נטען.</td></tr><tr><td>Progress</td><td><code class="inline">progress</code> + <code class="inline">progress-bar</code></td><td>כמה הושלם: שלבי הרשמה, ציון.</td></tr><tr><td>Floating label</td><td><code class="inline">form-floating</code></td><td>טפסי הרשמה והתחברות. שימו לב: ה-<code class="inline">&lt;input&gt;</code> לפני ה-<code class="inline">&lt;label&gt;</code>, וחייב <code class="inline">placeholder</code>.</td></tr></table>
+<div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>לוחצים ולא קורה כלום:</strong> בדקו שה-<code class="inline">data-bs-target</code> מתחיל ב-<code class="inline">#</code>, ושהשם אחרי ה-<code class="inline">#</code> זהה בדיוק ל-<code class="inline">id</code> (כולל אותיות גדולות וקטנות).</li>
+            <li><strong>אף רכיב לא עובד באתר:</strong> בדקו שהשורה של <code class="inline">bootstrap.bundle.min.js</code> קיימת בסוף <code class="inline">_Layout.cshtml</code>. בכלי המפתחים (F12 ← Console) תופיע שגיאה כמו <code class="inline">bootstrap is not defined</code>.</li>
+            <li><strong>הקרוסלה לא מופיעה:</strong> אין אף <code class="inline">carousel-item</code> עם <code class="inline">active</code>, או שיש יותר מאחד.</li>
+            <li><strong>הכפתור בתוך הלולאה פותח את החלון של מוצר אחר:</strong> ה-<code class="inline">id</code> לא ייחודי. הוסיפו לו <code class="inline">@product.Id</code> (סעיף 3).</li>
+            <li><strong>Tooltip או Toast לא מופיעים:</strong> הם צריכים את שורות ה-JavaScript מסעיף 7. בלעדיהן, Bootstrap לא מפעיל אותם.</li>
+        </ul>
+    </div>
+<div class="exercise"><h3>✏️ תרגיל מסכם: עמוד מוצר</h3><ol>
+        <li>בעמוד <code class="inline">Details</code> של מוצר, הוסיפו קרוסלה עם 3 תמונות (אפשר מ-placehold.co).</li>
+        <li>מתחתיה, לשוניות: "תיאור" (עם <code class="inline">@Model.Description</code>), "מפרט" ו"משלוחים".</li>
+        <li>הוסיפו כפתור "הוספה לעגלה" שמציג Toast.</li>
+        <li>בונוס: ב-<code class="inline">Index</code>, החליפו את המחיקה ב-Modal של "בטוחים?" מסעיף 3.</li>
+    </ol></div>
+
+    <div class="summary">
+        <h3>📌 מה למדנו</h3>
+        <ul><li>תכונות <code class="inline">data-bs-toggle</code> ו-<code class="inline">data-bs-target=&quot;#id&quot;</code> מפעילות רכיבים בלי לכתוב JavaScript.</li>
+<li>Carousel, Modal, Accordion, Tabs ו-Offcanvas: רק HTML. Toast ו-Tooltip: צריך שורת JavaScript.</li>
+<li>בקרוסלה ובלשוניות: בדיוק פריט אחד עם <code class="inline">active</code>. מהמסד: <code class="inline">@(i == 0 ? &quot;active&quot; : &quot;&quot;)</code>.</li>
+<li>בתוך <code class="inline">@foreach</code>, כל id צריך להיות ייחודי: מוסיפים <code class="inline">@product.Id</code>.</li></ul>
+    </div>
+    <p style="margin-top:1.5rem">🔎 <strong>רוצים עוד?</strong> כל הרכיבים, עם עוד אפשרויות: <a href="https://getbootstrap.com/docs/5.3/components/carousel/" target="_blank">getbootstrap.com</a>, תחת Components (באנגלית).</p>
+</main>
+<script src="../assets/site.js"></script>
+</body>
+</html>

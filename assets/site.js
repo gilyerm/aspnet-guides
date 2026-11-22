@@ -50,6 +50,8 @@
         { num: '9', slug: '09-bootstrap', section: 'pages', title: 'Bootstrap', desc: 'רכיבים מוכנים לאתר יפה בלי הרבה CSS', ready: true,
           keywords: 'כרטיס card טבלה table כפתור btn רשת grid row col container alert צבעים' },
 
+        { num: '9ב', slug: '09b-bootstrap-components', section: 'pages', title: "Bootstrap חלק ב': רכיבים שזזים", desc: 'קרוסלה, חלון קופץ, שאלות נפתחות, לשוניות, תפריט צד והודעות', ready: true,
+          keywords: 'carousel קרוסלה שקופיות באנר modal חלון קופץ accordion שאלות נפוצות tabs לשוניות offcanvas עגלה toast tooltip badge spinner progress floating data-bs-toggle' },
         { num: '10', slug: '10-models', section: 'data', title: 'מודלים', desc: 'מחלקה שמייצגת נתונים, והעברת מידע ל-View', ready: true,
           keywords: 'Model מחלקה class property @model' },
         { num: '11', slug: '11-forms', section: 'data', title: 'טפסים', desc: 'ממלאים טופס והמידע מגיע לשרת', ready: true,
@@ -346,6 +348,7 @@
         });
     }
     var BOOTSTRAP_CSS = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css';
+    var BOOTSTRAP_JS = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js';
     document.querySelectorAll('.playground').forEach(function (pg) {
         var id = 'pg' + (++pgCount);
         var langs = ['html', 'css', 'js'];
@@ -443,6 +446,7 @@
                 'n.style.cssText="position:fixed;top:8px;left:8px;right:8px;background:#eaf6f0;color:#16825d;border:1px solid #16825d;border-radius:6px;padding:8px 10px;font-size:14px;z-index:9999";' +
                 'document.body.appendChild(n);setTimeout(function(){n.remove();},3000);});' +
                 '})();<\/script>' +
+                (pg.hasAttribute('data-bootstrap') ? '<script src="' + BOOTSTRAP_JS + '"><\/script>' : '') +
                 (js ? '<script>' + js + '<\/script>' : '') + '</body></html>';
         }
         var timer;

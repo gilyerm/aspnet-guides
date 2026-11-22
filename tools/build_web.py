@@ -1084,6 +1084,7 @@ def box(kind, title, text):
 
 
 exec(open(os.path.join(os.path.dirname(__file__), 'web_intro.py'), encoding='utf-8').read())
+exec(open(os.path.join(os.path.dirname(__file__), 'bootstrap2.py'), encoding='utf-8').read())
 exec(open(os.path.join(os.path.dirname(__file__), 'web_part2.py'), encoding='utf-8').read())
 
 print('built web basics pages')

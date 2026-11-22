@@ -78,6 +78,35 @@ public IActionResult Index()
             change='אם אין לכם <code class="inline">ImageUrl</code>, מחקו את שורת ה-<code class="inline">&lt;img&gt;</code>.',
             guide=G('09-bootstrap', 'מדריך 9') + ', ' + G('adv-a-partial-views', 'מתקדם א (אותו כרטיס בכמה עמודים)')),
 
+    snippet('קרוסלה של מוצרים',
+            'שקופיות מתחלפות, אחת לכל מוצר מהמסד, עם תמונה, שם ומחיר.',
+            [('ב-View, למשל בדף הבית או ב-Index', '''
+@model List<Product>
+
+<div id="productsCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var product = Model[i];
+            <div class="carousel-item @(i == 0 ? "active" : "")">
+                <img src="@product.ImageUrl" class="d-block w-100" alt="@product.Name" />
+                <div class="carousel-caption">
+                    <h5>@product.Name</h5>
+                    <p>@product.Price ₪</p>
+                </div>
+            </div>
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#productsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#productsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>''', 'cshtml')],
+            change='רק לשקופית הראשונה יש <code class="inline">active</code>, ולכן <code class="inline">for</code> עם <code class="inline">i</code> ולא <code class="inline">foreach</code>. אם אין לכם <code class="inline">ImageUrl</code>, מחקו את שורת ה-<code class="inline">&lt;img&gt;</code>.',
+            guide=G('09b-bootstrap-components', "Bootstrap חלק ב', סעיף 2")),
+
     snippet('עמוד פרטים של פריט אחד',
             'עמוד שמציג פריט אחד לפי המספר שבכתובת, למשל /Products/Details/5.',
             [('ב-Controller', '''
@@ -233,7 +262,8 @@ public IActionResult Delete(int id)
 <form asp-action="Delete" asp-route-id="@product.Id" method="post"
       onsubmit="return confirm('בטוחים שרוצים למחוק?');">
     <button type="submit" class="btn btn-sm btn-danger">מחיקה</button>
-</form>''')]),
+</form>''')],
+            change='זו הגרסה הפשוטה, עם חלון של הדפדפן. גרסה יפה יותר, עם חלון של Bootstrap: ' + G('09b-bootstrap-components', "Bootstrap חלק ב', סעיף 3") + '.'),
 
     snippet('הודעת "נשמר בהצלחה"',
             'אחרי שמירה ומעבר לעמוד אחר, מופיעה הודעה ירוקה פעם אחת.',

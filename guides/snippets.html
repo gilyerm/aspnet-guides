@@ -78,6 +78,36 @@
 <p class="guide-link">הסבר מלא: <a href="09-bootstrap.html">מדריך 9</a>, <a href="adv-a-partial-views.html">מתקדם א (אותו כרטיס בכמה עמודים)</a></p>
 </div>
 <div class="snippet">
+<h3>קרוסלה של מוצרים</h3>
+<p>שקופיות מתחלפות, אחת לכל מוצר מהמסד, עם תמונה, שם ומחיר.</p>
+<p class="where">ב-View, למשל בדף הבית או ב-Index</p>
+<pre class="code-block" data-lang="cshtml">@model List&lt;Product&gt;
+
+&lt;div id=&quot;productsCarousel&quot; class=&quot;carousel slide&quot; data-bs-ride=&quot;carousel&quot;&gt;
+    &lt;div class=&quot;carousel-inner&quot;&gt;
+        @for (int i = 0; i &lt; Model.Count; i++)
+        {
+            var product = Model[i];
+            &lt;div class=&quot;carousel-item @(i == 0 ? &quot;active&quot; : &quot;&quot;)&quot;&gt;
+                &lt;img src=&quot;@product.ImageUrl&quot; class=&quot;d-block w-100&quot; alt=&quot;@product.Name&quot; /&gt;
+                &lt;div class=&quot;carousel-caption&quot;&gt;
+                    &lt;h5&gt;@product.Name&lt;/h5&gt;
+                    &lt;p&gt;@product.Price ₪&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        }
+    &lt;/div&gt;
+    &lt;button class=&quot;carousel-control-prev&quot; type=&quot;button&quot; data-bs-target=&quot;#productsCarousel&quot; data-bs-slide=&quot;prev&quot;&gt;
+        &lt;span class=&quot;carousel-control-prev-icon&quot;&gt;&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;button class=&quot;carousel-control-next&quot; type=&quot;button&quot; data-bs-target=&quot;#productsCarousel&quot; data-bs-slide=&quot;next&quot;&gt;
+        &lt;span class=&quot;carousel-control-next-icon&quot;&gt;&lt;/span&gt;
+    &lt;/button&gt;
+&lt;/div&gt;</pre>
+<p class="change-note">רק לשקופית הראשונה יש <code class="inline">active</code>, ולכן <code class="inline">for</code> עם <code class="inline">i</code> ולא <code class="inline">foreach</code>. אם אין לכם <code class="inline">ImageUrl</code>, מחקו את שורת ה-<code class="inline">&lt;img&gt;</code>.</p>
+<p class="guide-link">הסבר מלא: <a href="09b-bootstrap-components.html">Bootstrap חלק ב', סעיף 2</a></p>
+</div>
+<div class="snippet">
 <h3>עמוד פרטים של פריט אחד</h3>
 <p>עמוד שמציג פריט אחד לפי המספר שבכתובת, למשל /Products/Details/5.</p>
 <p class="where">ב-Controller</p>
@@ -239,6 +269,7 @@ public IActionResult Delete(int id)
       onsubmit=&quot;return confirm(&#x27;בטוחים שרוצים למחוק?&#x27;);&quot;&gt;
     &lt;button type=&quot;submit&quot; class=&quot;btn btn-sm btn-danger&quot;&gt;מחיקה&lt;/button&gt;
 &lt;/form&gt;</pre>
+<p class="change-note">זו הגרסה הפשוטה, עם חלון של הדפדפן. גרסה יפה יותר, עם חלון של Bootstrap: <a href="09b-bootstrap-components.html">Bootstrap חלק ב', סעיף 3</a>.</p>
 </div>
 <div class="snippet">
 <h3>הודעת "נשמר בהצלחה"</h3>
