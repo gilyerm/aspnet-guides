@@ -10,7 +10,7 @@ OUT = os.path.join(os.path.dirname(__file__), '..', 'guides')
 
 
 def pg(html_src='', css='', js='', title='נסו בעצמכם', height=220, bootstrap=False):
-    parts = [f'<div class="playground" data-title="{title}" data-height="{height}"{" data-bootstrap" if bootstrap else ""}>']
+    parts = [f'<div class="playground" data-title="{html.escape(title)}" data-height="{height}"{" data-bootstrap" if bootstrap else ""}>']
     for lang, src in (('html', html_src), ('css', css), ('js', js)):
         if src.strip():
             parts.append(f'<textarea data-lang="{lang}">{html.escape(src.strip(chr(10)))}</textarea>')
@@ -299,6 +299,48 @@ page('web-html', 'יסודות HTML', 'התגיות שנשתמש בהן בפרו
 
     <button type="submit">שליחה</button>
 </form>''', title='נסו: הוסיפו שדה "טלפון" (type="tel")', height=460),
+             '<h3>שדות חובה</h3>',
+             '<p>בטופס שלמעלה אפשר ללחוץ "שליחה" גם כשהכול ריק. כדי לחייב את המשתמש למלא שדה, מוסיפים לו את המילה ' + c('required') + '. אין לה ערך: עצם זה שהיא כתובה בתגית אומר "חובה".</p>',
+             concept('שדה חובה (required)', 'שדה שאי אפשר לשלוח את הטופס בלי למלא. כשלוחצים "שליחה" והוא ריק, הדפדפן עוצר את השליחה, קופץ לשדה ומציג הודעה קטנה לידו.',
+                     'דוגמה: ' + c('<input type="text" id="name" required>') + '. נהוג לסמן שדות חובה בכוכבית אדומה ליד התווית, כדי שהמשתמש יידע מראש.'),
+             table(['תכונה', 'מה היא בודקת', 'דוגמה'], [
+                 [c('required'), 'שהשדה לא ריק. ב-checkbox: שסימנו אותו.', c('<input type="text" required>')],
+                 [c('type="email"'), 'שמה שנכתב נראה כמו אימייל (יש @). בודק רק אם השדה לא ריק, אז משלבים עם ' + c('required') + '.', c('<input type="email" required>')],
+                 [c('minlength') + ' / ' + c('maxlength'), 'מספר תווים מינימלי / מקסימלי.', c('<input type="password" minlength="6">')],
+                 [c('min') + ' / ' + c('max'), 'הערך הכי קטן / הכי גדול (במספרים ובתאריכים).', c('<input type="number" min="1" max="120">')],
+             ]),
+             pg('''
+<form>
+    <p>שדות עם <span class="req">*</span> הם חובה</p>
+
+    <label for="name2">שם: <span class="req">*</span></label><br>
+    <input type="text" id="name2" required><br><br>
+
+    <label for="email2">אימייל: <span class="req">*</span></label><br>
+    <input type="email" id="email2" required><br><br>
+
+    <label for="pass2">סיסמה (לפחות 6 תווים): <span class="req">*</span></label><br>
+    <input type="password" id="pass2" required minlength="6"><br><br>
+
+    <label for="phone2">טלפון (לא חובה):</label><br>
+    <input type="tel" id="phone2"><br><br>
+
+    <input type="checkbox" id="agree2" required>
+    <label for="agree2">אני מסכים לתנאים <span class="req">*</span></label><br><br>
+
+    <button type="submit">שליחה</button>
+</form>''', css='''
+.req {
+    color: #c72e2e;
+    font-weight: bold;
+}
+
+/* מסגרת אדומה לשדה חובה שהמשתמש נגע בו ולא מילא נכון */
+input:user-invalid {
+    border: 2px solid #c72e2e;
+}''', title='נסו: לחצו "שליחה" בלי למלא כלום. אחר כך מלאו הכול ושלחו שוב. ואז מחקו את required מהשם ובדקו מה השתנה', height=420),
+             '<div class="checkpoint">' + 'לחצתם "שליחה" כשהשם ריק, והדפדפן עצר וקפץ לשדה עם הודעה? וכשמילאתם הכול הופיעה הודעה ירוקה שהטופס נשלח? מצוין.</div>',
+             '<div class="warning"><strong>⚠️ הבדיקה של הדפדפן היא רק עזרה למשתמש.</strong> ' + 'מי שמבין קצת יכול לעקוף אותה (למשל למחוק את ' + c('required') + ' בכלי המפתחים, F12). לכן בפרויקט בודקים שוב בשרת, עם ' + c('[Required]') + ' במודל: <a href="12-validation.html">מדריך 12</a>. החדשות הטובות: כשכותבים ' + c('[Required]') + ' במודל, ASP.NET מוסיף לשדה את הבדיקה בדפדפן לבד.' + '</div>',
              '<div class="explanation"><strong>💡 בפרויקט:</strong> במקום ' + c('id') + ' ו-' + c('name') + ' כותבים ' + c('asp-for="Name"') + ', ו-ASP.NET ממלא אותם לבד ומחבר את השדה למודל (מדריך 11). אבל בסוף, בדפדפן, זה בדיוק אותו HTML.</div>',
          ]),
          ('8. תגיות שמתארות את מבנה העמוד', [
@@ -315,7 +357,8 @@ page('web-html', 'יסודות HTML', 'התגיות שנשתמש בהן בפרו
      ['תגית פותחת וסוגרת, ותכונות כמו ' + c('href') + ' ו-' + c('src') + '.',
       'טקסט: h1-h6, p, strong. קישורים ותמונות: a, img. רשימות: ul/ol/li. טבלאות: table/tr/th/td.',
       'div ו-span עוטפים חלקים, ו-class/id נותנים להם שם לעיצוב ול-JavaScript.',
-      'טפסים: form, label, input עם type, select, textarea, button. בפרויקט asp-for בונה אותם בשבילנו.'],
+      'טפסים: form, label, input עם type, select, textarea, button. בפרויקט asp-for בונה אותם בשבילנו.',
+      'שדה חובה: מוסיפים ' + c('required') + '. הדפדפן לא ישלח את הטופס עד שימלאו אותו, ובשרת בודקים שוב עם ' + c('[Required]') + '.'],
      'רשימה מלאה של כל התגיות, עם דוגמאות: <a href="https://www.w3schools.com/html/" target="_blank">w3schools HTML</a> או <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element" target="_blank">MDN</a> (באנגלית).')
 
 # =====================================================================

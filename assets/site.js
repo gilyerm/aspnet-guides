@@ -400,7 +400,7 @@
         editor.addEventListener('scroll', function () { hl.scrollTop = editor.scrollTop; hl.scrollLeft = editor.scrollLeft; });
         paintCode();
         withPrism(paintCode);
-        var frame = el('iframe', { 'class': 'pg-frame', sandbox: 'allow-scripts allow-modals', title: 'תוצאה' });
+        var frame = el('iframe', { 'class': 'pg-frame', sandbox: 'allow-scripts allow-modals allow-forms', title: 'תוצאה' });
         frame.style.height = (pg.getAttribute('data-height') || 220) + 'px';
         // העורך גבוה מספיק כדי להראות את כל הקוד (עד גבול), גם כשהתוצאה קטנה
         var maxLines = Math.max.apply(null, present.map(function (l) { return original[l].split('\n').length; }));
@@ -436,7 +436,13 @@
                 '["log","info","warn","error","table"].forEach(function(t){var o=console[t];console[t]=function(){var a=[].slice.call(arguments);' +
                 'var d=null;if(t==="table"){try{d=JSON.parse(JSON.stringify(a[0]));}catch(e){}}' +
                 'parent.postMessage({pg:"' + id + '",con:t,text:a.map(f).join(" "),data:d},"*");o&&o.apply(console,arguments);};});' +
-                'console.clear=function(){parent.postMessage({pg:"' + id + '",con:"clear"},"*");};})();<\/script>' +
+                'console.clear=function(){parent.postMessage({pg:"' + id + '",con:"clear"},"*");};' +
+                // טופס שעבר את הבדיקה של הדפדפן: לא שולחים באמת לשום מקום, רק מראים שהוא עבר
+                'document.addEventListener("submit",function(e){if(e.defaultPrevented)return;e.preventDefault();' +
+                'var n=document.createElement("div");n.textContent="✓ הטופס עבר את הבדיקה ונשלח (בדוגמה הוא לא נשלח באמת לשום מקום)";' +
+                'n.style.cssText="position:fixed;top:8px;left:8px;right:8px;background:#eaf6f0;color:#16825d;border:1px solid #16825d;border-radius:6px;padding:8px 10px;font-size:14px;z-index:9999";' +
+                'document.body.appendChild(n);setTimeout(function(){n.remove();},3000);});' +
+                '})();<\/script>' +
                 (js ? '<script>' + js + '<\/script>' : '') + '</body></html>';
         }
         var timer;
