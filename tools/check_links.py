@@ -26,7 +26,7 @@ ids = {p: set(re.findall(r'\sid="([^"]+)"', strip_code(s))) for p, s in pages.it
 problems = []
 count = 0
 for path, s in pages.items():
-    for href in re.findall(r'<a\s[^>]*href="([^"]+)"', strip_code(s)):
+    for href, text in re.findall(r'<a\s[^>]*href="([^"]+)"[^>]*>(.*?)</a>', strip_code(s), flags=re.S):
         if re.match(r'^(https?:|mailto:|data:|javascript:)', href) or href == '#':
             continue
         count += 1
@@ -37,6 +37,8 @@ for path, s in pages.items():
             problems.append(f'{name}: {href} -> page not found')
         elif frag and frag not in ids[target]:
             problems.append(f'{name}: {href} -> no element with id="{frag}"')
+        elif not frag and 'סעיף' in text:
+            problems.append(f'{name}: {href} -> the link text names a section, but the link goes to the top of the page (add #id)')
 
 print(f'checked {count} internal links')
 for p in problems:
