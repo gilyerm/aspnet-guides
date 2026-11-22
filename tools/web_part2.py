@@ -10,7 +10,7 @@ page('web-design', 'עיצוב שנראה מקצועי', 'גופנים בעבר�
      '<strong>💡 על מה העמוד הזה?</strong> אתר יכול לעבוד מצוין ועדיין להיראות "של תלמיד". רוב ההבדל לא בקוד מסובך, אלא בכמה בחירות פשוטות: גופן טוב, אייקונים, רווחים וצבעים שמתאימים זה לזה. מומלץ להכיר קודם את <a href="web-css.html">יסודות CSS</a>.',
      [
          ('1. גופן בעברית מ-Google Fonts', [
-             '<p>הגופן שמגיע כברירת מחדל לא מיועד לעברית. ב-<a href="https://fonts.google.com/?subset=hebrew" target="_blank">Google Fonts</a> יש גופנים חינמיים שנראים מצוין בעברית, למשל <strong>Rubik</strong> (שהאתר הזה כתוב בו), <strong>Heebo</strong>, <strong>Assistant</strong> ו-<strong>Varela Round</strong>.</p>',
+             '<p>הגופן שמגיע כברירת מחדל לא מיועד לעברית. ב-<a href="https://fonts.google.com/?subset=hebrew" target="_blank">Google Fonts</a> יש גופנים חינמיים שנראים מצוין בעברית, למשל <strong>Rubik</strong>, <strong>Heebo</strong>, <strong>Assistant</strong> ו-<strong>Varela Round</strong>.</p>',
              pg(FONT_LINK + '''
 <h2 class="before">לפני: הגופן הרגיל</h2>
 <p class="before">ברוכים הבאים לחנות שלנו! כאן תמצאו את כל הציוד לבית הספר.</p>

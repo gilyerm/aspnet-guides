@@ -22,6 +22,8 @@
         { num: '3', slug: '03-git-github', section: 'start', title: 'Git ו-GitHub', desc: 'שמירת גיבוי ב-GitHub בלחיצות כפתור, ומעבר בין מחשבים', ready: true,
           keywords: 'Commit Push Pull Clone מאגר Repository גיבוי בית בית ספר Update-Database gitignore Conflict' },
 
+        { num: 'מבוא', slug: 'web-intro', section: 'web', title: 'מה זה HTML, CSS ו-JavaScript?', desc: 'שלוש השפות של כל עמוד אינטרנט: מה כל אחת עושה ואיפה היא בפרויקט', ready: true,
+          keywords: 'שפה שפות דפדפן שרת Browser Server שלד עיצוב התנהגות מבוא Java C#' },
         { num: 'HTML', slug: 'web-html', section: 'web', title: 'יסודות HTML', desc: 'תגיות, קישורים ותמונות, רשימות, טבלאות וטפסים, עם דוגמאות חיות', ready: true,
           keywords: 'תגית tag h1 p a img ul li table tr td form input label select textarea div span class id' },
         { num: 'CSS', slug: 'web-css', section: 'web', title: 'יסודות CSS', desc: 'צבעים, רווחים (Box Model), Flexbox, hover, התאמה לטלפון ו-Bootstrap', ready: true,

@@ -617,6 +617,20 @@ main summary { font-weight: 700; cursor: pointer; }
 .pg-ctable th, .pg-ctable td { border: 1px solid #444; padding: 0.15rem 0.6rem; text-align: left; }
 .pg-ctable th { background: #2D2D2D; color: #9CA3AF; font-weight: 400; }
 
+/* מבוא: אותו כרטיס בשלושה שלבים */
+.layers { border: 1px solid var(--line-strong); border-radius: 10px; overflow: hidden; margin: 1.2rem 0 1.8rem; background: var(--page); box-shadow: var(--shadow); }
+.layers-tabs { display: flex; gap: 0.3rem; flex-wrap: wrap; padding: 0.5rem 0.7rem; background: var(--chrome); border-bottom: 1px solid var(--line); }
+.layers-tabs button { font-family: inherit; font-size: 0.92rem; font-weight: 500; border: 1px solid var(--line-strong); background: var(--page); color: var(--ink); border-radius: 6px; padding: 0.25rem 0.85rem; cursor: pointer; }
+.layers-tabs button.active { background: #68217A; border-color: #68217A; color: #fff; }
+.layers-body { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: center; border-bottom: 1px solid var(--line); }
+.layers-frame { width: 100%; height: 350px; border: 0; background: #fff; border-left: 1px solid var(--line); }
+.layers-note { margin: 0; padding: 1rem 1.3rem; font-size: 1rem; }
+.layers-code { padding: 0.6rem 0.9rem 0.2rem; }
+.layers-code-label { font-size: 0.85rem; color: var(--muted); }
+.layers-code .code-wrap { margin-top: 0.4rem; }
+.layers-code pre.code-block { max-height: 300px; overflow-y: auto; }
+@media (max-width: 760px) { .layers-body { grid-template-columns: 1fr; } .layers-frame { border-left: 0; border-bottom: 1px solid var(--line); } }
+
 html[data-theme="dark"] .bm-demo { background: var(--page) !important; border-color: var(--line-strong) !important; }
 html[data-theme="dark"] .bm-code { color: var(--muted) !important; }
 

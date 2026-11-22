@@ -1,4 +1,4 @@
-"""Builds the web basics pages (guides/web-html.html, web-css.html, web-js.html).
+"""Builds the web basics pages (guides/web-intro.html, web-html.html, web-css.html, web-js.html and the part 2 pages).
 
 Edit the content below and run:  python tools/build_web.py
 Code inside pg(...) is escaped automatically and becomes a live "try it yourself" editor.
@@ -77,7 +77,7 @@ def page(slug, title, subtitle, intro, sections, summary, more):
 # HTML
 # =====================================================================
 page('web-html', 'יסודות HTML', 'התגיות שנשתמש בהן בפרויקט, עם דוגמה חיה לכל אחת',
-     '<strong>💡 על מה העמוד הזה?</strong> HTML הוא השלד של כל עמוד: מה יש בו (כותרת, פסקה, תמונה, טופס). כל קובץ cshtml בפרויקט הוא בעצם HTML, עם תוספות של C# (מדריך 5). כאן נעבור על התגיות שבאמת צריך.',
+     '<strong>💡 על מה העמוד הזה?</strong> HTML הוא השלד של כל עמוד: מה יש בו (כותרת, פסקה, תמונה, טופס). כל קובץ cshtml בפרויקט הוא בעצם HTML, עם תוספות של C# (מדריך 5). כאן נעבור על התגיות שבאמת צריך. חדשים בזה? התחילו ב-<a href="web-intro.html">מה זה HTML, CSS ו-JavaScript?</a>',
      [
          ('1. איך נראית תגית', [
              concept('תגית (Tag)', f'מילה בתוך סוגריים משולשים שאומרת לדפדפן "מה זה". לרוב יש תגית פותחת ותגית סוגרת (עם {c("/")}), והתוכן ביניהן.',
@@ -366,7 +366,7 @@ box_model_demo = '''
 </table>'''
 
 page('web-css', 'יסודות CSS', 'איך מעצבים: צבעים, רווחים, סידור בשורה, ועמוד שמתאים לטלפון',
-     '<strong>💡 על מה העמוד הזה?</strong> אם HTML הוא השלד, CSS הוא הבגדים: צבעים, גדלים, רווחים ומיקום. Bootstrap (מדריך 9) נותן הרבה עיצוב מוכן, אבל כדי לשנות אותו ולהתאים לאתר שלכם צריך להכיר את הבסיס. איפה שמים את ה-CSS בפרויקט: מדריך 8.',
+     '<strong>💡 על מה העמוד הזה?</strong> אם HTML הוא השלד, CSS הוא הבגדים: צבעים, גדלים, רווחים ומיקום. Bootstrap (מדריך 9) נותן הרבה עיצוב מוכן, אבל כדי לשנות אותו ולהתאים לאתר שלכם צריך להכיר את הבסיס. איפה שמים את ה-CSS בפרויקט: מדריך 8. חדשים בזה? התחילו ב-<a href="web-intro.html">מה זה HTML, CSS ו-JavaScript?</a>',
      [
          ('1. איך כותבים כלל CSS', [
              concept('כלל CSS', f'"למי" (סלקטור), ואז בסוגריים מסולסלים "מה לשנות" (תכונה: ערך;).',
@@ -606,7 +606,7 @@ p {
 # JavaScript
 # =====================================================================
 page('web-js', 'יסודות JavaScript', 'איך גורמים לעמוד להגיב: לחיצות, הקלדה, הצגה והסתרה',
-     '<strong>💡 על מה העמוד הזה?</strong> HTML הוא השלד, CSS הבגדים, ו-JavaScript הוא מה שגורם לעמוד <strong>לזוז</strong>: כפתור שעושה משהו, הודעה שמופיעה, טופס שבודק את עצמו. JavaScript רץ בדפדפן, אחרי שהעמוד כבר הגיע מהשרת. איפה שמים אותו בפרויקט: מדריך 8, סעיף 4.',
+     '<strong>💡 על מה העמוד הזה?</strong> HTML הוא השלד, CSS הבגדים, ו-JavaScript הוא מה שגורם לעמוד <strong>לזוז</strong>: כפתור שעושה משהו, הודעה שמופיעה, טופס שבודק את עצמו. JavaScript רץ בדפדפן, אחרי שהעמוד כבר הגיע מהשרת. איפה שמים אותו בפרויקט: מדריך 8, סעיף 4. חדשים בזה? התחילו ב-<a href="web-intro.html">מה זה HTML, CSS ו-JavaScript?</a>',
      [
          ('1. הצעד הראשון: לחיצה על כפתור', [
              '<p>כמעט כל קוד JavaScript באתר עובד ככה: <strong>מוצאים</strong> אלמנט בעמוד, <strong>מחכים</strong> שמשהו יקרה לו (לחיצה), ואז <strong>משנים</strong> משהו.</p>',
@@ -863,6 +863,7 @@ def box(kind, title, text):
     return f'<div class="{kind}"><strong>{title}</strong> {text}</div>'
 
 
+exec(open(os.path.join(os.path.dirname(__file__), 'web_intro.py'), encoding='utf-8').read())
 exec(open(os.path.join(os.path.dirname(__file__), 'web_part2.py'), encoding='utf-8').read())
 
 print('built web basics pages')
