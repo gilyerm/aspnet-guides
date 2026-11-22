@@ -30,7 +30,7 @@
         <li>קליק ימני על התיקייה <code class="inline">Views/Shared</code> ← <strong>Add</strong> ← <strong>View</strong> ← <strong>Razor View - Empty</strong>.</li>
         <li>תנו שם <code class="inline">_ProductCard.cshtml</code>. <strong>הקו התחתון בהתחלה</strong> הוא מוסכמה שאומרת "זה Partial, לא עמוד שלם".</li>
         <li>החליפו את התוכן ב:
-<pre class="code-block">@model Product
+<pre class="code-block" data-preview>@model Product
 
 &lt;div class="card h-100"&gt;
     @if (Model.ImageUrl != null)
@@ -42,7 +42,7 @@
         &lt;p class="card-text"&gt;@Model.Price ₪&lt;/p&gt;
         &lt;a asp-controller="Products" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary"&gt;לפרטים&lt;/a&gt;
     &lt;/div&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;</pre><template class="code-sample"><div style="max-width:260px"><div class="card h-100"><img src="https://placehold.co/400x260?text=Product" class="card-img-top" alt="תיק גב" /><div class="card-body"><h5 class="card-title">תיק גב</h5><p class="card-text">89 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div></template>
             <p class="change-note">אם אין לכם <code class="inline">ImageUrl</code> (לא עשיתם את מדריך 16), מחקו את כל בלוק ה-<code class="inline">@if</code>.</p>
         </li>
     </ul>
@@ -85,7 +85,7 @@
     <!-- ===================== 4 ===================== -->
     <h2>4. Partial בלי Model</h2>
     <p>Partial לא חייב לקבל מידע. למשל, קופסת "צרו קשר" שחוזרת בכמה עמודים. צרו <code class="inline">Views/Shared/_ContactBox.cshtml</code>:</p>
-<pre class="code-block">&lt;div class="alert alert-info mt-4"&gt;
+<pre class="code-block" data-preview>&lt;div class="alert alert-info mt-4"&gt;
     יש שאלה? כתבו לנו: &lt;strong&gt;shop@example.com&lt;/strong&gt;
 &lt;/div&gt;</pre>
     <p>ובכל עמוד שרוצים:</p>

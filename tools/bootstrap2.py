@@ -2,6 +2,23 @@
 
 IMG = 'https://placehold.co/800x320/{bg}/ffffff?text={text}'
 
+CAROUSEL_SAMPLE = ('<div id="pc" class="carousel slide" data-bs-ride="carousel"><div class="carousel-inner">' +
+    ''.join(f'<div class="carousel-item{" active" if i == 0 else ""}"><img src="{IMG.format(bg=bg, text=t)}" class="d-block w-100" alt="{n}">'
+            f'<div class="carousel-caption"><h5>{n}</h5><p>{pr} ₪</p></div></div>'
+            for i, (bg, t, n, pr) in enumerate([('5c2d91', 'Bag', 'תיק גב', 89), ('0d6efd', 'Notebook', 'מחברת', 12), ('198754', 'Pen', 'עט', 5)])) +
+    '</div><button class="carousel-control-prev" type="button" data-bs-target="#pc" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>'
+    '<button class="carousel-control-next" type="button" data-bs-target="#pc" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button></div>')
+
+def _del_row(i, name):
+    return (f'<tr><td>{name}</td><td><button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#delete-{i}">מחיקה</button>'
+            f'<div class="modal fade" id="delete-{i}" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content">'
+            f'<div class="modal-header"><h5 class="modal-title">מחיקת מוצר</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>'
+            f'<div class="modal-body">בטוחים שרוצים למחוק את <strong>{name}</strong>? אי אפשר לבטל את זה.</div>'
+            f'<div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ביטול</button>'
+            f'<form><button type="submit" class="btn btn-danger" data-bs-dismiss="modal">כן, למחוק</button></form></div></div></div></div></td></tr>')
+
+DELETE_SAMPLE = '<table class="table" style="min-height:0"><tr><th>שם</th><th></th></tr>' + _del_row(1, 'תיק גב') + _del_row(2, 'מחברת') + '</table><div style="height:230px"></div>'
+
 page('09b-bootstrap-components', "Bootstrap חלק ב': רכיבים שזזים",
      'קרוסלה, חלון קופץ, שאלות נפתחות, לשוניות, תפריט צד והודעות, בלי לכתוב JavaScript',
      '<strong>💡 על מה העמוד הזה?</strong> ב<a href="09-bootstrap.html">מדריך 9</a> ראינו רכיבים שרק נראים טוב: כפתורים, כרטיסים, טבלאות. כאן נכיר רכיבים ש<strong>עושים</strong> משהו: נפתחים, מתחלפים וקופצים. ל-Bootstrap יש קובץ JavaScript משלו שמפעיל אותם, ולכן לרובם מספיק HTML עם כמה תכונות מיוחדות.',
@@ -87,7 +104,7 @@ page('09b-bootstrap-components', "Bootstrap חלק ב': רכיבים שזזים"
     <button class="carousel-control-next" type="button" data-bs-target="#productsCarousel" data-bs-slide="next">
         <span class="carousel-control-next-icon"></span>
     </button>
-</div>''', 'cshtml'),
+</div>''', 'cshtml', CAROUSEL_SAMPLE),
              '<p class="change-note">' + c('@(i == 0 ? "active" : "")') + ' פירושו: "אם זו השקופית הראשונה, כתוב active, אחרת אל תכתוב כלום". ' + c('ImageUrl') + ' מגיע מ<a href="16-images.html">מדריך 16</a>. אם אין לכם תמונות, מחקו את שורת ה-' + c('<img>') + ' ותנו ל-' + c('carousel-item') + ' גובה וצבע רקע.</p>',
              '<div class="checkpoint">הקרוסלה מופיעה ומתחלפת? אם היא <strong>לא מופיעה בכלל</strong>, כנראה אף שקופית לא קיבלה ' + c('active') + ', או שהרשימה ריקה (אין מוצרים במסד).</div>',
          ]),
@@ -153,7 +170,7 @@ page('09b-bootstrap-components', "Bootstrap חלק ב': רכיבים שזזים"
             </div>
         </td>
     </tr>
-}''', 'cshtml'),
+}''', 'cshtml', DELETE_SAMPLE),
              '<p class="change-note">הטופס שבתוך החלון שולח ל-Action בשם ' + c('Delete') + ' עם POST. ה-Action הזה צריך להיות קיים ב-Controller (בספריית קטעי הקוד: <a href="snippets.html">"הוספה, עריכה ומחיקה"</a>).</p>',
          ]),
          ('4. שאלות נפתחות (Accordion)', [

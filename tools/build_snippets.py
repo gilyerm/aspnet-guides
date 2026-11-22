@@ -4,16 +4,21 @@ import html
 G = lambda slug, label: f'<a href="{slug}.html">{label}</a>'
 
 
-def code(src, lang=None):
+def code(src, lang=None, preview=None):
+    """preview=True: תצוגה מקדימה של הקוד עצמו. preview="<html>": תצוגה של HTML לדוגמה (כשיש בקוד C#)."""
     attr = f' data-lang="{lang}"' if lang else ''
-    return f'<pre class="code-block"{attr}>{html.escape(src.strip(chr(10)))}</pre>'
+    if preview:
+        attr += ' data-preview'
+    sample = f'<template class="code-sample">{preview}</template>' if isinstance(preview, str) else ''
+    return f'<pre class="code-block"{attr}>{html.escape(src.strip(chr(10)))}</pre>{sample}'
 
 
-def snippet(title, what, parts, change=None, guide=None, star=False):
+def snippet(title, what, parts, change=None, guide=None, star=False, preview=None):
+    """preview: {מספר החלק: True או HTML לדוגמה}. מוסיף לשונית "תצוגה מקדימה" לחלק הזה."""
     s = ['<div class="snippet">', f'<h3>{"<span class=star>⭐</span> " if star else ""}{title}</h3>', f'<p>{what}</p>']
-    for where, src, *lang in parts:
+    for i, (where, src, *lang) in enumerate(parts):
         s.append(f'<p class="where">{where}</p>')
-        s.append(code(src, lang[0] if lang else None))
+        s.append(code(src, lang[0] if lang else None, (preview or {}).get(i)))
     if change:
         s.append(f'<p class="change-note">{change}</p>')
     if guide:
@@ -55,7 +60,8 @@ public IActionResult Index()
     </tbody>
 </table>''')],
             change='החליפו את <code class="inline">Products</code>/<code class="inline">Product</code> בשם הטבלה והמודל שלכם, ואת העמודות בשדות שלכם.',
-            guide=G('13-database', 'מדריך 13') + ', ' + G('10-models', 'מדריך 10')),
+            guide=G('13-database', 'מדריך 13') + ', ' + G('10-models', 'מדריך 10'),
+            preview={1: '<table class="table table-striped table-hover"><thead><tr><th>שם</th><th>מחיר</th></tr></thead><tbody><tr><td>תיק גב</td><td>89 ₪</td></tr><tr><td>מחברת</td><td>12 ₪</td></tr><tr><td>עט</td><td>5 ₪</td></tr><tr><td>מחשבון</td><td>60 ₪</td></tr></tbody></table>'}),
 
     snippet('כרטיסים ברשת',
             'כל פריט ככרטיס עם תמונה: שלושה בשורה במחשב, אחד בשורה בטלפון.',
@@ -76,7 +82,8 @@ public IActionResult Index()
     }
 </div>''')],
             change='אם אין לכם <code class="inline">ImageUrl</code>, מחקו את שורת ה-<code class="inline">&lt;img&gt;</code>.',
-            guide=G('09-bootstrap', 'מדריך 9') + ', ' + G('adv-a-partial-views', 'מתקדם א (אותו כרטיס בכמה עמודים)')),
+            guide=G('09-bootstrap', 'מדריך 9') + ', ' + G('adv-a-partial-views', 'מתקדם א (אותו כרטיס בכמה עמודים)'),
+            preview={0: '<div class="row"><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Bag" class="card-img-top" alt="תיק גב" /><div class="card-body"><h5 class="card-title">תיק גב</h5><p class="card-text">89 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Notebook" class="card-img-top" alt="מחברת" /><div class="card-body"><h5 class="card-title">מחברת</h5><p class="card-text">12 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Pen" class="card-img-top" alt="עט" /><div class="card-body"><h5 class="card-title">עט</h5><p class="card-text">5 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div></div>'}),
 
     snippet('קרוסלה של מוצרים',
             'שקופיות מתחלפות, אחת לכל מוצר מהמסד, עם תמונה, שם ומחיר.',
@@ -105,7 +112,8 @@ public IActionResult Index()
     </button>
 </div>''', 'cshtml')],
             change='רק לשקופית הראשונה יש <code class="inline">active</code>, ולכן <code class="inline">for</code> עם <code class="inline">i</code> ולא <code class="inline">foreach</code>. אם אין לכם <code class="inline">ImageUrl</code>, מחקו את שורת ה-<code class="inline">&lt;img&gt;</code>.',
-            guide=G('09b-bootstrap-components', "Bootstrap חלק ב', סעיף 2")),
+            guide=G('09b-bootstrap-components', "Bootstrap חלק ב', סעיף 2"),
+            preview={0: '<div id="pc" class="carousel slide" data-bs-ride="carousel"><div class="carousel-inner"><div class="carousel-item active"><img src="https://placehold.co/800x320/5c2d91/ffffff?text=Bag" class="d-block w-100" alt=""><div class="carousel-caption"><h5>תיק גב</h5><p>89 ₪</p></div></div><div class="carousel-item"><img src="https://placehold.co/800x320/0d6efd/ffffff?text=Notebook" class="d-block w-100" alt=""><div class="carousel-caption"><h5>מחברת</h5><p>12 ₪</p></div></div></div><button class="carousel-control-prev" type="button" data-bs-target="#pc" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button><button class="carousel-control-next" type="button" data-bs-target="#pc" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button></div>'}),
 
     snippet('עמוד פרטים של פריט אחד',
             'עמוד שמציג פריט אחד לפי המספר שבכתובת, למשל /Products/Details/5.',
@@ -143,7 +151,8 @@ public IActionResult Details(int id)
 else
 {
     @* כאן הטבלה או הכרטיסים *@
-}''')]),
+}''')],
+            preview={0: '<div class="alert alert-info">אין עדיין מוצרים. 🙂</div>'}),
 
     snippet('עיצוב תאריכים ומחירים',
             'תאריך בפורמט ישראלי, ומחיר עם שתי ספרות אחרי הנקודה.',
@@ -183,7 +192,8 @@ public IActionResult Index(int page = 1)
         }
     </ul>
 </nav>''')],
-            change='<code class="inline">pageSize</code> קובע כמה פריטים בכל עמוד.'),
+            change='<code class="inline">pageSize</code> קובע כמה פריטים בכל עמוד.',
+            preview={1: '<nav><ul class="pagination"><li class="page-item"><a class="page-link" href="#">1</a></li><li class="page-item active"><a class="page-link" href="#">2</a></li><li class="page-item"><a class="page-link" href="#">3</a></li></ul></nav><p class="text-muted small">(כאן עמוד 2 הוא העמוד הנוכחי)</p>'}),
 
     snippet('ספירה: "נמצאו 12 מוצרים"',
             'מציג כמה פריטים יש ברשימה.',
@@ -278,7 +288,8 @@ return RedirectToAction("Index");'''),
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }''')],
-            change='<code class="inline">TempData</code> שורד מעבר עמוד אחד (Redirect), ואז נמחק לבד. כשההודעה ב-Layout, היא עובדת בכל העמודים.'),
+            change='<code class="inline">TempData</code> שורד מעבר עמוד אחד (Redirect), ואז נמחק לבד. כשההודעה ב-Layout, היא עובדת בכל העמודים.',
+            preview={1: '<div class="alert alert-success alert-dismissible fade show mt-3">המוצר נשמר בהצלחה!<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>'}),
 
     snippet('רשימה נפתחת מטבלה אחרת',
             'בחירת קטגוריה למוצר מתוך טבלת הקטגוריות.',
@@ -462,7 +473,8 @@ else
     <a asp-area="Identity" asp-page="/Account/Login">התחברות</a>
     <a asp-area="Identity" asp-page="/Account/Register">הרשמה</a>
 }''')],
-            guide=G('17-users', 'מדריך 17, סעיף 3') + ', ' + G('adv-c-identity', 'מתקדם ג (שם מלא במקום אימייל)')),
+            guide=G('17-users', 'מדריך 17, סעיף 3') + ', ' + G('adv-c-identity', 'מתקדם ג (שם מלא במקום אימייל)'),
+            preview={0: '<p>שלום, dana@example.com!</p><hr><p class="text-muted small mb-1">ומי שלא התחבר רואה:</p><a href="#">התחברות</a> <a href="#">הרשמה</a>'}),
 
     snippet('כפתור שרק מנהל רואה',
             'מסתיר כפתור מכל מי שאינו מנהל. (ההגנה האמיתית היא [Authorize] ב-Controller!)',
@@ -668,7 +680,8 @@ sections.append(('עיצוב ומבנה', [
         </div>
     </div>
 </div>''')],
-            change='ה-<code class="inline">data-bs-target</code> של הכפתור חייב להיות זהה ל-<code class="inline">id</code> של החלון (עם # לפניו).'),
+            change='ה-<code class="inline">data-bs-target</code> של הכפתור חייב להיות זהה ל-<code class="inline">id</code> של החלון (עם # לפניו).',
+            preview={0: True}),
 
     snippet('הודעה שנסגרת בלחיצה',
             'הודעה עם X לסגירה.',
@@ -676,7 +689,8 @@ sections.append(('עיצוב ומבנה', [
 <div class="alert alert-warning alert-dismissible fade show">
     שימו לב: המבצע מסתיים ביום חמישי!
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>''')]),
+</div>''')],
+            preview={0: True}),
 
     snippet('לוגו בתפריט ואייקון לכרטיסייה',
             'תמונה במקום (או ליד) שם האתר, ואייקון משלכם בלשונית של הדפדפן.',
@@ -707,7 +721,8 @@ public IActionResult PageNotFound()
     <h1 class="display-1">404</h1>
     <p class="lead">אופס, העמוד שחיפשתם לא קיים. 🤔</p>
     <a asp-controller="Home" asp-action="Index" class="btn btn-primary">לדף הבית</a>
-</div>''')]),
+</div>''')],
+            preview={2: '<div class="text-center mt-5"><h1 class="display-1">404</h1><p class="lead">אופס, העמוד שחיפשתם לא קיים. 🤔</p><a href="#" class="btn btn-primary">לדף הבית</a></div>'}),
 
     snippet('Footer',
             'השורה התחתונה של האתר.',
@@ -716,7 +731,8 @@ public IActionResult PageNotFound()
     &copy; 2027 · האתר של גיל ·
     <a asp-controller="Home" asp-action="Privacy">פרטיות</a> ·
     <a href="mailto:dana@example.com">צרו קשר</a>
-</div>''')]),
+</div>''')],
+            preview={0: '<footer class="border-top text-muted py-3"><div class="container text-center">&copy; 2027 · האתר של גיל · <a href="#">פרטיות</a> · <a href="#">צרו קשר</a></div></footer>'}),
 ]))
 
 # ======================= JavaScript =======================

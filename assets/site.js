@@ -527,11 +527,61 @@
     });
     if (pgCount) setPgLayout(pgLayout);
 
+    // ---------- תצוגה מקדימה לבלוק קוד: לשוניות "קוד" ו"תצוגה" ----------
+    // <pre class="code-block" data-preview>...</pre>  תצוגה של הקוד עצמו
+    // ואם בקוד יש C# (@foreach וכו'), אחריו: <template class="code-sample">HTML לדוגמה</template>
+    function addPreview(wrap, pre, sampleTpl) {
+        var id = 'pv' + (++pvCount);
+        wrap.classList.add('has-preview');
+        var head = el('div', { 'class': 'cv-head', role: 'tablist' },
+            '<button type="button" role="tab" data-view="code" aria-selected="true" class="active">קוד</button>' +
+            '<button type="button" role="tab" data-view="preview" aria-selected="false">תצוגה מקדימה</button>' +
+            (sampleTpl ? '<span class="cv-note">עם נתונים לדוגמה</span>' : ''));
+        wrap.insertBefore(head, pre);
+        var box = null, frame = null;
+        function build() {
+            box = el('div', { 'class': 'cv-preview', hidden: '' },
+                '<div class="cv-chrome" aria-hidden="true"><span class="pg-dots"><i></i><i></i><i></i></span><span class="cv-url">localhost</span></div>');
+            frame = el('iframe', { 'class': 'cv-frame', sandbox: 'allow-scripts allow-modals', title: 'תצוגה מקדימה', loading: 'lazy' });
+            var src = sampleTpl ? sampleTpl.innerHTML : pre.textContent;
+            frame.srcdoc = '<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="utf-8">' +
+                '<link rel="stylesheet" href="' + BOOTSTRAP_CSS + '">' +
+                '<style>body{padding:16px;margin:0;min-height:60px}</style></head><body>' + src +
+                '<script src="' + BOOTSTRAP_JS + '"><\/script>' +
+                '<script>(function(){function h(){parent.postMessage({pv:"' + id + '",h:document.documentElement.scrollHeight},"*");}' +
+                'window.addEventListener("load",h);if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);setTimeout(h,300);})();' +
+                'document.addEventListener("submit",function(e){e.preventDefault();});' +
+                'document.addEventListener("click",function(e){var a=e.target.closest("a[href]");if(a&&!a.hasAttribute("data-bs-toggle")&&!a.hasAttribute("data-bs-slide"))e.preventDefault();});<\/script>' +
+                '</body></html>';
+            box.appendChild(frame);
+            wrap.appendChild(box);
+            window.addEventListener('message', function (e) {
+                if (e.data && e.data.pv === id && e.data.h) frame.style.height = Math.min(Math.max(e.data.h, 120), 640) + 'px';
+            });
+        }
+        head.addEventListener('click', function (e) {
+            var b = e.target.closest('button[data-view]');
+            if (!b) return;
+            var showPreview = b.getAttribute('data-view') === 'preview';
+            if (showPreview && !box) build();
+            head.querySelectorAll('button').forEach(function (x) {
+                x.classList.toggle('active', x === b);
+                x.setAttribute('aria-selected', x === b);
+            });
+            pre.hidden = showPreview;
+            wrap.classList.toggle('showing-preview', showPreview);
+            if (box) box.hidden = !showPreview;
+        });
+    }
+
     // ---------- כפתור העתקה לכל בלוק קוד ----------
+    var pvCount = 0;
     document.querySelectorAll('pre.code-block').forEach(function (pre) {
+        var sampleTpl = pre.nextElementSibling && pre.nextElementSibling.matches('template.code-sample') ? pre.nextElementSibling : null;
         var wrap = el('div', { 'class': 'code-wrap' });
         pre.parentNode.insertBefore(wrap, pre);
         wrap.appendChild(pre);
+        if (pre.hasAttribute('data-preview')) addPreview(wrap, pre, sampleTpl);
         var btn = el('button', { 'class': 'copy-btn', 'type': 'button' }, 'העתק');
         btn.addEventListener('click', function () {
             var text = pre.innerText.replace(/ /g, ' ');
@@ -545,7 +595,7 @@
                 btn.textContent = 'סמנו והעתיקו ידנית';
             }
         });
-        wrap.appendChild(btn);
+        (wrap.querySelector('.cv-head') || wrap).appendChild(btn);
     });
 
     // ---------- קישור לספריית קטעי הקוד בסוף כל מדריך ----------

@@ -416,6 +416,31 @@ pre.code-block code[class*="language-"] { font-family: var(--mono); font-size: i
 .copy-btn:hover { background: #3E3E42; color: #fff; }
 pre.code-block .change { background: #574800; color: #FFE45C; border-radius: 2px; box-shadow: 0 0 0 2px #574800; }
 
+/* תצוגה מקדימה לבלוק קוד */
+[hidden] { display: none !important; }
+.cv-head { display: flex; align-items: flex-end; gap: 0.2rem; padding: 0 0.3rem; border-bottom: 1px solid var(--line-strong); }
+.cv-head button {
+    font-family: var(--font); font-size: 0.85rem; font-weight: 500; color: var(--muted);
+    background: transparent; border: 1px solid transparent; border-bottom: 0; border-radius: 6px 6px 0 0;
+    padding: 0.3rem 0.9rem; margin-bottom: -1px; cursor: pointer;
+}
+.cv-head button:hover { color: var(--ink); }
+.cv-head button.active { color: var(--ink); background: var(--page); border-color: var(--line-strong); border-bottom: 1px solid var(--page); }
+.cv-note { margin-right: auto; align-self: center; font-size: 0.78rem; color: var(--muted); padding-left: 0.3rem; }
+.has-preview pre.code-block, .has-preview pre.code-block[class*="language-"] { border-top-left-radius: 0; border-top-right-radius: 0; border-top: 0; }
+.showing-preview .copy-btn { display: none; }
+.cv-head .copy-btn { position: static; align-self: center; margin-right: auto; background: transparent; border: 1px solid var(--line-strong); color: var(--muted); }
+.cv-head .copy-btn:hover { background: var(--page-2); color: var(--ink); }
+.cv-note + .copy-btn { margin-right: 0.6rem; }
+.cv-preview { border: 1px solid var(--line-strong); border-top: 0; border-radius: 0 0 8px 8px; overflow: hidden; background: #fff; }
+.cv-chrome { display: flex; align-items: center; gap: 0.55rem; background: #E9E9EE; border-bottom: 1px solid #DCDCE4; padding: 0.3rem 0.6rem; direction: ltr; }
+html[data-theme="dark"] .cv-chrome { background: #2D2D30; border-color: #3C3C3C; }
+.cv-chrome .pg-dots i { background: #5E5A72; }
+html[data-theme="dark"] .cv-chrome .pg-dots i { background: #A0A0A0; }
+.cv-url { flex: 1; background: #fff; color: #5E5A72; border-radius: 5px; padding: 0.1rem 0.6rem; font-family: var(--mono); font-size: 0.78rem; }
+html[data-theme="dark"] .cv-url { background: #1E1E1E; color: #A0A0A0; }
+.cv-frame { display: block; width: 100%; height: 160px; border: 0; background: #fff; }
+
 /* =====================================================================
    טבלאות
    ===================================================================== */

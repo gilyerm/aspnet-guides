@@ -57,7 +57,7 @@ public IActionResult Create(Product product)
     <!-- ===================== 3 ===================== -->
     <h2>3. מי מחובר עכשיו?</h2>
     <p>בכל View אפשר לבדוק אם המשתמש מחובר, ולהציג את השם שלו, דרך <code class="inline">User</code>:</p>
-<pre class="code-block">@if (User.Identity?.IsAuthenticated == true)
+<pre class="code-block" data-preview>@if (User.Identity?.IsAuthenticated == true)
 {
     &lt;p&gt;שלום, @User.Identity.Name! 👋&lt;/p&gt;
 }
@@ -69,7 +69,7 @@ else
         או
         &lt;a asp-area="Identity" asp-page="/Account/Register"&gt;הירשמו&lt;/a&gt;
     &lt;/p&gt;
-}</pre>
+}</pre><template class="code-sample"><p>שלום, dana@example.com! 👋</p><hr><p class="text-muted small mb-1">ומי שלא התחבר רואה:</p><p>שלום אורח! <a href="#">התחברו</a> או <a href="#">הירשמו</a></p></template>
     <table class="simple">
         <tr><th>מה</th><th>הסבר</th></tr>
         <tr><td><code class="inline">User.Identity?.IsAuthenticated</code></td><td><code class="inline">true</code> אם מישהו מחובר.</td></tr>

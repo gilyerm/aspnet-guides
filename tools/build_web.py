@@ -1074,9 +1074,13 @@ document.getElementById("ask").addEventListener("click", function () {
 
 
 
-def code(src, lang=None):
+def code(src, lang=None, preview=None):
+    """preview=True: תצוגה מקדימה של הקוד עצמו. preview="<html>": תצוגה של HTML לדוגמה (כשיש בקוד C#)."""
     attr = f' data-lang="{lang}"' if lang else ''
-    return f'<pre class="code-block"{attr}>{html.escape(src.strip(chr(10)))}</pre>'
+    if preview:
+        attr += ' data-preview'
+    sample = f'<template class="code-sample">{preview}</template>' if isinstance(preview, str) else ''
+    return f'<pre class="code-block"{attr}>{html.escape(src.strip(chr(10)))}</pre>{sample}'
 
 
 def box(kind, title, text):

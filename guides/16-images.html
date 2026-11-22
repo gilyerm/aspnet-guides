@@ -44,7 +44,7 @@ Update-Database</pre>
 <pre class="code-block">&lt;form asp-action="Create" method="post" enctype="multipart/form-data"&gt;</pre>
         </li>
         <li>בתוך הטופס, לפני כפתור השמירה, הוסיפו:
-<pre class="code-block">&lt;div class="mb-3"&gt;
+<pre class="code-block" data-preview>&lt;div class="mb-3"&gt;
     &lt;label class="form-label"&gt;תמונה&lt;/label&gt;
     &lt;input type="file" name="imageFile" class="form-control" accept="image/*" /&gt;
 &lt;/div&gt;</pre>
@@ -153,10 +153,10 @@ public IActionResult Create(Product product, IFormFile? imageFile)
     <!-- ===================== 4 ===================== -->
     <h2>4. הצגת התמונה</h2>
     <p>ב-<code class="inline">Views/Products/Details.cshtml</code>, הוסיפו מתחת ל-<code class="inline">&lt;h1&gt;</code>:</p>
-<pre class="code-block">@if (Model.ImageUrl != null)
+<pre class="code-block" data-preview>@if (Model.ImageUrl != null)
 {
     &lt;img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded mb-3" style="max-width: 400px;" /&gt;
-}</pre>
+}</pre><template class="code-sample"><img src="https://placehold.co/400x260?text=Product" alt="מוצר" class="img-fluid rounded mb-3" style="max-width: 400px;" /></template>
     <p><code class="inline">img-fluid</code> של Bootstrap דואג שהתמונה לא תצא מהמסך בטלפון.</p>
     <p>ברשימה (<code class="inline">Index.cshtml</code>) אפשר להוסיף עמודה עם תמונה קטנה. בשורת הכותרות <code class="inline">&lt;th&gt;&lt;/th&gt;</code>, ובתוך הלולאה:</p>
 <pre class="code-block">&lt;td&gt;
