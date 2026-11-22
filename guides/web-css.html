@@ -192,7 +192,7 @@ p {
 }</textarea>
 </div>
 <div class="explanation"><strong>💡 ב-Bootstrap:</strong> אותו דבר בקלאסים: <code class="inline">class=&quot;d-flex justify-content-between align-items-center gap-2&quot;</code>.</div>
-    <h2>7. hover, פינות מעוגלות וצל</h2>
+    <h2>7. מצבים: hover ועוד, פינות מעוגלות וצל</h2>
 <div class="playground" data-title="נסו: שנו את 0.3s ל-2s" data-height="140">
 <textarea data-lang="html">&lt;button class=&quot;fancy&quot;&gt;עברו עליי עם העכבר&lt;/button&gt;</textarea>
 <textarea data-lang="css">.fancy {
@@ -213,7 +213,166 @@ p {
 }</textarea>
 </div>
 <table class="simple"><tr><th>תכונה</th><th>מה היא עושה</th></tr><tr><td><code class="inline">:hover</code></td><td>הכלל חל רק כשהעכבר מעל האלמנט.</td></tr><tr><td><code class="inline">border-radius</code></td><td>פינות מעוגלות. <code class="inline">50%</code> על ריבוע = עיגול.</td></tr><tr><td><code class="inline">box-shadow</code></td><td>צל: הזזה לצד, הזזה למטה, טשטוש, צבע.</td></tr><tr><td><code class="inline">transition</code></td><td>השינוי קורה בהדרגה, ולא בבת אחת.</td></tr><tr><td><code class="inline">cursor: pointer</code></td><td>העכבר הופך ליד, כמו על קישור.</td></tr></table>
-    <h2>8. עמוד שמתאים לטלפון</h2>
+<h3>לא רק hover: עוד מצבים של אלמנט</h3>
+<div class="concept"><span class="concept-title">📖 Pseudo-class (מצב)</span>מילה שמוסיפים לסלקטור אחרי נקודתיים, והכלל חל רק כשהאלמנט במצב הזה. <code class="inline">:hover</code> הוא אחד מהם, ויש עוד הרבה.<span class="example">דוגמה: <code class="inline">button:active { ... }</code> פירושו "כפתור, רק ברגע שלוחצים עליו".</span></div>
+<table class="simple"><tr><th>מצב</th><th>מתי הוא חל</th><th>שימוש נפוץ</th></tr><tr><td><code class="inline">:hover</code></td><td>העכבר מעל האלמנט.</td><td>כפתורים, כרטיסים, שורות בטבלה.</td></tr><tr><td><code class="inline">:active</code></td><td>ברגע הלחיצה עצמה (כל עוד מחזיקים).</td><td>כפתור ש"נלחץ פנימה".</td></tr><tr><td><code class="inline">:focus</code></td><td>האלמנט שפעיל עכשיו: השדה שמקלידים בו, או כפתור שהגיעו אליו עם Tab.</td><td>מסגרת צבעונית לשדה בטופס.</td></tr><tr><td><code class="inline">:visited</code></td><td>קישור שכבר נכנסו אליו.</td><td>צבע אחר לקישורים שכבר ראו.</td></tr></table>
+<div class="playground" data-title="נסו: החזיקו את העכבר לחוץ על כפתור. ואז שנו את 0.95 ל-0.7" data-height="150">
+<textarea data-lang="html">&lt;button class=&quot;btn3&quot;&gt;לחצו עליי&lt;/button&gt;
+&lt;button class=&quot;btn3&quot;&gt;ואחר כך עליי&lt;/button&gt;
+&lt;p&gt;נסו גם: לחצו על הרקע הלבן, ואז Tab במקלדת.&lt;/p&gt;</textarea>
+<textarea data-lang="css">.btn3 {
+    background-color: seagreen;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* העכבר מעל */
+.btn3:hover {
+    background-color: mediumseagreen;
+}
+
+/* ברגע הלחיצה: קטן קצת ונהיה כהה */
+.btn3:active {
+    background-color: darkgreen;
+    transform: scale(0.95);
+}
+
+/* הכפתור שנבחר (למשל עם Tab) */
+.btn3:focus {
+    outline: 3px solid orange;
+    outline-offset: 3px;
+}</textarea>
+</div>
+    <h2>8. עיצוב לפי מצב ומיקום: טפסים וטבלאות</h2>
+<p>אותו רעיון של "מצב" עובד גם על שדות בטופס (מולא נכון? סומן?) ועל המיקום של אלמנט ברשימה (ראשון? אחרון? זוגי?).</p>
+<h3>טופס שמגיב למשתמש</h3>
+<table class="simple"><tr><th>סלקטור</th><th>מתי הוא חל</th></tr><tr><td><code class="inline">:focus</code></td><td>השדה שמקלידים בו עכשיו.</td></tr><tr><td><code class="inline">:user-invalid</code></td><td>המשתמש מילא את השדה (או ניסה לשלוח), והוא לא תקין. למשל שדה <code class="inline">required</code> ריק, או אימייל בלי @.</td></tr><tr><td><code class="inline">:valid</code></td><td>השדה תקין.</td></tr><tr><td><code class="inline">:checked</code></td><td>תיבת סימון או radio שסומנו.</td></tr><tr><td><code class="inline">:disabled</code></td><td>שדה או כפתור עם <code class="inline">disabled</code>: אי אפשר להשתמש בהם.</td></tr><tr><td><code class="inline">::placeholder</code></td><td>הטקסט האפור שמופיע בשדה ריק.</td></tr><tr><td><code class="inline">::after</code> / <code class="inline">::before</code></td><td>מוסיף תוכן אחרי / לפני האלמנט, מתוך ה-CSS, עם <code class="inline">content</code>.</td></tr></table>
+<div class="playground" data-title="נסו: כתבו אימייל בלי @ ועברו לשדה הבא. אחר כך סמנו את התיבה" data-height="400">
+<textarea data-lang="html">&lt;form&gt;
+    &lt;label class=&quot;req&quot;&gt;שם&lt;/label&gt;
+    &lt;input type=&quot;text&quot; required placeholder=&quot;למשל: דנה&quot;&gt;
+
+    &lt;label class=&quot;req&quot;&gt;אימייל&lt;/label&gt;
+    &lt;input type=&quot;email&quot; required placeholder=&quot;name@example.com&quot;&gt;
+
+    &lt;label&gt;קוד קופון (בקרוב)&lt;/label&gt;
+    &lt;input type=&quot;text&quot; disabled placeholder=&quot;עוד לא זמין&quot;&gt;
+
+    &lt;label class=&quot;agree&quot;&gt;&lt;input type=&quot;checkbox&quot; required&gt; אני מסכים לתנאים&lt;/label&gt;
+
+    &lt;button type=&quot;submit&quot;&gt;שליחה&lt;/button&gt;
+&lt;/form&gt;</textarea>
+<textarea data-lang="css">form {
+    max-width: 280px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+input[type=&quot;text&quot;], input[type=&quot;email&quot;] {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* כוכבית אדומה אוטומטית לכל תווית עם class=&quot;req&quot; */
+.req::after {
+    content: &quot; *&quot;;
+    color: crimson;
+}
+
+/* הטקסט האפור בשדה ריק */
+::placeholder {
+    color: #aaa;
+}
+
+/* השדה שמקלידים בו */
+input:focus {
+    border-color: royalblue;
+    outline: none;
+}
+
+/* שדה שמולא נכון */
+input:valid {
+    border-color: seagreen;
+}
+
+/* שדה שמולא לא נכון (אחרי שהמשתמש נגע בו) */
+input:user-invalid {
+    border-color: crimson;
+    background-color: #fff0f0;
+}
+
+/* שדה שאי אפשר להשתמש בו */
+input:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+/* תיבת הסימון: כשמסמנים, כל השורה נהיית ירוקה */
+.agree:has(:checked) {
+    color: seagreen;
+    font-weight: bold;
+}
+
+button {
+    margin-top: 12px;
+    padding: 8px 20px;
+}</textarea>
+</div>
+<div class="explanation"><strong>💡 <code class="inline">:has</code> בשורה של התיבה:</strong> <code class="inline">.agree:has(:checked)</code> פירושו "התווית .agree, אם יש בתוכה משהו מסומן". כך מעצבים את כל השורה, ולא רק את הריבוע הקטן.</div>
+<h3>טבלה מפוספסת</h3>
+<table class="simple"><tr><th>סלקטור</th><th>מה הוא בוחר</th></tr><tr><td><code class="inline">:nth-child(even)</code></td><td>כל אלמנט במקום זוגי (2, 4, 6...). <code class="inline">odd</code> = אי-זוגי.</td></tr><tr><td><code class="inline">:nth-child(3)</code></td><td>רק האלמנט השלישי.</td></tr><tr><td><code class="inline">:first-child</code></td><td>הראשון.</td></tr><tr><td><code class="inline">:last-child</code></td><td>האחרון.</td></tr></table>
+<div class="playground" data-title="נסו: שנו even ל-odd. ואז הוסיפו שורה חדשה לטבלה, והפסים יסתדרו לבד" data-height="270">
+<textarea data-lang="html">&lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;מוצר&lt;/th&gt;&lt;th&gt;מחיר&lt;/th&gt;&lt;th&gt;במלאי&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;עט&lt;/td&gt;&lt;td&gt;5 ₪&lt;/td&gt;&lt;td&gt;120&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;מחברת&lt;/td&gt;&lt;td&gt;12 ₪&lt;/td&gt;&lt;td&gt;45&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;תיק גב&lt;/td&gt;&lt;td&gt;89 ₪&lt;/td&gt;&lt;td&gt;8&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;מחשבון&lt;/td&gt;&lt;td&gt;60 ₪&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;סרגל&lt;/td&gt;&lt;td&gt;4 ₪&lt;/td&gt;&lt;td&gt;300&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</textarea>
+<textarea data-lang="css">table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px 12px;
+    text-align: right;
+}
+
+th {
+    background-color: #5c2d91;
+    color: white;
+}
+
+/* כל שורה שנייה: רקע אפור */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* השורה שהעכבר עליה */
+tr:hover td {
+    background-color: #ffe9a8;
+}
+
+/* השורה האחרונה: קו תחתון */
+tr:last-child td {
+    border-bottom: 3px solid #5c2d91;
+}</textarea>
+</div>
+<div class="explanation"><strong>💡 בפרויקט:</strong> כשמציגים טבלה מה-DB עם <code class="inline">@foreach</code> (<a href="10-models.html">מדריך 10</a>, או "טבלה מהמסד" ב<a href="snippets.html">ספריית קטעי הקוד</a>), אי אפשר לדעת מראש כמה שורות יהיו. <code class="inline">:nth-child(even)</code> מפספס אותן לבד, לא משנה כמה. ב-Bootstrap אותו דבר נעשה עם <code class="inline">class=&quot;table table-striped table-hover&quot;</code>.</div>
+    <h2>9. עמוד שמתאים לטלפון</h2>
 <div class="concept"><span class="concept-title">📖 Media Query</span>כלל CSS שחל רק כשהמסך בגודל מסוים. <code class="inline">@media (max-width: 600px) { ... }</code> פירושו "רק כשהמסך צר מ-600 פיקסלים".</div>
 <div class="playground" data-title="נסו: שנו 400px ל-1000px, ותראו את התצוגה של &quot;טלפון&quot;" data-height="200">
 <textarea data-lang="html">&lt;div class=&quot;cards&quot;&gt;
@@ -241,7 +400,7 @@ p {
 }</textarea>
 </div>
 <div class="explanation"><strong>💡 ב-Bootstrap:</strong> זה בדיוק מה ש-<code class="inline">col-12 col-md-4</code> עושה בשבילכם (מדריך 9, סעיף 5).</div>
-    <h2>9. CSS משלכם יחד עם Bootstrap</h2>
+    <h2>10. CSS משלכם יחד עם Bootstrap</h2>
 <p>הדרך הנכונה לשנות עיצוב של Bootstrap: <strong>לא</strong> לגעת בקבצים של Bootstrap, אלא להוסיף class משלכם ב-<code class="inline">site.css</code>. הוא נטען אחרי Bootstrap, ולכן הכלל שלכם "מנצח".</p>
 <div class="playground" data-title="נסו: שנו את הצבע של .btn-pink" data-height="120" data-bootstrap>
 <textarea data-lang="html">&lt;button class=&quot;btn btn-primary&quot;&gt;כפתור רגיל של Bootstrap&lt;/button&gt;
@@ -259,6 +418,7 @@ p {
         <ul><li>כלל CSS: סלקטור { תכונה: ערך; }. הסלקטור הנפוץ ביותר הוא class (<code class="inline">.name</code>).</li>
 <li>צבעים וטקסט: color, background-color, font-size, text-align.</li>
 <li>Box Model: padding בפנים, border מסגרת, margin בחוץ.</li>
+<li>מצבים: <code class="inline">:hover</code>, <code class="inline">:active</code>, <code class="inline">:focus</code>, ובטפסים <code class="inline">:user-invalid</code> ו-<code class="inline">:checked</code>. מיקום: <code class="inline">:nth-child(even)</code> לטבלה מפוספסת.</li>
 <li>Flexbox מסדר בשורה, ו-@media מתאים לטלפון.</li>
 <li>משנים את Bootstrap עם class משלכם ב-site.css, ולא בקבצים שלו.</li></ul>
     </div>

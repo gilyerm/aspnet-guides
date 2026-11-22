@@ -570,7 +570,7 @@ p {
 }''', title='נסו: justify-content: center, ואחר כך align-items: flex-start', height=200),
              '<div class="explanation"><strong>💡 ב-Bootstrap:</strong> אותו דבר בקלאסים: ' + c('class="d-flex justify-content-between align-items-center gap-2"') + '.</div>',
          ]),
-         ('7. hover, פינות מעוגלות וצל', [
+         ('7. מצבים: hover ועוד, פינות מעוגלות וצל', [
              pg('''
 <button class="fancy">עברו עליי עם העכבר</button>''', css='''
 .fancy {
@@ -596,8 +596,184 @@ p {
                  [c('transition'), 'השינוי קורה בהדרגה, ולא בבת אחת.'],
                  [c('cursor: pointer'), 'העכבר הופך ליד, כמו על קישור.'],
              ]),
+             '<h3>לא רק hover: עוד מצבים של אלמנט</h3>',
+             concept('Pseudo-class (מצב)', 'מילה שמוסיפים לסלקטור אחרי נקודתיים, והכלל חל רק כשהאלמנט במצב הזה. ' + c(':hover') + ' הוא אחד מהם, ויש עוד הרבה.',
+                     'דוגמה: ' + c('button:active { ... }') + ' פירושו "כפתור, רק ברגע שלוחצים עליו".'),
+             table(['מצב', 'מתי הוא חל', 'שימוש נפוץ'], [
+                 [c(':hover'), 'העכבר מעל האלמנט.', 'כפתורים, כרטיסים, שורות בטבלה.'],
+                 [c(':active'), 'ברגע הלחיצה עצמה (כל עוד מחזיקים).', 'כפתור ש"נלחץ פנימה".'],
+                 [c(':focus'), 'האלמנט שפעיל עכשיו: השדה שמקלידים בו, או כפתור שהגיעו אליו עם Tab.', 'מסגרת צבעונית לשדה בטופס.'],
+                 [c(':visited'), 'קישור שכבר נכנסו אליו.', 'צבע אחר לקישורים שכבר ראו.'],
+             ]),
+             pg('''
+<button class="btn3">לחצו עליי</button>
+<button class="btn3">ואחר כך עליי</button>
+<p>נסו גם: לחצו על הרקע הלבן, ואז Tab במקלדת.</p>''', css='''
+.btn3 {
+    background-color: seagreen;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* העכבר מעל */
+.btn3:hover {
+    background-color: mediumseagreen;
+}
+
+/* ברגע הלחיצה: קטן קצת ונהיה כהה */
+.btn3:active {
+    background-color: darkgreen;
+    transform: scale(0.95);
+}
+
+/* הכפתור שנבחר (למשל עם Tab) */
+.btn3:focus {
+    outline: 3px solid orange;
+    outline-offset: 3px;
+}''', title='נסו: החזיקו את העכבר לחוץ על כפתור. ואז שנו את 0.95 ל-0.7', height=150),
          ]),
-         ('8. עמוד שמתאים לטלפון', [
+         ('8. עיצוב לפי מצב ומיקום: טפסים וטבלאות', [
+             '<p>אותו רעיון של "מצב" עובד גם על שדות בטופס (מולא נכון? סומן?) ועל המיקום של אלמנט ברשימה (ראשון? אחרון? זוגי?).</p>',
+             '<h3>טופס שמגיב למשתמש</h3>',
+             table(['סלקטור', 'מתי הוא חל'], [
+                 [c(':focus'), 'השדה שמקלידים בו עכשיו.'],
+                 [c(':user-invalid'), 'המשתמש מילא את השדה (או ניסה לשלוח), והוא לא תקין. למשל שדה ' + c('required') + ' ריק, או אימייל בלי @.'],
+                 [c(':valid'), 'השדה תקין.'],
+                 [c(':checked'), 'תיבת סימון או radio שסומנו.'],
+                 [c(':disabled'), 'שדה או כפתור עם ' + c('disabled') + ': אי אפשר להשתמש בהם.'],
+                 [c('::placeholder'), 'הטקסט האפור שמופיע בשדה ריק.'],
+                 [c('::after') + ' / ' + c('::before'), 'מוסיף תוכן אחרי / לפני האלמנט, מתוך ה-CSS, עם ' + c('content') + '.'],
+             ]),
+             pg('''
+<form>
+    <label class="req">שם</label>
+    <input type="text" required placeholder="למשל: דנה">
+
+    <label class="req">אימייל</label>
+    <input type="email" required placeholder="name@example.com">
+
+    <label>קוד קופון (בקרוב)</label>
+    <input type="text" disabled placeholder="עוד לא זמין">
+
+    <label class="agree"><input type="checkbox" required> אני מסכים לתנאים</label>
+
+    <button type="submit">שליחה</button>
+</form>''', css='''
+form {
+    max-width: 280px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+input[type="text"], input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* כוכבית אדומה אוטומטית לכל תווית עם class="req" */
+.req::after {
+    content: " *";
+    color: crimson;
+}
+
+/* הטקסט האפור בשדה ריק */
+::placeholder {
+    color: #aaa;
+}
+
+/* השדה שמקלידים בו */
+input:focus {
+    border-color: royalblue;
+    outline: none;
+}
+
+/* שדה שמולא נכון */
+input:valid {
+    border-color: seagreen;
+}
+
+/* שדה שמולא לא נכון (אחרי שהמשתמש נגע בו) */
+input:user-invalid {
+    border-color: crimson;
+    background-color: #fff0f0;
+}
+
+/* שדה שאי אפשר להשתמש בו */
+input:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+/* תיבת הסימון: כשמסמנים, כל השורה נהיית ירוקה */
+.agree:has(:checked) {
+    color: seagreen;
+    font-weight: bold;
+}
+
+button {
+    margin-top: 12px;
+    padding: 8px 20px;
+}''', title='נסו: כתבו אימייל בלי @ ועברו לשדה הבא. אחר כך סמנו את התיבה', height=400),
+             '<div class="explanation"><strong>💡 ' + c(':has') + ' בשורה של התיבה:</strong> ' + c('.agree:has(:checked)') + ' פירושו "התווית .agree, אם יש בתוכה משהו מסומן". כך מעצבים את כל השורה, ולא רק את הריבוע הקטן.</div>',
+             '<h3>טבלה מפוספסת</h3>',
+             table(['סלקטור', 'מה הוא בוחר'], [
+                 [c(':nth-child(even)'), 'כל אלמנט במקום זוגי (2, 4, 6...). ' + c('odd') + ' = אי-זוגי.'],
+                 [c(':nth-child(3)'), 'רק האלמנט השלישי.'],
+                 [c(':first-child'), 'הראשון.'],
+                 [c(':last-child'), 'האחרון.'],
+             ]),
+             pg('''
+<table>
+    <tr><th>מוצר</th><th>מחיר</th><th>במלאי</th></tr>
+    <tr><td>עט</td><td>5 ₪</td><td>120</td></tr>
+    <tr><td>מחברת</td><td>12 ₪</td><td>45</td></tr>
+    <tr><td>תיק גב</td><td>89 ₪</td><td>8</td></tr>
+    <tr><td>מחשבון</td><td>60 ₪</td><td>0</td></tr>
+    <tr><td>סרגל</td><td>4 ₪</td><td>300</td></tr>
+</table>''', css='''
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px 12px;
+    text-align: right;
+}
+
+th {
+    background-color: #5c2d91;
+    color: white;
+}
+
+/* כל שורה שנייה: רקע אפור */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* השורה שהעכבר עליה */
+tr:hover td {
+    background-color: #ffe9a8;
+}
+
+/* השורה האחרונה: קו תחתון */
+tr:last-child td {
+    border-bottom: 3px solid #5c2d91;
+}''', title='נסו: שנו even ל-odd. ואז הוסיפו שורה חדשה לטבלה, והפסים יסתדרו לבד', height=270),
+             '<div class="explanation"><strong>💡 בפרויקט:</strong> כשמציגים טבלה מה-DB עם ' + c('@foreach') + ' (<a href="10-models.html">מדריך 10</a>, או "טבלה מהמסד" ב<a href="snippets.html">ספריית קטעי הקוד</a>), אי אפשר לדעת מראש כמה שורות יהיו. ' + c(':nth-child(even)') + ' מפספס אותן לבד, לא משנה כמה. ב-Bootstrap אותו דבר נעשה עם ' + c('class="table table-striped table-hover"') + '.</div>',
+         ]),
+         ('9. עמוד שמתאים לטלפון', [
              concept('Media Query', f'כלל CSS שחל רק כשהמסך בגודל מסוים. {c("@media (max-width: 600px) { ... }")} פירושו "רק כשהמסך צר מ-600 פיקסלים".'),
              pg('''
 <div class="cards">
@@ -625,7 +801,7 @@ p {
 }''', title='נסו: שנו 400px ל-1000px, ותראו את התצוגה של "טלפון"', height=200),
              '<div class="explanation"><strong>💡 ב-Bootstrap:</strong> זה בדיוק מה ש-' + c('col-12 col-md-4') + ' עושה בשבילכם (מדריך 9, סעיף 5).</div>',
          ]),
-         ('9. CSS משלכם יחד עם Bootstrap', [
+         ('10. CSS משלכם יחד עם Bootstrap', [
              '<p>הדרך הנכונה לשנות עיצוב של Bootstrap: <strong>לא</strong> לגעת בקבצים של Bootstrap, אלא להוסיף class משלכם ב-' + c('site.css') + '. הוא נטען אחרי Bootstrap, ולכן הכלל שלכם "מנצח".</p>',
              pg('''
 <button class="btn btn-primary">כפתור רגיל של Bootstrap</button>
@@ -641,6 +817,7 @@ p {
      ['כלל CSS: סלקטור { תכונה: ערך; }. הסלקטור הנפוץ ביותר הוא class (' + c('.name') + ').',
       'צבעים וטקסט: color, background-color, font-size, text-align.',
       'Box Model: padding בפנים, border מסגרת, margin בחוץ.',
+      'מצבים: ' + c(':hover') + ', ' + c(':active') + ', ' + c(':focus') + ', ובטפסים ' + c(':user-invalid') + ' ו-' + c(':checked') + '. מיקום: ' + c(':nth-child(even)') + ' לטבלה מפוספסת.',
       'Flexbox מסדר בשורה, ו-@media מתאים לטלפון.',
       'משנים את Bootstrap עם class משלכם ב-site.css, ולא בקבצים שלו.'],
      'ההמשך באתר: <a href="web-css2.html">CSS חלק ב\'</a> (מיקום, משתני צבע, Grid ואנימציות) ו-<a href="web-design.html">עיצוב שנראה מקצועי</a>. כל התכונות, עם דוגמאות: <a href="https://www.w3schools.com/css/" target="_blank">w3schools CSS</a>. משחק שמלמד Flexbox: <a href="https://flexboxfroggy.com/#he" target="_blank">Flexbox Froggy</a> (יש גם בעברית).')
