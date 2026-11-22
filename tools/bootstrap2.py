@@ -1,10 +1,10 @@
 # "Bootstrap part 2": interactive components. Run through build_web.py (it provides pg, concept, table, c, page, code, box).
 
-IMG = 'https://placehold.co/800x320/{bg}/ffffff?text={text}'
+IMG = 'https://picsum.photos/seed/{text}/800/400'
 
 CAROUSEL_SAMPLE = ('<div id="pc" class="carousel slide" data-bs-ride="carousel"><div class="carousel-inner">' +
     ''.join(f'<div class="carousel-item{" active" if i == 0 else ""}"><img src="{IMG.format(bg=bg, text=t)}" class="d-block w-100" alt="{n}">'
-            f'<div class="carousel-caption"><h5>{n}</h5><p>{pr} ₪</p></div></div>'
+            f'<div class="carousel-caption bg-dark bg-opacity-50 rounded-3 py-2 mb-3"><h5>{n}</h5><p>{pr} ₪</p></div></div>'
             for i, (bg, t, n, pr) in enumerate([('5c2d91', 'Bag', 'תיק גב', 89), ('0d6efd', 'Notebook', 'מחברת', 12), ('198754', 'Pen', 'עט', 5)])) +
     '</div><button class="carousel-control-prev" type="button" data-bs-target="#pc" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>'
     '<button class="carousel-control-next" type="button" data-bs-target="#pc" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button></div>')
@@ -45,20 +45,20 @@ page('09b-bootstrap-components', "Bootstrap חלק ב': רכיבים שזזים"
     <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="3000">
             <img src="''' + IMG.format(bg='5c2d91', text='Sale') + '''" class="d-block w-100" alt="מבצע">
-            <div class="carousel-caption">
+            <div class="carousel-caption bg-dark bg-opacity-50 rounded-3 py-2 mb-3">
                 <h5>מבצע סוף שנה</h5>
                 <p>20% הנחה על הכול</p>
             </div>
         </div>
         <div class="carousel-item" data-bs-interval="3000">
             <img src="''' + IMG.format(bg='0d6efd', text='New') + '''" class="d-block w-100" alt="חדש">
-            <div class="carousel-caption">
+            <div class="carousel-caption bg-dark bg-opacity-50 rounded-3 py-2 mb-3">
                 <h5>הגיעו מוצרים חדשים</h5>
             </div>
         </div>
         <div class="carousel-item" data-bs-interval="3000">
             <img src="''' + IMG.format(bg='198754', text='Delivery') + '''" class="d-block w-100" alt="משלוח">
-            <div class="carousel-caption">
+            <div class="carousel-caption bg-dark bg-opacity-50 rounded-3 py-2 mb-3">
                 <h5>משלוח חינם מעל 100 ₪</h5>
             </div>
         </div>
@@ -77,7 +77,8 @@ page('09b-bootstrap-components', "Bootstrap חלק ב': רכיבים שזזים"
                  [c('data-bs-ride="carousel"'), 'מתחילה להתחלף לבד כשהעמוד נטען. בלי זה, רק החצים מחליפים.'],
                  [c('carousel-item active'), 'שקופית. ' + c('active') + ' = השקופית שמופיעה ראשונה. <strong>חייבת להיות בדיוק אחת כזו.</strong>'],
                  [c('data-bs-interval="3000"'), 'כמה זמן כל שקופית מוצגת, באלפיות שנייה (3000 = 3 שניות).'],
-                 [c('carousel-caption'), 'טקסט מעל התמונה.'],
+                 [c('carousel-caption'), 'טקסט מעל התמונה. ' + c('bg-dark bg-opacity-50 rounded-3') + ' נותן לו רקע כהה שקוף למחצה, כדי שיהיה קריא על כל תמונה, ו-' + c('mb-3') + ' מרים אותו מעל הנקודות.'],
+                 [c('d-block w-100'), 'התמונה ממלאת את כל הרוחב. כדאי שלכל התמונות יהיה אותו יחס (למשל 800x400), אחרת הגובה "קופץ" בין שקופיות.'],
                  [c('carousel-indicators') + ', ' + c('carousel-control-prev/next'), 'הנקודות והחצים. אפשר למחוק אותם אם לא צריך.'],
              ]),
              '<h3>קרוסלה של מוצרים מהמסד</h3>',
@@ -91,7 +92,7 @@ page('09b-bootstrap-components', "Bootstrap חלק ב': רכיבים שזזים"
             var product = Model[i];
             <div class="carousel-item @(i == 0 ? "active" : "")">
                 <img src="@product.ImageUrl" class="d-block w-100" alt="@product.Name" />
-                <div class="carousel-caption">
+                <div class="carousel-caption bg-dark bg-opacity-50 rounded-3 py-2 mb-3">
                     <h5>@product.Name</h5>
                     <p>@product.Price ₪</p>
                 </div>
