@@ -701,7 +701,8 @@ sections.append(('עיצוב ומבנה', [
 </a>'''),
              ('ב-_Layout.cshtml, בתוך ה-head', '''
 <link rel="icon" href="~/images/icon.png" />''')],
-            change='שימו את התמונות בתיקייה <code class="inline">wwwroot/images</code>.'),
+            change='שימו את התמונות בתיקייה <code class="inline">wwwroot/images</code>. האייקון בלשונית נקרא favicon. הכי פשוט: להחליף את <code class="inline">wwwroot/favicon.ico</code> בקובץ משלכם עם אותו שם, בלי שורת קוד. אם עדיין רואים את הישן: <span class="keyboard">Ctrl</span>+<span class="keyboard">F5</span>.',
+            guide=G('web-design', 'עיצוב שנראה מקצועי, סעיף 5')),
 
     snippet('עמוד 404 מעוצב',
             'במקום עמוד ריק כשכתובת לא קיימת, עמוד "העמוד לא נמצא" משלכם.',
@@ -785,6 +786,9 @@ page = f'''<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ספריית קטעי קוד</title>
     <script src="../assets/theme-init.js"></script>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
     <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body data-guide="snippets" data-toc="deep">

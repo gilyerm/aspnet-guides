@@ -6,7 +6,7 @@ ICONS_LINK = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstra
 # =====================================================================
 # עיצוב שנראה מקצועי
 # =====================================================================
-page('web-design', 'עיצוב שנראה מקצועי', 'גופנים בעברית, אייקונים, סרטונים ומפות, וכמה כללי עיצוב שעושים את כל ההבדל',
+page('web-design', 'עיצוב שנראה מקצועי', 'גופנים בעברית, אייקונים, סרטונים ומפות, כללי עיצוב שעושים את כל ההבדל, ואייקון ללשונית',
      '<strong>💡 על מה העמוד הזה?</strong> אתר יכול לעבוד מצוין ועדיין להיראות "של תלמיד". רוב ההבדל לא בקוד מסובך, אלא בכמה בחירות פשוטות: גופן טוב, אייקונים, רווחים וצבעים שמתאימים זה לזה. מומלץ להכיר קודם את <a href="web-css.html">יסודות CSS</a>.',
      [
          ('1. גופן בעברית מ-Google Fonts', [
@@ -135,8 +135,52 @@ body {
              ]),
              box('explanation', '💡 לא בטוחים באילו צבעים לבחור?', 'באתרים כמו <a href="https://coolors.co" target="_blank">coolors.co</a> יש פלטות מוכנות של צבעים שמתאימים זה לזה. לחצו רווח כדי לקבל פלטה חדשה, והעתיקו את הקודים.'),
          ]),
+         ('5. אייקון ללשונית של הדפדפן (favicon)', [
+             concept('Favicon', 'האייקון הקטן שמופיע בלשונית של הדפדפן, ליד שם העמוד, וגם ברשימת המועדפים. השם בא מ-favorite icon (אייקון למועדפים). אתר עם אייקון משלו נראה גמור ומקצועי.',
+                     'דוגמה: הסמל הסגול עם ' + c('</>') + ' בלשונית של האתר הזה.'),
+             '''<div class="tabmock" aria-hidden="true">
+        <div class="tabmock-row">
+            <div class="tabmock-tab"><span class="tabmock-ico tabmock-default"></span><span>Home Page - MyProject</span><span class="tabmock-x">✕</span></div>
+            <div class="tabmock-tab active"><span class="tabmock-ico">🎒</span><span dir="auto">דף הבית - החנות של דנה</span><span class="tabmock-x">✕</span></div>
+        </div>
+        <div class="tabmock-bar"><span class="tabmock-url">localhost:7123</span></div>
+    </div>
+    <p class="tabmock-caption">משמאל: האייקון של התבנית. מימין: עם favicon משלכם, ושם עמוד בעברית.</p>''',
+             '<p>הטקסט שליד האייקון הוא ה-' + c('<title>') + ' של העמוד. בפרויקט הוא בא מ-' + c('ViewData["Title"]') + ' של כל View, ומהשורה של ה-' + c('<title>') + ' ב-' + c('_Layout.cshtml') + ' (<a href="06-layout.html">מדריך 6</a>).</p>',
+             '<h3>שלב 1: יוצרים אייקון</h3>',
+             '<ul class="step-list">'
+             '<li>היכנסו ל-<a href="https://favicon.io" target="_blank">favicon.io</a>. יש שם שלוש אפשרויות: <strong>Text</strong> (אות או שתיים על רקע צבעוני), <strong>Image</strong> (מתמונה שלכם) ו-<strong>Emoji</strong> (מאימוג\'י).</li>'
+             '<li>עצבו ולחצו <strong>Download</strong>. יורד קובץ zip.</li>'
+             '<li>פתחו את ה-zip. צריך ממנו רק קובץ אחד: ' + c('favicon.ico') + ' (או ' + c('favicon-32x32.png') + ' לדרך השנייה).</li>'
+             '</ul>',
+             '<div class="explanation"><strong>💡 איזו תמונה מתאימה?</strong> ריבועית ופשוטה: האייקון מוצג בגודל 16 עד 32 פיקסלים, אז טקסט ארוך או תמונה עם הרבה פרטים לא ייראו. אות אחת, אימוג\'י או לוגו פשוט עובדים הכי טוב.</div>',
+             '<h3>שלב 2, דרך א: מחליפים את הקובץ הקיים (הכי פשוט)</h3>',
+             '<p>בפרויקט כבר יש אייקון: ' + c('wwwroot/favicon.ico') + '. הדפדפן מחפש קובץ בשם הזה לבד, גם בלי שום שורת קוד.</p>',
+             '<ul class="step-list">'
+             '<li>ב-Solution Explorer, מחקו את ' + c('wwwroot/favicon.ico') + ' הישן.</li>'
+             '<li>גררו את ה-' + c('favicon.ico') + ' החדש מהמחשב לתיקייה ' + c('wwwroot') + ' ב-Solution Explorer. <strong>השם חייב להיות בדיוק</strong> ' + c('favicon.ico') + '.</li>'
+             '<li>הריצו את האתר (ואם רואים עדיין את הישן, ראו "הזיכרון של הדפדפן" למטה).</li>'
+             '</ul>',
+             '<h3>שלב 2, דרך ב: תמונה משלכם עם שורת קוד</h3>',
+             '<p>מתאים כשרוצים קובץ PNG, או שם אחר. שימו את התמונה ב-' + c('wwwroot/images') + ', ובתוך ה-' + c('<head>') + ' של ' + c('Views/Shared/_Layout.cshtml') + ' הוסיפו:</p>',
+             code('<link rel="icon" type="image/png" href="~/images/favicon-32x32.png" asp-append-version="true" />', 'cshtml'),
+             '<p class="change-note">אם כבר יש ב-' + c('<head>') + ' שורה עם ' + c('rel="icon"') + ', שנו בה את הנתיב במקום להוסיף שורה שנייה. ' + c('~/') + ' = התיקייה ' + c('wwwroot') + '.</p>',
+             '<div class="explanation"><strong>🎁 בונוס: אימוג\'י בלי שום קובץ.</strong> אפשר לכתוב את האייקון ישר בשורה, בלי להוריד כלום. החליפו את ה-🎒 בכל אימוג\'י:</div>',
+             code('''<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎒</text></svg>" />''', 'cshtml'),
+             '<div class="warning"><strong>⚠️ הזיכרון של הדפדפן:</strong> דפדפנים שומרים את ה-favicon בזיכרון לזמן רב, ולכן אחרי ההחלפה רואים לפעמים עדיין את הישן. זה לא אומר שטעיתם. נסו: <span class="keyboard">Ctrl</span> + <span class="keyboard">F5</span> (רענון מלא), לסגור את הלשונית ולפתוח חדשה, או חלון גלישה בסתר (<span class="keyboard">Ctrl</span> + <span class="keyboard">Shift</span> + <span class="keyboard">N</span>). בדרך ב, ' + c('asp-append-version="true"') + ' עוזר: הוא משנה את הכתובת בכל פעם שהקובץ משתנה.</div>',
+             '<div class="checkpoint">בלשונית של האתר מופיע האייקון שלכם? מצוין. בדקו גם שהשם שלידו נכון, ואם לא, שנו את ה-' + c('<title>') + ' ב-' + c('_Layout.cshtml') + '.</div>',
+             '''<div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>עדיין רואים את האייקון הישן:</strong> זה כמעט תמיד הזיכרון של הדפדפן. ראו את האזהרה למעלה.</li>
+            <li><strong>אין אייקון בכלל (או סמל של דף ריק):</strong> הקובץ לא נמצא. בדקו שהוא בתוך ''' + c('wwwroot') + ''' (ולא בתיקייה הראשית של הפרויקט), ושהשם בשורת הקוד זהה לשם הקובץ, כולל הסיומת (''' + c('.png') + ''' או ''' + c('.ico') + ''').</li>
+            <li><strong>האייקון מטושטש או לא ברור:</strong> התמונה מפורטת מדי, או לא ריבועית. נסו אות אחת או אימוג'י.</li>
+        </ul>
+    </div>''',
+         ]),
      ],
      ['גופן מ-Google Fonts: שורת link ב-Layout, ו-font-family ב-site.css.',
+      'favicon: מחליפים את ' + c('wwwroot/favicon.ico') + ' (או מוסיפים ' + c('<link rel="icon">') + '), ואם רואים את הישן: Ctrl+F5.',
       'אייקונים: Bootstrap Icons, שורת link אחת, ואז ' + c('<i class="bi bi-...">') + '.',
       'סרטונים ומפות: קוד הטמעה (iframe), עטוף ב-' + c('ratio ratio-16x9') + '.',
       'עיצוב: צבע מוביל אחד, ניגודיות, רווחים, היררכיה ועקביות.'],

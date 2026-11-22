@@ -32,7 +32,7 @@
           keywords: 'getElementById querySelector addEventListener click textContent classList toggle hidden let const forEach alert confirm' },
 
         { num: '🎨', slug: 'web-design', section: 'web', title: 'עיצוב שנראה מקצועי', desc: 'גופנים בעברית, אייקונים, סרטונים ומפות, וכללי עיצוב', ready: true,
-          keywords: 'Google Fonts גופן Rubik Heebo אייקונים Bootstrap Icons YouTube מפה iframe embed צבעים פלטה ניגודיות' },
+          keywords: 'Google Fonts גופן Rubik Heebo אייקונים Bootstrap Icons YouTube מפה iframe embed צבעים פלטה ניגודיות favicon אייקון לשונית כרטיסייה' },
         { num: 'CSS 2', slug: 'web-css2', section: 'web', title: "CSS חלק ב'", desc: 'משתני צבע, position, Grid ואנימציות', ready: true,
           keywords: 'var משתנים root position sticky fixed absolute relative grid keyframes animation אנימציה' },
         { num: 'JS 2', slug: 'web-js2', section: 'web', title: "JavaScript חלק ב'", desc: 'פונקציות, אובייקטים, טיימרים, משחקים קטנים ו-localStorage', ready: true,

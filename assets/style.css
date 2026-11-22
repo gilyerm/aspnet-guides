@@ -711,6 +711,23 @@ html[data-theme="dark"] .pgl-info { color: #93C5FD; }
 .pg-ctable th, .pg-ctable td { border: 1px solid var(--ed-line); padding: 0.15rem 0.6rem; text-align: left; }
 .pg-ctable th { background: var(--br-chrome); color: var(--br-fg); font-weight: 400; }
 
+/* הדגמה של לשוניות דפדפן (favicon) */
+.tabmock { border: 1px solid var(--line-strong); border-radius: 10px; overflow: hidden; margin: 1.2rem 0 0.4rem; direction: ltr; background: #DEE1E6; max-width: 620px; }
+.tabmock-row { display: flex; gap: 2px; padding: 8px 8px 0; }
+.tabmock-tab { display: flex; align-items: center; gap: 8px; font-family: system-ui, Arial, sans-serif; font-size: 13px; color: #3C4043; padding: 7px 12px; border-radius: 8px 8px 0 0; min-width: 0; flex: 1; max-width: 260px; }
+.tabmock-tab span:nth-child(2) { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tabmock-tab.active { background: #fff; color: #202124; }
+.tabmock-ico { width: 16px; height: 16px; font-size: 14px; line-height: 16px; text-align: center; flex-shrink: 0; }
+.tabmock-default { border-radius: 50%; border: 1.5px solid #80868B; box-sizing: border-box; }
+.tabmock-x { font-size: 10px; color: #5F6368; }
+.tabmock-bar { background: #fff; padding: 6px 10px 8px; }
+.tabmock-url { display: block; background: #F1F3F4; border-radius: 14px; padding: 4px 12px; font-family: system-ui, Arial, sans-serif; font-size: 13px; color: #5F6368; }
+html[data-theme="dark"] .tabmock { background: #202124; }
+html[data-theme="dark"] .tabmock-tab { color: #BDC1C6; }
+html[data-theme="dark"] .tabmock-tab.active, html[data-theme="dark"] .tabmock-bar { background: #35363A; color: #E8EAED; }
+html[data-theme="dark"] .tabmock-url { background: #202124; color: #BDC1C6; }
+.tabmock-caption { font-size: 0.9rem; color: var(--muted); margin-top: 0; }
+
 /* מבוא: אותו כרטיס בשלושה שלבים */
 .layers { border: 1px solid var(--line-strong); border-radius: 10px; overflow: hidden; margin: 1.2rem 0 1.8rem; background: var(--page); box-shadow: var(--shadow); }
 .layers-tabs { display: flex; gap: 0.3rem; flex-wrap: wrap; padding: 0.5rem 0.7rem; background: var(--chrome); border-bottom: 1px solid var(--line); }

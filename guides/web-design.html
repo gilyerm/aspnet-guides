@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>עיצוב שנראה מקצועי</title>
     <script src="../assets/theme-init.js"></script>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
     <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body data-guide="web-design">
 <main>
     <h1>עיצוב שנראה מקצועי</h1>
-    <div class="subtitle">גופנים בעברית, אייקונים, סרטונים ומפות, וכמה כללי עיצוב שעושים את כל ההבדל</div>
+    <div class="subtitle">גופנים בעברית, אייקונים, סרטונים ומפות, כללי עיצוב שעושים את כל ההבדל, ואייקון ללשונית</div>
 
     <div class="explanation"><strong>💡 על מה העמוד הזה?</strong> אתר יכול לעבוד מצוין ועדיין להיראות "של תלמיד". רוב ההבדל לא בקוד מסובך, אלא בכמה בחירות פשוטות: גופן טוב, אייקונים, רווחים וצבעים שמתאימים זה לזה. מומלץ להכיר קודם את <a href="web-css.html">יסודות CSS</a>.
         <br><br>
@@ -132,10 +135,44 @@
 </div>
 <table class="simple"><tr><th>כלל</th><th>למה</th><th>איך</th></tr><tr><td><strong>2-3 צבעים בלבד</strong></td><td>יותר צבעים = בלגן. צבע אחד "מוביל" (לכפתורים ולכותרות), ושאר העמוד בשחור, אפור ולבן.</td><td>בחרו צבע מוביל אחד, והשתמשו בו בכל האתר.</td></tr><tr><td><strong>ניגודיות</strong></td><td>טקסט צהוב על לבן, או אפור בהיר על אפור, קשה לקרוא.</td><td>טקסט כהה על רקע בהיר (או הפוך).</td></tr><tr><td><strong>רווחים</strong></td><td>צפיפות מעייפת את העין. רווח "נותן לתוכן לנשום".</td><td><code class="inline">padding</code> בתוך קופסאות, <code class="inline">margin</code> ביניהן, <code class="inline">line-height: 1.6</code> בטקסט.</td></tr><tr><td><strong>היררכיה</strong></td><td>צריך לראות מיד מה הכי חשוב.</td><td>כותרת גדולה, טקסט רגיל, ופעולה אחת בולטת (כפתור בצבע המוביל).</td></tr><tr><td><strong>עקביות</strong></td><td>אתר שבו כל עמוד נראה אחרת נראה לא גמור.</td><td>אותו גופן, אותם צבעים, אותו סגנון כפתורים בכל העמודים. (בשביל זה יש <code class="inline">site.css</code> ומשתני CSS, ראו <a href="web-css2.html">CSS חלק ב'</a>.)</td></tr><tr><td><strong>פחות זה יותר</strong></td><td>סימני קריאה, אנימציות ומסגרות צועקות מסיחים את הדעת.</td><td>כל קישוט צריך סיבה.</td></tr></table>
 <div class="explanation"><strong>💡 לא בטוחים באילו צבעים לבחור?</strong> באתרים כמו <a href="https://coolors.co" target="_blank">coolors.co</a> יש פלטות מוכנות של צבעים שמתאימים זה לזה. לחצו רווח כדי לקבל פלטה חדשה, והעתיקו את הקודים.</div>
+    <h2>5. אייקון ללשונית של הדפדפן (favicon)</h2>
+<div class="concept"><span class="concept-title">📖 Favicon</span>האייקון הקטן שמופיע בלשונית של הדפדפן, ליד שם העמוד, וגם ברשימת המועדפים. השם בא מ-favorite icon (אייקון למועדפים). אתר עם אייקון משלו נראה גמור ומקצועי.<span class="example">דוגמה: הסמל הסגול עם <code class="inline">&lt;/&gt;</code> בלשונית של האתר הזה.</span></div>
+<div class="tabmock" aria-hidden="true">
+        <div class="tabmock-row">
+            <div class="tabmock-tab"><span class="tabmock-ico tabmock-default"></span><span>Home Page - MyProject</span><span class="tabmock-x">✕</span></div>
+            <div class="tabmock-tab active"><span class="tabmock-ico">🎒</span><span dir="auto">דף הבית - החנות של דנה</span><span class="tabmock-x">✕</span></div>
+        </div>
+        <div class="tabmock-bar"><span class="tabmock-url">localhost:7123</span></div>
+    </div>
+    <p class="tabmock-caption">משמאל: האייקון של התבנית. מימין: עם favicon משלכם, ושם עמוד בעברית.</p>
+<p>הטקסט שליד האייקון הוא ה-<code class="inline">&lt;title&gt;</code> של העמוד. בפרויקט הוא בא מ-<code class="inline">ViewData[&quot;Title&quot;]</code> של כל View, ומהשורה של ה-<code class="inline">&lt;title&gt;</code> ב-<code class="inline">_Layout.cshtml</code> (<a href="06-layout.html">מדריך 6</a>).</p>
+<h3>שלב 1: יוצרים אייקון</h3>
+<ul class="step-list"><li>היכנסו ל-<a href="https://favicon.io" target="_blank">favicon.io</a>. יש שם שלוש אפשרויות: <strong>Text</strong> (אות או שתיים על רקע צבעוני), <strong>Image</strong> (מתמונה שלכם) ו-<strong>Emoji</strong> (מאימוג'י).</li><li>עצבו ולחצו <strong>Download</strong>. יורד קובץ zip.</li><li>פתחו את ה-zip. צריך ממנו רק קובץ אחד: <code class="inline">favicon.ico</code> (או <code class="inline">favicon-32x32.png</code> לדרך השנייה).</li></ul>
+<div class="explanation"><strong>💡 איזו תמונה מתאימה?</strong> ריבועית ופשוטה: האייקון מוצג בגודל 16 עד 32 פיקסלים, אז טקסט ארוך או תמונה עם הרבה פרטים לא ייראו. אות אחת, אימוג'י או לוגו פשוט עובדים הכי טוב.</div>
+<h3>שלב 2, דרך א: מחליפים את הקובץ הקיים (הכי פשוט)</h3>
+<p>בפרויקט כבר יש אייקון: <code class="inline">wwwroot/favicon.ico</code>. הדפדפן מחפש קובץ בשם הזה לבד, גם בלי שום שורת קוד.</p>
+<ul class="step-list"><li>ב-Solution Explorer, מחקו את <code class="inline">wwwroot/favicon.ico</code> הישן.</li><li>גררו את ה-<code class="inline">favicon.ico</code> החדש מהמחשב לתיקייה <code class="inline">wwwroot</code> ב-Solution Explorer. <strong>השם חייב להיות בדיוק</strong> <code class="inline">favicon.ico</code>.</li><li>הריצו את האתר (ואם רואים עדיין את הישן, ראו "הזיכרון של הדפדפן" למטה).</li></ul>
+<h3>שלב 2, דרך ב: תמונה משלכם עם שורת קוד</h3>
+<p>מתאים כשרוצים קובץ PNG, או שם אחר. שימו את התמונה ב-<code class="inline">wwwroot/images</code>, ובתוך ה-<code class="inline">&lt;head&gt;</code> של <code class="inline">Views/Shared/_Layout.cshtml</code> הוסיפו:</p>
+<pre class="code-block" data-lang="cshtml">&lt;link rel=&quot;icon&quot; type=&quot;image/png&quot; href=&quot;~/images/favicon-32x32.png&quot; asp-append-version=&quot;true&quot; /&gt;</pre>
+<p class="change-note">אם כבר יש ב-<code class="inline">&lt;head&gt;</code> שורה עם <code class="inline">rel=&quot;icon&quot;</code>, שנו בה את הנתיב במקום להוסיף שורה שנייה. <code class="inline">~/</code> = התיקייה <code class="inline">wwwroot</code>.</p>
+<div class="explanation"><strong>🎁 בונוס: אימוג'י בלי שום קובץ.</strong> אפשר לכתוב את האייקון ישר בשורה, בלי להוריד כלום. החליפו את ה-🎒 בכל אימוג'י:</div>
+<pre class="code-block" data-lang="cshtml">&lt;link rel=&quot;icon&quot; href=&quot;data:image/svg+xml,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 100 100&#x27;&gt;&lt;text y=&#x27;.9em&#x27; font-size=&#x27;90&#x27;&gt;🎒&lt;/text&gt;&lt;/svg&gt;&quot; /&gt;</pre>
+<div class="warning"><strong>⚠️ הזיכרון של הדפדפן:</strong> דפדפנים שומרים את ה-favicon בזיכרון לזמן רב, ולכן אחרי ההחלפה רואים לפעמים עדיין את הישן. זה לא אומר שטעיתם. נסו: <span class="keyboard">Ctrl</span> + <span class="keyboard">F5</span> (רענון מלא), לסגור את הלשונית ולפתוח חדשה, או חלון גלישה בסתר (<span class="keyboard">Ctrl</span> + <span class="keyboard">Shift</span> + <span class="keyboard">N</span>). בדרך ב, <code class="inline">asp-append-version=&quot;true&quot;</code> עוזר: הוא משנה את הכתובת בכל פעם שהקובץ משתנה.</div>
+<div class="checkpoint">בלשונית של האתר מופיע האייקון שלכם? מצוין. בדקו גם שהשם שלידו נכון, ואם לא, שנו את ה-<code class="inline">&lt;title&gt;</code> ב-<code class="inline">_Layout.cshtml</code>.</div>
+<div class="troubleshoot">
+        <h3>🔧 אם זה לא עובד</h3>
+        <ul>
+            <li><strong>עדיין רואים את האייקון הישן:</strong> זה כמעט תמיד הזיכרון של הדפדפן. ראו את האזהרה למעלה.</li>
+            <li><strong>אין אייקון בכלל (או סמל של דף ריק):</strong> הקובץ לא נמצא. בדקו שהוא בתוך <code class="inline">wwwroot</code> (ולא בתיקייה הראשית של הפרויקט), ושהשם בשורת הקוד זהה לשם הקובץ, כולל הסיומת (<code class="inline">.png</code> או <code class="inline">.ico</code>).</li>
+            <li><strong>האייקון מטושטש או לא ברור:</strong> התמונה מפורטת מדי, או לא ריבועית. נסו אות אחת או אימוג'י.</li>
+        </ul>
+    </div>
 
     <div class="summary">
         <h3>📌 מה למדנו</h3>
         <ul><li>גופן מ-Google Fonts: שורת link ב-Layout, ו-font-family ב-site.css.</li>
+<li>favicon: מחליפים את <code class="inline">wwwroot/favicon.ico</code> (או מוסיפים <code class="inline">&lt;link rel=&quot;icon&quot;&gt;</code>), ואם רואים את הישן: Ctrl+F5.</li>
 <li>אייקונים: Bootstrap Icons, שורת link אחת, ואז <code class="inline">&lt;i class=&quot;bi bi-...&quot;&gt;</code>.</li>
 <li>סרטונים ומפות: קוד הטמעה (iframe), עטוף ב-<code class="inline">ratio ratio-16x9</code>.</li>
 <li>עיצוב: צבע מוביל אחד, ניגודיות, רווחים, היררכיה ועקביות.</li></ul>
