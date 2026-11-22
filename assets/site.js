@@ -290,12 +290,23 @@
         });
     }
 
+    // Prism נטען פעם אחת, רק בעמודים שיש בהם קוד
+    var prismWaiting = null;
+    function withPrism(cb) {
+        if (window.Prism && window.Prism.highlightElement) { cb(); return; }
+        if (prismWaiting) { prismWaiting.push(cb); return; }
+        prismWaiting = [cb];
+        document.head.appendChild(el('link', { rel: 'stylesheet', href: root + 'assets/vendor/prism-vsc-dark-plus.css' }));
+        window.Prism = window.Prism || {};
+        window.Prism.manual = true;
+        var ps = el('script', { src: root + 'assets/vendor/prism.js' });
+        ps.onload = function () { prismWaiting.forEach(function (f) { f(); }); };
+        document.head.appendChild(ps);
+    }
+
     var blocks = document.querySelectorAll('pre.code-block');
     if (blocks.length) {
-        var css = el('link', { rel: 'stylesheet', href: root + 'assets/vendor/prism-vsc-dark-plus.css' });
-        document.head.appendChild(css);
-        var prismScript = el('script', { src: root + 'assets/vendor/prism.js' });
-        prismScript.onload = function () {
+        withPrism(function () {
             blocks.forEach(function (pre) {
                 var words = [];
                 pre.querySelectorAll('.change').forEach(function (s) {
@@ -311,8 +322,7 @@
                 window.Prism.highlightElement(code);
                 wrapChanges(code, words);
             });
-        };
-        document.head.appendChild(prismScript);
+        });
     }
 
     // ---------- נסו בעצמכם: עורך חי עם תוצאה ----------
@@ -339,15 +349,38 @@
                 return '<button type="button" data-tab="' + l + '"' + (l === active ? ' class="active"' : '') + '>' + names[l] + '</button>';
             }).join('') + '</span>' +
             '<span class="pg-actions"><button type="button" data-act="reset">↺ איפוס</button></span>');
-        var editor = el('textarea', { 'class': 'pg-editor', spellcheck: 'false', 'aria-label': 'עורך קוד' });
+        var editor = el('textarea', { 'class': 'pg-editor', spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', 'aria-label': 'עורך קוד' });
         editor.value = current[active];
+        // שכבת צבעים מתחת לתיבת הטקסט: מקלידים בתיבה (שהטקסט שלה שקוף) ורואים את הקוד הצבוע מתחתיה
+        var PRISM_LANG = { html: 'markup', css: 'css', js: 'javascript' };
+        var hlCode = el('code');
+        var hl = el('pre', { 'class': 'pg-hl', 'aria-hidden': 'true' });
+        hl.appendChild(hlCode);
+        var codeBox = el('div', { 'class': 'pg-code' });
+        codeBox.appendChild(hl);
+        codeBox.appendChild(editor);
+        function paintCode() {
+            var text = editor.value;
+            if (text.slice(-1) === '\n') text += ' ';
+            var P = window.Prism, lang = PRISM_LANG[active];
+            if (P && P.highlight && P.languages && P.languages[lang]) {
+                hlCode.innerHTML = P.highlight(text, P.languages[lang], lang);
+            } else {
+                hlCode.textContent = text;
+            }
+            hl.scrollTop = editor.scrollTop;
+            hl.scrollLeft = editor.scrollLeft;
+        }
+        editor.addEventListener('scroll', function () { hl.scrollTop = editor.scrollTop; hl.scrollLeft = editor.scrollLeft; });
+        paintCode();
+        withPrism(paintCode);
         var frame = el('iframe', { 'class': 'pg-frame', sandbox: 'allow-scripts allow-modals', title: 'תוצאה' });
         frame.style.height = (pg.getAttribute('data-height') || 220) + 'px';
         editor.style.minHeight = (pg.getAttribute('data-height') || 220) + 'px';
         var result = el('div', { 'class': 'pg-result' }, '<div class="pg-result-label">👀 התוצאה (מתעדכנת תוך כדי הקלדה)</div>');
         result.appendChild(frame);
         var body = el('div', { 'class': 'pg-body' });
-        body.appendChild(editor);
+        body.appendChild(codeBox);
         body.appendChild(result);
         var err = el('div', { 'class': 'pg-error' });
         var con = el('div', { 'class': 'pg-console' });
@@ -373,6 +406,7 @@
         var timer;
         editor.addEventListener('input', function () {
             current[active] = editor.value;
+            paintCode();
             clearTimeout(timer);
             timer = setTimeout(render, 350);
         });
@@ -391,10 +425,12 @@
             if (b.getAttribute('data-tab')) {
                 active = b.getAttribute('data-tab');
                 editor.value = current[active];
+                paintCode();
                 bar.querySelectorAll('[data-tab]').forEach(function (x) { x.classList.toggle('active', x === b); });
             } else if (b.getAttribute('data-act') === 'reset') {
                 present.forEach(function (l) { current[l] = original[l]; });
                 editor.value = current[active];
+                paintCode();
                 render();
             }
         });
