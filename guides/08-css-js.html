@@ -23,7 +23,7 @@
     <p class="web-basics-link">🌐 צריכים לרענן את הבסיס? ב-<a href="web-css.html">יסודות CSS</a> ו-<a href="web-js.html">יסודות JavaScript</a> יש הסבר קצר ודוגמאות שאפשר לשנות ולראות את התוצאה מיד.</p>
 
     <!-- ===================== 1 ===================== -->
-    <h2>1. התיקייה wwwroot</h2>
+    <h2 id="wwwroot">1. התיקייה wwwroot</h2>
     <div class="concept">
         <span class="concept-title">📖 מושג: קבצים סטטיים</span>
         קבצים שהדפדפן מקבל כמו שהם, בלי שהשרת משנה בהם משהו: CSS, JavaScript, תמונות. בפרויקט שלנו, כל הקבצים האלה גרים בתיקייה <code class="inline">wwwroot</code>.
@@ -44,7 +44,7 @@
     </div>
 
     <!-- ===================== 2 ===================== -->
-    <h2>2. CSS לכל האתר</h2>
+    <h2 id="site-css">2. CSS לכל האתר</h2>
     <p>הקובץ <code class="inline">wwwroot/css/site.css</code> כבר מקושר לכל העמודים, דרך השורה הזאת ב-<code class="inline">_Layout.cshtml</code>:</p>
     <pre class="code-block">&lt;link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /&gt;</pre>
     <p>אז כל מה שתכתבו ב-<code class="inline">site.css</code> ישפיע על כל האתר. נסו: פתחו את <code class="inline">site.css</code>, והוסיפו בסוף הקובץ:</p>
@@ -86,7 +86,7 @@
     <div class="checkpoint">עמוד "אודות" צהוב, וכל שאר העמודים לבנים כרגיל.</div>
 
     <!-- ===================== 4 ===================== -->
-    <h2>4. JavaScript</h2>
+    <h2 id="javascript">4. JavaScript</h2>
     <p>גם כאן יש שתי אפשרויות: לכל האתר (בקובץ <code class="inline">wwwroot/js/site.js</code>, שכבר מקושר ב-Layout), או לעמוד אחד. לעמוד אחד לא צריך להוסיף כלום ב-Layout, כי ה-Section בשם <code class="inline">Scripts</code> כבר קיים שם.</p>
 
     <ul class="step-list">
@@ -122,7 +122,7 @@
     <p>אם עדיין רואים את הגרסה הישנה, לחצו <strong>בדפדפן</strong> על <span class="keyboard">Ctrl+Shift+R</span> (רענון מלא, בלי מטמון).</p>
 
     <!-- ===================== 6 ===================== -->
-    <h2>6. עברית: האתר מימין לשמאל</h2>
+    <h2 id="rtl">6. עברית: האתר מימין לשמאל</h2>
     <p>הפרויקט נוצר באנגלית, ולכן הכול מסודר משמאל לימין. כדי להפוך את כל האתר לעברית צריך שני שינויים ב-<code class="inline">_Layout.cshtml</code>:</p>
     <ul class="step-list">
         <li>בשורה הראשונה אחרי <code class="inline">&lt;!DOCTYPE html&gt;</code>, החליפו את <code class="inline">&lt;html lang="en"&gt;</code> ב:

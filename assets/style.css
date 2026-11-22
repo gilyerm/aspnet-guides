@@ -235,6 +235,15 @@ p { max-width: 70ch; }
     .layout.with-toc main .toc { display: none; }
 }
 
+/* סעיף שהגיעו אליו מקישור: מרקר צהוב שדועך */
+:root { --flash: #FFE45C; }
+html[data-theme="dark"] { --flash: rgba(204, 167, 0, 0.45); }
+.flash { animation: flash 2.6s ease-out; border-radius: 4px; }
+@keyframes flash {
+    0%, 35% { background-color: var(--flash); box-shadow: 0 0 0 0.35rem var(--flash); }
+    100% { background-color: transparent; box-shadow: 0 0 0 0.35rem transparent; }
+}
+
 /* =====================================================================
    קופסאות תוכן, בשפה של ה-IDE
    ===================================================================== */

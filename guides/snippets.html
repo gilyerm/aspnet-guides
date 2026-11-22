@@ -27,7 +27,7 @@
 
     <h2>הצגת מידע</h2>
 <div class="snippet">
-<h3>טבלה עם נתונים מהמסד</h3>
+<h3 id="db-table">טבלה עם נתונים מהמסד</h3>
 <p>מציג את כל השורות מטבלה במסד הנתונים, בטבלת Bootstrap.</p>
 <p class="where">ב-Controller, Action בשם Index</p>
 <pre class="code-block">public IActionResult Index()
@@ -56,10 +56,10 @@
     &lt;/tbody&gt;
 &lt;/table&gt;</pre><template class="code-sample"><table class="table table-striped table-hover"><thead><tr><th>שם</th><th>מחיר</th></tr></thead><tbody><tr><td>תיק גב</td><td>89 ₪</td></tr><tr><td>מחברת</td><td>12 ₪</td></tr><tr><td>עט</td><td>5 ₪</td></tr><tr><td>מחשבון</td><td>60 ₪</td></tr></tbody></table></template>
 <p class="change-note">החליפו את <code class="inline">Products</code>/<code class="inline">Product</code> בשם הטבלה והמודל שלכם, ואת העמודות בשדות שלכם.</p>
-<p class="guide-link">הסבר מלא: <a href="13-database.html">מדריך 13</a>, <a href="10-models.html">מדריך 10</a></p>
+<p class="guide-link">הסבר מלא: <a href="13-database.html">מדריך 13</a>, <a href="10-models.html#show-products">מדריך 10</a></p>
 </div>
 <div class="snippet">
-<h3>כרטיסים ברשת</h3>
+<h3 id="cards">כרטיסים ברשת</h3>
 <p>כל פריט ככרטיס עם תמונה: שלושה בשורה במחשב, אחד בשורה בטלפון.</p>
 <p class="where">ב-View (במקום טבלה)</p>
 <pre class="code-block" data-preview>&lt;div class=&quot;row&quot;&gt;
@@ -78,10 +78,10 @@
     }
 &lt;/div&gt;</pre><template class="code-sample"><div class="row"><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Bag" class="card-img-top" alt="תיק גב" /><div class="card-body"><h5 class="card-title">תיק גב</h5><p class="card-text">89 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Notebook" class="card-img-top" alt="מחברת" /><div class="card-body"><h5 class="card-title">מחברת</h5><p class="card-text">12 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Pen" class="card-img-top" alt="עט" /><div class="card-body"><h5 class="card-title">עט</h5><p class="card-text">5 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div></div></template>
 <p class="change-note">אם אין לכם <code class="inline">ImageUrl</code>, מחקו את שורת ה-<code class="inline">&lt;img&gt;</code>.</p>
-<p class="guide-link">הסבר מלא: <a href="09-bootstrap.html">מדריך 9</a>, <a href="adv-a-partial-views.html">מתקדם א (אותו כרטיס בכמה עמודים)</a></p>
+<p class="guide-link">הסבר מלא: <a href="09-bootstrap.html#cards">מדריך 9</a>, <a href="adv-a-partial-views.html#same-card">מתקדם א (אותו כרטיס בכמה עמודים)</a></p>
 </div>
 <div class="snippet">
-<h3>קרוסלה של מוצרים</h3>
+<h3 id="carousel">קרוסלה של מוצרים</h3>
 <p>שקופיות מתחלפות, אחת לכל מוצר מהמסד, עם תמונה, שם ומחיר.</p>
 <p class="where">ב-View, למשל בדף הבית או ב-Index</p>
 <pre class="code-block" data-lang="cshtml" data-preview>@model List&lt;Product&gt;
@@ -108,7 +108,7 @@
     &lt;/button&gt;
 &lt;/div&gt;</pre><template class="code-sample"><div id="pc" class="carousel slide" data-bs-ride="carousel"><div class="carousel-inner"><div class="carousel-item active"><img src="https://picsum.photos/seed/bag/800/400" class="d-block w-100" alt=""><div class="carousel-caption bg-dark bg-opacity-50 rounded-3 py-2 mb-3"><h5>תיק גב</h5><p>89 ₪</p></div></div><div class="carousel-item"><img src="https://picsum.photos/seed/notebook/800/400" class="d-block w-100" alt=""><div class="carousel-caption bg-dark bg-opacity-50 rounded-3 py-2 mb-3"><h5>מחברת</h5><p>12 ₪</p></div></div></div><button class="carousel-control-prev" type="button" data-bs-target="#pc" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button><button class="carousel-control-next" type="button" data-bs-target="#pc" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button></div></template>
 <p class="change-note">רק לשקופית הראשונה יש <code class="inline">active</code>, ולכן <code class="inline">for</code> עם <code class="inline">i</code> ולא <code class="inline">foreach</code>. אם אין לכם <code class="inline">ImageUrl</code>, מחקו את שורת ה-<code class="inline">&lt;img&gt;</code>.</p>
-<p class="guide-link">הסבר מלא: <a href="09b-bootstrap-components.html">Bootstrap חלק ב', סעיף 2</a></p>
+<p class="guide-link">הסבר מלא: <a href="09b-bootstrap-components.html#carousel-db">Bootstrap חלק ב', סעיף 2</a></p>
 </div>
 <div class="snippet">
 <h3>עמוד פרטים של פריט אחד</h3>
@@ -135,7 +135,7 @@
 &lt;a asp-action=&quot;Index&quot; class=&quot;btn btn-secondary&quot;&gt;חזרה לרשימה&lt;/a&gt;</pre>
 <p class="where">הקישור לעמוד (למשל בטבלה)</p>
 <pre class="code-block">&lt;a asp-action=&quot;Details&quot; asp-route-id=&quot;@product.Id&quot;&gt;פרטים&lt;/a&gt;</pre>
-<p class="guide-link">הסבר מלא: <a href="10-models.html">מדריך 10, סעיף 5</a></p>
+<p class="guide-link">הסבר מלא: <a href="10-models.html#details">מדריך 10, סעיף 5</a></p>
 </div>
 <div class="snippet">
 <h3>"אין עדיין נתונים" כשהרשימה ריקה</h3>
@@ -160,7 +160,7 @@ else
 <p class="change-note"><code class="inline">N2</code> = עם פסיק לאלפים ושתי ספרות אחרי הנקודה (1,250.00). <code class="inline">N0</code> = בלי ספרות אחרי הנקודה.</p>
 </div>
 <div class="snippet">
-<h3>חלוקה לעמודים</h3>
+<h3 id="paging">חלוקה לעמודים</h3>
 <p>כשיש הרבה פריטים: 9 בכל עמוד, וקישורים לעמוד 1, 2, 3...</p>
 <p class="where">ב-Controller</p>
 <pre class="code-block">public IActionResult Index(int page = 1)
@@ -203,7 +203,7 @@ else
 <p class="where">ב-View</p>
 <pre class="code-block">&lt;img src=&quot;@(product.ImageUrl ?? &quot;https://placehold.co/400x300?text=No+Image&quot;)&quot; alt=&quot;@product.Name&quot; class=&quot;img-fluid&quot; /&gt;</pre>
 <p class="change-note">אפשר לשים תמונה משלכם ב-<code class="inline">wwwroot/images</code> ולכתוב <code class="inline">"/images/no-image.png"</code> במקום הכתובת.</p>
-<p class="guide-link">הסבר מלא: <a href="16-images.html">מדריך 16</a></p>
+<p class="guide-link">הסבר מלא: <a href="16-images.html#show-image">מדריך 16</a></p>
 </div>
 <div class="snippet">
 <h3>קיצור טקסט ארוך</h3>
@@ -217,7 +217,7 @@ else
 </div>
     <h2>פעולות על נתונים</h2>
 <div class="snippet">
-<h3>הוספה, עריכה ומחיקה</h3>
+<h3 id="crud">הוספה, עריכה ומחיקה</h3>
 <p>הדרך המהירה: Scaffolding יוצר את כל העמודים בלחיצה. כאן העריכה והמחיקה, למי שכותב ביד.</p>
 <p class="where">ב-Controller: עריכה</p>
 <pre class="code-block">public IActionResult Edit(int id)
@@ -265,17 +265,17 @@ public IActionResult Delete(int id)
 <p class="guide-link">הסבר מלא: <a href="15-scaffolding.html">מדריך 15 (הדרך האוטומטית)</a>, <a href="11-forms.html">מדריך 11</a></p>
 </div>
 <div class="snippet">
-<h3>חלון אישור לפני מחיקה</h3>
+<h3 id="confirm-delete">חלון אישור לפני מחיקה</h3>
 <p>לפני מחיקה קופץ "בטוחים?", ורק אישור מוחק.</p>
 <p class="where">ב-View, כפתור מחיקה ליד כל פריט</p>
 <pre class="code-block">&lt;form asp-action=&quot;Delete&quot; asp-route-id=&quot;@product.Id&quot; method=&quot;post&quot;
       onsubmit=&quot;return confirm(&#x27;בטוחים שרוצים למחוק?&#x27;);&quot;&gt;
     &lt;button type=&quot;submit&quot; class=&quot;btn btn-sm btn-danger&quot;&gt;מחיקה&lt;/button&gt;
 &lt;/form&gt;</pre>
-<p class="change-note">זו הגרסה הפשוטה, עם חלון של הדפדפן. גרסה יפה יותר, עם חלון של Bootstrap: <a href="09b-bootstrap-components.html">Bootstrap חלק ב', סעיף 3</a>.</p>
+<p class="change-note">זו הגרסה הפשוטה, עם חלון של הדפדפן. גרסה יפה יותר, עם חלון של Bootstrap: <a href="09b-bootstrap-components.html#delete-modal">Bootstrap חלק ב', סעיף 3</a>.</p>
 </div>
 <div class="snippet">
-<h3>הודעת "נשמר בהצלחה"</h3>
+<h3 id="saved-message">הודעת "נשמר בהצלחה"</h3>
 <p>אחרי שמירה ומעבר לעמוד אחר, מופיעה הודעה ירוקה פעם אחת.</p>
 <p class="where">ב-Controller, לפני ה-RedirectToAction</p>
 <pre class="code-block">TempData[&quot;Message&quot;] = &quot;המוצר נשמר בהצלחה!&quot;;
@@ -299,7 +299,7 @@ return RedirectToAction(&quot;Index&quot;);</pre>
 <pre class="code-block">&lt;select asp-for=&quot;CategoryId&quot; asp-items=&quot;ViewBag.Categories&quot; class=&quot;form-select&quot;&gt;
     &lt;option value=&quot;&quot;&gt;-- בחרו קטגוריה --&lt;/option&gt;
 &lt;/select&gt;</pre>
-<p class="guide-link">הסבר מלא: <a href="14-relationships.html">מדריך 14, סעיף 4</a></p>
+<p class="guide-link">הסבר מלא: <a href="14-relationships.html#dropdown">מדריך 14, סעיף 4</a></p>
 </div>
 <div class="snippet">
 <h3>חיפוש, מיון וסינון</h3>
@@ -330,10 +330,10 @@ return RedirectToAction(&quot;Index&quot;);</pre>
     ...
 &lt;/form&gt;</pre>
 <p class="change-note">ב-<code class="inline">Program.cs</code> צריך גם <code class="inline">app.UseStaticFiles();</code> לפני <code class="inline">app.UseRouting();</code>, אחרת תמונות שהועלו לא יוצגו.</p>
-<p class="guide-link">הסבר מלא: <a href="16-images.html">מדריך 16 (כולל הקוד המלא לשמירה ב-Controller)</a></p>
+<p class="guide-link">הסבר מלא: <a href="16-images.html#save-file">מדריך 16 (כולל הקוד המלא לשמירה ב-Controller)</a></p>
 </div>
 <div class="snippet">
-<h3><span class=star>⭐</span> נתונים התחלתיים (Seed)</h3>
+<h3 id="seed"><span class=star>⭐</span> נתונים התחלתיים (Seed)</h3>
 <p>מוצרים לדוגמה שנכנסים למסד הנתונים לבד, אם הטבלה ריקה. נוח מאוד במחשב חדש.</p>
 <p class="where">ב-Program.cs, מיד אחרי var app = builder.Build();</p>
 <pre class="code-block">using (var scope = app.Services.CreateScope())
@@ -366,7 +366,7 @@ return RedirectToAction(&quot;Index&quot;);</pre>
     products = products.Where(p =&gt; p.CategoryId == categoryId);
 }
 ViewBag.Categories = _context.Categories.ToList();</pre>
-<p class="guide-link">הסבר מלא: <a href="adv-b-search.html">מתקדם ב, סעיף 3</a></p>
+<p class="guide-link">הסבר מלא: <a href="adv-b-search.html#sort-filter">מתקדם ב, סעיף 3</a></p>
 </div>
 <div class="snippet">
 <h3>כפתור "אהבתי" עם מונה</h3>
@@ -399,7 +399,7 @@ public string? Phone { get; set; }
 [Range(1, 120, ErrorMessage = &quot;גיל בין 1 ל-120&quot;)]
 [Display(Name = &quot;גיל&quot;)]
 public int Age { get; set; }</pre>
-<p class="guide-link">הסבר מלא: <a href="12-validation.html">מדריך 12</a></p>
+<p class="guide-link">הסבר מלא: <a href="12-validation.html#rules">מדריך 12</a></p>
 </div>
 <div class="snippet">
 <h3>בחירת תאריך</h3>
@@ -479,7 +479,7 @@ else
     &lt;a asp-area=&quot;Identity&quot; asp-page=&quot;/Account/Login&quot;&gt;התחברות&lt;/a&gt;
     &lt;a asp-area=&quot;Identity&quot; asp-page=&quot;/Account/Register&quot;&gt;הרשמה&lt;/a&gt;
 }</pre><template class="code-sample"><p>שלום, dana@example.com!</p><hr><p class="text-muted small mb-1">ומי שלא התחבר רואה:</p><a href="#">התחברות</a> <a href="#">הרשמה</a></template>
-<p class="guide-link">הסבר מלא: <a href="17-users.html">מדריך 17, סעיף 3</a>, <a href="adv-c-identity.html">מתקדם ג (שם מלא במקום אימייל)</a></p>
+<p class="guide-link">הסבר מלא: <a href="17-users.html#who-is-logged-in">מדריך 17, סעיף 3</a>, <a href="adv-c-identity.html#full-name-menu">מתקדם ג (שם מלא במקום אימייל)</a></p>
 </div>
 <div class="snippet">
 <h3>כפתור שרק מנהל רואה</h3>
@@ -489,17 +489,17 @@ else
 {
     &lt;a asp-action=&quot;Create&quot; class=&quot;btn btn-primary&quot;&gt;הוספת מוצר&lt;/a&gt;
 }</pre>
-<p class="guide-link">הסבר מלא: <a href="17-users.html">מדריך 17, סעיף 5</a></p>
+<p class="guide-link">הסבר מלא: <a href="17-users.html#admin-only">מדריך 17, סעיף 5</a></p>
 </div>
 <div class="snippet">
 <h3>עמוד שרק מנהל נכנס אליו</h3>
 <p>חוסם Action אחד, או Controller שלם.</p>
 <p class="where">מעל Action או מעל ה-class של ה-Controller</p>
 <pre class="code-block">[Authorize(Roles = &quot;Admin&quot;)]</pre>
-<p class="guide-link">הסבר מלא: <a href="17-users.html">מדריך 17, סעיף 4</a></p>
+<p class="guide-link">הסבר מלא: <a href="17-users.html#admin-role">מדריך 17, סעיף 4</a></p>
 </div>
 <div class="snippet">
-<h3>יצירת המנהל הראשון</h3>
+<h3 id="first-admin">יצירת המנהל הראשון</h3>
 <p>בכל הפעלה: יוצר את התפקיד Admin ונותן אותו לאימייל מסוים.</p>
 <p class="where">ב-Program.cs (דורש .AddRoles&lt;IdentityRole&gt;())</p>
 <pre class="code-block">using (var scope = app.Services.CreateScope())
@@ -519,7 +519,7 @@ else
     }
 }</pre>
 <p class="change-note">החליפו את האימייל. אם עשיתם את מתקדם ג, כתבו <code class="inline">ApplicationUser</code> במקום <code class="inline">IdentityUser</code>.</p>
-<p class="guide-link">הסבר מלא: <a href="17-users.html">מדריך 17, סעיף 4 (כל השלבים)</a></p>
+<p class="guide-link">הסבר מלא: <a href="17-users.html#first-admin">מדריך 17, סעיף 4 (כל השלבים)</a></p>
 </div>
 <div class="snippet">
 <h3><span class=star>⭐</span> רק הנתונים של המשתמש המחובר ("ההזמנות שלי")</h3>
@@ -617,14 +617,14 @@ public async Task&lt;IActionResult&gt; MakeAdmin(string id)
 </div>
     <h2>עיצוב ומבנה</h2>
 <div class="snippet">
-<h3><span class=star>⭐</span> האתר בעברית, מימין לשמאל</h3>
+<h3 id="rtl"><span class=star>⭐</span> האתר בעברית, מימין לשמאל</h3>
 <p>שני שינויים ב-_Layout.cshtml.</p>
 <p class="where">בשורה הראשונה אחרי DOCTYPE</p>
 <pre class="code-block">&lt;html lang=&quot;he&quot; dir=&quot;rtl&quot;&gt;</pre>
 <p class="where">במקום הקישור ל-bootstrap.min.css</p>
 <pre class="code-block">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css&quot; /&gt;</pre>
 <p class="change-note">בדקו את גרסת ה-Bootstrap בפרויקט (בשורה הראשונה של <code class="inline">wwwroot/lib/bootstrap/dist/css/bootstrap.min.css</code>) ושימו אותה במקום 5.3.3.</p>
-<p class="guide-link">הסבר מלא: <a href="08-css-js.html">מדריך 8, סעיף 6</a></p>
+<p class="guide-link">הסבר מלא: <a href="08-css-js.html#rtl">מדריך 8, סעיף 6</a></p>
 </div>
 <div class="snippet">
 <h3>קישור בתפריט</h3>
@@ -633,7 +633,7 @@ public async Task&lt;IActionResult&gt; MakeAdmin(string id)
 <pre class="code-block">&lt;li class=&quot;nav-item&quot;&gt;
     &lt;a class=&quot;nav-link text-dark&quot; asp-controller=&quot;Products&quot; asp-action=&quot;Index&quot;&gt;מוצרים&lt;/a&gt;
 &lt;/li&gt;</pre>
-<p class="guide-link">הסבר מלא: <a href="06-layout.html">מדריך 6, סעיף 3</a></p>
+<p class="guide-link">הסבר מלא: <a href="06-layout.html#add-link">מדריך 6, סעיף 3</a></p>
 </div>
 <div class="snippet">
 <h3>תפריט שמשתנה לפי מי שמחובר</h3>
@@ -671,7 +671,7 @@ public async Task&lt;IActionResult&gt; MakeAdmin(string id)
 <pre class="code-block">&lt;a href=&quot;javascript:history.back()&quot; class=&quot;btn btn-secondary&quot;&gt;→ חזרה&lt;/a&gt;</pre>
 </div>
 <div class="snippet">
-<h3>חלון קופץ (Modal)</h3>
+<h3 id="modal">חלון קופץ (Modal)</h3>
 <p>חלון שנפתח מעל העמוד בלחיצה על כפתור. Bootstrap כבר כולל את ה-JavaScript שלו.</p>
 <p class="where">בכל View</p>
 <pre class="code-block" data-preview>&lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#infoModal&quot;&gt;
@@ -706,7 +706,7 @@ public async Task&lt;IActionResult&gt; MakeAdmin(string id)
 &lt;/div&gt;</pre>
 </div>
 <div class="snippet">
-<h3>לוגו בתפריט ואייקון לכרטיסייה</h3>
+<h3 id="logo-favicon">לוגו בתפריט ואייקון לכרטיסייה</h3>
 <p>תמונה במקום (או ליד) שם האתר, ואייקון משלכם בלשונית של הדפדפן.</p>
 <p class="where">ב-_Layout.cshtml, בתוך ה-navbar-brand</p>
 <pre class="code-block">&lt;a class=&quot;navbar-brand&quot; asp-controller=&quot;Home&quot; asp-action=&quot;Index&quot;&gt;
@@ -716,7 +716,7 @@ public async Task&lt;IActionResult&gt; MakeAdmin(string id)
 <p class="where">ב-_Layout.cshtml, בתוך ה-head</p>
 <pre class="code-block">&lt;link rel=&quot;icon&quot; href=&quot;~/images/icon.png&quot; /&gt;</pre>
 <p class="change-note">שימו את התמונות בתיקייה <code class="inline">wwwroot/images</code>. האייקון בלשונית נקרא favicon. הכי פשוט: להחליף את <code class="inline">wwwroot/favicon.ico</code> בקובץ משלכם עם אותו שם, בלי שורת קוד. אם עדיין רואים את הישן: <span class="keyboard">Ctrl</span>+<span class="keyboard">F5</span>.</p>
-<p class="guide-link">הסבר מלא: <a href="web-design.html">עיצוב שנראה מקצועי, סעיף 5</a></p>
+<p class="guide-link">הסבר מלא: <a href="web-design.html#favicon">עיצוב שנראה מקצועי, סעיף 5</a></p>
 </div>
 <div class="snippet">
 <h3>עמוד 404 מעוצב</h3>
@@ -768,7 +768,7 @@ public async Task&lt;IActionResult&gt; MakeAdmin(string id)
         });
     &lt;/script&gt;
 }</pre>
-<p class="change-note">בדפי ההרשמה וההתחברות צריך קודם להוציא אותם לעריכה (מתקדם ג, סעיף 4).</p>
+<p class="change-note">בדפי ההרשמה וההתחברות צריך קודם להוציא אותם לעריכה (<a href="adv-c-identity.html#scaffold-identity">מתקדם ג, סעיף 4</a>).</p>
 </div>
 <div class="snippet">
 <h3>מונה תווים בתיבת טקסט</h3>

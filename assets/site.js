@@ -636,6 +636,19 @@
         }
     }
 
+    // ---------- הגעה לסעיף מקישור: גוללים אליו ומסמנים אותו לרגע, כדי שהעין תמצא איפה להתחיל ----------
+    function flashTarget(scroll) {
+        var id = decodeURIComponent(location.hash.slice(1));
+        var t = id && document.getElementById(id);
+        if (!t) return;
+        if (scroll) t.scrollIntoView({ block: 'start' });
+        t.classList.remove('flash');
+        void t.offsetWidth;
+        t.classList.add('flash');
+    }
+    if (location.hash) requestAnimationFrame(function () { flashTarget(true); });
+    window.addEventListener('hashchange', function () { flashTarget(false); });
+
     // ---------- כפתור "חזרה למעלה" ----------
     var topBtn = el('button', { 'class': 'to-top', 'type': 'button', 'aria-label': 'חזרה למעלה', 'title': 'חזרה למעלה' }, '↑');
     topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });

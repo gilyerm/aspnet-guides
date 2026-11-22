@@ -18,7 +18,7 @@
     <div class="explanation">
         <strong>💡 על מה המדריך הזה?</strong> מערכת ההרשמה וההתחברות כבר קיימת באתר מהיום הראשון (בזכות Individual Accounts במדריך 1). עכשיו נשתמש בה: נחסום עמודים למי שלא מחובר, נציג מידע לפי המשתמש, וניצור תפקיד "מנהל" שרק לו מותר לנהל את האתר.
         <br><br>
-        <strong>מה צריך לפני:</strong> פרויקט עם Individual Accounts (מדריך 1), ומסד נתונים שכבר נוצר, כלומר נרשמתם לפחות פעם אחת (מדריך 2, סעיף 7). לדוגמאות כדאי שיהיו לכם <code class="inline">ProductsController</code> (מדריכים 10-13) ו-<code class="inline">CategoriesController</code> (מדריך 15), אבל זה עובד עם כל Controller.
+        <strong>מה צריך לפני:</strong> פרויקט עם Individual Accounts (מדריך 1), ומסד נתונים שכבר נוצר, כלומר נרשמתם לפחות פעם אחת (<a href="02-visual-studio.html#view-database">מדריך 2, סעיף 7</a>). לדוגמאות כדאי שיהיו לכם <code class="inline">ProductsController</code> (מדריכים 10-13) ו-<code class="inline">CategoriesController</code> (מדריך 15), אבל זה עובד עם כל Controller.
     </div>
 
     <!-- ===================== 1 ===================== -->
@@ -58,7 +58,7 @@ public IActionResult Create(Product product)
     </div>
 
     <!-- ===================== 3 ===================== -->
-    <h2>3. מי מחובר עכשיו?</h2>
+    <h2 id="who-is-logged-in">3. מי מחובר עכשיו?</h2>
     <p>בכל View אפשר לבדוק אם המשתמש מחובר, ולהציג את השם שלו, דרך <code class="inline">User</code>:</p>
 <pre class="code-block" data-preview>@if (User.Identity?.IsAuthenticated == true)
 {
@@ -84,7 +84,7 @@ else
     <p>(<span class="keyboard">Ctrl+.</span> יוסיף <code class="inline">using System.Security.Claims;</code>. דוגמה מלאה של "רק הנתונים שלי" תמצאו בספריית קטעי הקוד.)</p>
 
     <!-- ===================== 4 ===================== -->
-    <h2>4. תפקיד "מנהל"</h2>
+    <h2 id="admin-role">4. תפקיד "מנהל"</h2>
     <div class="concept">
         <span class="concept-title">📖 מושג: Role (תפקיד)</span>
         קבוצה של משתמשים עם אותן הרשאות. נותנים למשתמש תפקיד, ואז חוסמים עמודים לפי תפקיד, ולא לפי כל משתמש בנפרד.
@@ -100,7 +100,7 @@ else
     .AddRoles&lt;IdentityRole&gt;()
     .AddEntityFrameworkStores&lt;ApplicationDbContext&gt;();</pre>
 
-    <h3>שלב ב: יוצרים את המנהל הראשון</h3>
+    <h3 id="first-admin">שלב ב: יוצרים את המנהל הראשון</h3>
     <p>בעיה: רק מנהל יכול לתת תפקיד מנהל, אבל עוד אין אף מנהל. הפתרון: קוד שרץ כשהאתר עולה, ונותן תפקיד מנהל לאימייל מסוים.</p>
     <ul class="step-list">
         <li>הירשמו לאתר (Register) עם האימייל שאתם רוצים שיהיה המנהל, ואשרו את החשבון בקישור <strong>Click here to confirm your account</strong>.</li>
@@ -147,7 +147,7 @@ else
     </div>
 
     <!-- ===================== 5 ===================== -->
-    <h2>5. כפתורים וקישורים שרק מנהל רואה</h2>
+    <h2 id="admin-only">5. כפתורים וקישורים שרק מנהל רואה</h2>
     <p>ב-View, <code class="inline">User.IsInRole("Admin")</code> בודק אם המשתמש המחובר הוא מנהל. לדוגמה, קישור לניהול הקטגוריות בתפריט (<code class="inline">_Layout.cshtml</code>), שמופיע רק למנהל:</p>
 <pre class="code-block">@if (User.IsInRole("Admin"))
 {

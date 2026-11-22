@@ -15,7 +15,7 @@
     <h1>יסודות CSS</h1>
     <div class="subtitle">איך מעצבים: צבעים, רווחים, סידור בשורה, ועמוד שמתאים לטלפון</div>
 
-    <div class="explanation"><strong>💡 על מה העמוד הזה?</strong> אם HTML הוא השלד, CSS הוא הבגדים: צבעים, גדלים, רווחים ומיקום. Bootstrap (מדריך 9) נותן הרבה עיצוב מוכן, אבל כדי לשנות אותו ולהתאים לאתר שלכם צריך להכיר את הבסיס. איפה שמים את ה-CSS בפרויקט: מדריך 8. חדשים בזה? התחילו ב-<a href="web-intro.html">מה זה HTML, CSS ו-JavaScript?</a>
+    <div class="explanation"><strong>💡 על מה העמוד הזה?</strong> אם HTML הוא השלד, CSS הוא הבגדים: צבעים, גדלים, רווחים ומיקום. Bootstrap (מדריך 9) נותן הרבה עיצוב מוכן, אבל כדי לשנות אותו ולהתאים לאתר שלכם צריך להכיר את הבסיס. איפה שמים את ה-CSS בפרויקט: <a href="08-css-js.html#site-css">מדריך 8</a>. חדשים בזה? התחילו ב-<a href="web-intro.html">מה זה HTML, CSS ו-JavaScript?</a>
         <br><br>
         <strong>✏️ איך עובדים עם העמוד:</strong> בכל עורך קוד אפשר <strong>לשנות את הקוד</strong>, והתוצאה מתעדכנת מיד בחלון הדפדפן שלידו. אם יש כמה קבצים (index.html, style.css, script.js), לחצו על השם שלהם כדי לעבור ביניהם. ↺ איפוס מחזיר את הדוגמה למצב ההתחלתי, ושני הכפתורים הקטנים לידו מסדרים את העורך והתוצאה זה ליד זה או אחד מעל השני. אי אפשר לשבור כלום, אז תתפרעו!
     </div>
@@ -195,7 +195,7 @@ p {
 }</textarea>
 </div>
 <div class="explanation"><strong>💡 ב-Bootstrap:</strong> אותו דבר בקלאסים: <code class="inline">class=&quot;d-flex justify-content-between align-items-center gap-2&quot;</code>.</div>
-    <h2>7. מצבים: hover ועוד, פינות מעוגלות וצל</h2>
+    <h2 id="states">7. מצבים: hover ועוד, פינות מעוגלות וצל</h2>
 <div class="playground" data-title="נסו: שנו את 0.3s ל-2s" data-height="140">
 <textarea data-lang="html">&lt;button class=&quot;fancy&quot;&gt;עברו עליי עם העכבר&lt;/button&gt;</textarea>
 <textarea data-lang="css">.fancy {
@@ -251,7 +251,7 @@ p {
     outline-offset: 3px;
 }</textarea>
 </div>
-    <h2>8. עיצוב לפי מצב ומיקום: טפסים וטבלאות</h2>
+    <h2 id="form-table-states">8. עיצוב לפי מצב ומיקום: טפסים וטבלאות</h2>
 <p>אותו רעיון של "מצב" עובד גם על שדות בטופס (מולא נכון? סומן?) ועל המיקום של אלמנט ברשימה (ראשון? אחרון? זוגי?).</p>
 <h3>טופס שמגיב למשתמש</h3>
 <table class="simple"><tr><th>סלקטור</th><th>מתי הוא חל</th></tr><tr><td><code class="inline">:focus</code></td><td>השדה שמקלידים בו עכשיו.</td></tr><tr><td><code class="inline">:user-invalid</code></td><td>המשתמש מילא את השדה (או ניסה לשלוח), והוא לא תקין. למשל שדה <code class="inline">required</code> ריק, או אימייל בלי @.</td></tr><tr><td><code class="inline">:valid</code></td><td>השדה תקין.</td></tr><tr><td><code class="inline">:checked</code></td><td>תיבת סימון או radio שסומנו.</td></tr><tr><td><code class="inline">:disabled</code></td><td>שדה או כפתור עם <code class="inline">disabled</code>: אי אפשר להשתמש בהם.</td></tr><tr><td><code class="inline">::placeholder</code></td><td>הטקסט האפור שמופיע בשדה ריק.</td></tr><tr><td><code class="inline">::after</code> / <code class="inline">::before</code></td><td>מוסיף תוכן אחרי / לפני האלמנט, מתוך ה-CSS, עם <code class="inline">content</code>.</td></tr></table>
@@ -374,7 +374,7 @@ tr:last-child td {
     border-bottom: 3px solid #5c2d91;
 }</textarea>
 </div>
-<div class="explanation"><strong>💡 בפרויקט:</strong> כשמציגים טבלה מה-DB עם <code class="inline">@foreach</code> (<a href="10-models.html">מדריך 10</a>, או "טבלה מהמסד" ב<a href="snippets.html">ספריית קטעי הקוד</a>), אי אפשר לדעת מראש כמה שורות יהיו. <code class="inline">:nth-child(even)</code> מפספס אותן לבד, לא משנה כמה. ב-Bootstrap אותו דבר נעשה עם <code class="inline">class=&quot;table table-striped table-hover&quot;</code>.</div>
+<div class="explanation"><strong>💡 בפרויקט:</strong> כשמציגים טבלה מה-DB עם <code class="inline">@foreach</code> (<a href="10-models.html#show-products">מדריך 10</a>, או <a href="snippets.html#db-table">"טבלה עם נתונים מהמסד"</a> בספריית קטעי הקוד), אי אפשר לדעת מראש כמה שורות יהיו. <code class="inline">:nth-child(even)</code> מפספס אותן לבד, לא משנה כמה. ב-Bootstrap אותו דבר נעשה עם <code class="inline">class=&quot;table table-striped table-hover&quot;</code>.</div>
     <h2>9. עמוד שמתאים לטלפון</h2>
 <div class="concept"><span class="concept-title">📖 Media Query</span>כלל CSS שחל רק כשהמסך בגודל מסוים. <code class="inline">@media (max-width: 600px) { ... }</code> פירושו "רק כשהמסך צר מ-600 פיקסלים".</div>
 <div class="playground" data-title="נסו: שנו 400px ל-1000px, ותראו את התצוגה של &quot;טלפון&quot;" data-height="200">
@@ -402,7 +402,7 @@ tr:last-child td {
     }
 }</textarea>
 </div>
-<div class="explanation"><strong>💡 ב-Bootstrap:</strong> זה בדיוק מה ש-<code class="inline">col-12 col-md-4</code> עושה בשבילכם (מדריך 9, סעיף 5).</div>
+<div class="explanation"><strong>💡 ב-Bootstrap:</strong> זה בדיוק מה ש-<code class="inline">col-12 col-md-4</code> עושה בשבילכם (<a href="09-bootstrap.html#grid">מדריך 9, סעיף 5</a>).</div>
     <h2>10. CSS משלכם יחד עם Bootstrap</h2>
 <p>הדרך הנכונה לשנות עיצוב של Bootstrap: <strong>לא</strong> לגעת בקבצים של Bootstrap, אלא להוסיף class משלכם ב-<code class="inline">site.css</code>. הוא נטען אחרי Bootstrap, ולכן הכלל שלכם "מנצח".</p>
 <div class="playground" data-title="נסו: שנו את הצבע של .btn-pink" data-height="120" data-bootstrap>

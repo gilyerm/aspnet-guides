@@ -27,7 +27,7 @@
     </div>
 
     <!-- ===================== 1 ===================== -->
-    <h2>1. שדה לכתובת התמונה במודל</h2>
+    <h2 id="image-field">1. שדה לכתובת התמונה במודל</h2>
     <ul class="step-list">
         <li>ב-<code class="inline">Models/Product.cs</code>, הוסיפו בתוך המחלקה:
 <pre class="code-block">public string? ImageUrl { get; set; }</pre>
@@ -62,7 +62,7 @@ Update-Database</pre>
     </table>
 
     <!-- ===================== 3 ===================== -->
-    <h2>3. שמירת הקובץ ב-Controller</h2>
+    <h2 id="save-file">3. שמירת הקובץ ב-Controller</h2>
     <div class="concept">
         <span class="concept-title">📖 מושג: IFormFile</span>
         הסוג של קובץ שהגיע מטופס. יש לו שם (<code class="inline">FileName</code>), גודל (<code class="inline">Length</code>), ופעולה שמעתיקה אותו לקובץ על המחשב (<code class="inline">CopyTo</code>).
@@ -154,7 +154,7 @@ public IActionResult Create(Product product, IFormFile? imageFile)
     <div class="checkpoint">הוסיפו מוצר עם תמונה. ב-Solution Explorer, תחת <code class="inline">wwwroot</code>, נוצרה התיקייה <code class="inline">images/products</code> ובה קובץ עם שם ארוך ומוזר. (אם לא רואים אותה, לחצו על כפתור "Show All Files" בראש Solution Explorer, או על רענון.)</div>
 
     <!-- ===================== 4 ===================== -->
-    <h2>4. הצגת התמונה</h2>
+    <h2 id="show-image">4. הצגת התמונה</h2>
     <p>ב-<code class="inline">Views/Products/Details.cshtml</code>, הוסיפו מתחת ל-<code class="inline">&lt;h1&gt;</code>:</p>
 <pre class="code-block" data-preview>@if (Model.ImageUrl != null)
 {
@@ -189,7 +189,7 @@ public IActionResult Create(Product product, IFormFile? imageFile)
         <h3>✏️ תרגיל</h3>
         <ol>
             <li>כשאין למוצר תמונה, הציגו תמונת ברירת מחדל. (רמז: <code class="inline">else</code>, ותמונה מ-<code class="inline">https://placehold.co/400x300?text=No+Image</code>.)</li>
-            <li>הציגו את המוצרים בעמוד הרשימה ככרטיסים של Bootstrap עם תמונה (מדריך 9, סעיפים 4-5) במקום טבלה.</li>
+            <li>הציגו את המוצרים בעמוד הרשימה ככרטיסים של Bootstrap עם תמונה (<a href="09-bootstrap.html#cards">מדריך 9, סעיפים 4-5</a>) במקום טבלה.</li>
             <li>בונוס: שנו את המגבלה ל-5MB, ובדקו שתמונה גדולה יותר נחסמת עם הודעה בעברית.</li>
         </ol>
     </div>

@@ -108,7 +108,7 @@
     <h3>תרגום הקישורים לעברית</h3>
     <p>הטקסט שבין <code class="inline">&gt;</code> ל-<code class="inline">&lt;/a&gt;</code> הוא מה שרואים בתפריט. החליפו את <code class="inline">Home</code> ב-<code class="inline">דף הבית</code>, ואת <code class="inline">Privacy</code> ב-<code class="inline">פרטיות</code>. <strong>אל תשנו</strong> את מה שכתוב בתוך <code class="inline">asp-controller</code> ו-<code class="inline">asp-action</code>, אלה השמות של ה-Controller וה-Action בקוד.</p>
 
-    <h3>הוספת קישור חדש</h3>
+    <h3 id="add-link">הוספת קישור חדש</h3>
     <p>כדי להוסיף קישור, מעתיקים בלוק <code class="inline">&lt;li&gt;</code> שלם ומשנים בו שלושה דברים: את ה-Controller, את ה-Action ואת הטקסט:</p>
 <pre class="code-block">&lt;li class="nav-item"&gt;
     &lt;a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About"&gt;אודות&lt;/a&gt;
@@ -118,7 +118,7 @@
     </div>
 
     <!-- ===================== 4 ===================== -->
-    <h2>4. הכפתורים Register ו-Login</h2>
+    <h2 id="register-login">4. הכפתורים Register ו-Login</h2>
     <p>בתפריט יש גם קישורים להרשמה ולהתחברות. הם לא כתובים ישירות ב-Layout, אלא בקובץ נפרד שה-Layout מכניס בשורה הזאת:</p>
     <pre class="code-block">&lt;partial name="_LoginPartial" /&gt;</pre>
     <p>הקובץ עצמו הוא <code class="inline">Views/Shared/_LoginPartial.cshtml</code>. אל תמחקו את השורה הזאת, אחרת לא יהיה איך להירשם ולהתחבר. אפשר לתרגם לעברית את הטקסטים בתוך <code class="inline">_LoginPartial.cshtml</code> בדיוק כמו בתפריט (למשל <code class="inline">Register</code> ל-<code class="inline">הרשמה</code>).</p>

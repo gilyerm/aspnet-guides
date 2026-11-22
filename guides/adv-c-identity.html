@@ -71,7 +71,7 @@ Update-Database</pre>
     <div class="checkpoint">ב-SQL Server Object Explorer, לטבלה <strong>dbo.AspNetUsers</strong> נוספה עמודה <strong>FullName</strong>.</div>
 
     <!-- ===================== 4 ===================== -->
-    <h2>4. מוציאים את דפי ההרשמה לעריכה</h2>
+    <h2 id="scaffold-identity">4. מוציאים את דפי ההרשמה לעריכה</h2>
     <p>דפי ההרשמה וההתחברות "מוסתרים" בתוך ספרייה. כדי לשנות אותם, צריך ליצור עותק שלהם בפרויקט, עם Scaffolding:</p>
     <ul class="step-list">
         <li>עצרו את האתר. ב-Solution Explorer, קליק ימני על <strong>שם הפרויקט</strong> ← <strong>Add</strong> ← <strong>New Scaffolded Item</strong>.</li>
@@ -121,7 +121,7 @@ public string FullName { get; set; } = "";</pre>
     </div>
 
     <!-- ===================== 7 ===================== -->
-    <h2>7. "שלום, [שם מלא]" בתפריט</h2>
+    <h2 id="full-name-menu">7. "שלום, [שם מלא]" בתפריט</h2>
     <p>ב-<code class="inline">_LoginPartial.cshtml</code>, חפשו את הקישור שבו כתוב <code class="inline">Hello @User.Identity?.Name!</code>. החליפו את הטקסט הזה ב:</p>
 <pre class="code-block" data-lang="cshtml">שלום, @((await UserManager.GetUserAsync(User))?.FullName)!</pre>
     <p><code class="inline">UserManager.GetUserAsync(User)</code> מביא את המשתמש המחובר ממסד הנתונים, כ-<code class="inline">ApplicationUser</code>, ומשם לוקחים את <code class="inline">FullName</code>.</p>

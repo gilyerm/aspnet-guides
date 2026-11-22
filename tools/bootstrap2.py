@@ -28,9 +28,9 @@ page('09b-bootstrap-components', "Bootstrap חלק ב': רכיבים שזזים"
                      'דוגמה: ' + c('<button data-bs-toggle="modal" data-bs-target="#myModal">') + ' פירושו "כשלוחצים, פתח את החלון שה-id שלו myModal".'),
              '<p>בפרויקט שלכם זה כבר עובד, בלי להתקין כלום: בסוף ' + c('Views/Shared/_Layout.cshtml') + ' יש שורה שטוענת את ה-JavaScript של Bootstrap. בדקו שהיא שם:</p>',
              code('<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>', 'cshtml'),
-             '<div class="warning"><strong>⚠️ חשוב: כל id פעם אחת בעמוד.</strong> אם יש שני רכיבים עם אותו ' + c('id') + ', הכפתור יפתח את הלא נכון (או אף אחד). זה קורה בעיקר בתוך ' + c('@foreach') + ', ולכן שם מוסיפים ל-id את המספר של הפריט, למשל ' + c('id="delete-@product.Id"') + ' (סעיף 3).</div>',
+             '<div class="warning"><strong>⚠️ חשוב: כל id פעם אחת בעמוד.</strong> אם יש שני רכיבים עם אותו ' + c('id') + ', הכפתור יפתח את הלא נכון (או אף אחד). זה קורה בעיקר בתוך ' + c('@foreach') + ', ולכן שם מוסיפים ל-id את המספר של הפריט, למשל ' + c('id="delete-@product.Id"') + ' (<a href="#delete-modal">סעיף 3</a>).</div>',
          ]),
-         ('2. קרוסלה (Carousel): שקופיות מתחלפות', [
+         ('2. קרוסלה (Carousel): שקופיות מתחלפות {#carousel}', [
              '<p>מתאים לבאנר בדף הבית, או לכמה תמונות של אותו מוצר.</p>',
              pg('''
 <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -81,7 +81,7 @@ page('09b-bootstrap-components', "Bootstrap חלק ב': רכיבים שזזים"
                  [c('d-block w-100'), 'התמונה ממלאת את כל הרוחב. כדאי שלכל התמונות יהיה אותו יחס (למשל 800x400), אחרת הגובה "קופץ" בין שקופיות.'],
                  [c('carousel-indicators') + ', ' + c('carousel-control-prev/next'), 'הנקודות והחצים. אפשר למחוק אותם אם לא צריך.'],
              ]),
-             '<h3>קרוסלה של מוצרים מהמסד</h3>',
+             '<h3 id="carousel-db">קרוסלה של מוצרים מהמסד</h3>',
              '<p>בפרויקט, השקופיות מגיעות מהמסד עם לולאה. הבעיה: רק לשקופית <strong>הראשונה</strong> צריך ' + c('active') + '. לכן משתמשים ב-' + c('for') + ' עם מונה ' + c('i') + ', ובודקים ' + c('i == 0') + ':</p>',
              code('''@model List<Product>
 
@@ -106,10 +106,10 @@ page('09b-bootstrap-components', "Bootstrap חלק ב': רכיבים שזזים"
         <span class="carousel-control-next-icon"></span>
     </button>
 </div>''', 'cshtml', CAROUSEL_SAMPLE),
-             '<p class="change-note">' + c('@(i == 0 ? "active" : "")') + ' פירושו: "אם זו השקופית הראשונה, כתוב active, אחרת אל תכתוב כלום". ' + c('ImageUrl') + ' מגיע מ<a href="16-images.html">מדריך 16</a>. אם אין לכם תמונות, מחקו את שורת ה-' + c('<img>') + ' ותנו ל-' + c('carousel-item') + ' גובה וצבע רקע.</p>',
+             '<p class="change-note">' + c('@(i == 0 ? "active" : "")') + ' פירושו: "אם זו השקופית הראשונה, כתוב active, אחרת אל תכתוב כלום". ' + c('ImageUrl') + ' מגיע מ<a href="16-images.html#image-field">מדריך 16</a>. אם אין לכם תמונות, מחקו את שורת ה-' + c('<img>') + ' ותנו ל-' + c('carousel-item') + ' גובה וצבע רקע.</p>',
              '<div class="checkpoint">הקרוסלה מופיעה ומתחלפת? אם היא <strong>לא מופיעה בכלל</strong>, כנראה אף שקופית לא קיבלה ' + c('active') + ', או שהרשימה ריקה (אין מוצרים במסד).</div>',
          ]),
-         ('3. חלון קופץ (Modal)', [
+         ('3. חלון קופץ (Modal) {#modal}', [
              '<p>חלון שמופיע מעל העמוד, והרקע מאחוריו מתכהה. מתאים לפרטים נוספים, לטופס קצר, ובעיקר לשאלה "בטוחים?" לפני מחיקה.</p>',
              pg('''
 <button type="button" class="btn btn-primary m-3" data-bs-toggle="modal" data-bs-target="#infoModal">
@@ -138,7 +138,7 @@ page('09b-bootstrap-components', "Bootstrap חלק ב': רכיבים שזזים"
                  [c('modal-header / modal-body / modal-footer'), 'כותרת, תוכן וכפתורים בתחתית.'],
                  [c('data-bs-dismiss="modal"'), 'על כפתור: סוגר את החלון.'],
              ]),
-             '<h3>בפרויקט: "בטוחים שרוצים למחוק?"</h3>',
+             '<h3 id="delete-modal">בפרויקט: "בטוחים שרוצים למחוק?"</h3>',
              '<p>חלון אחד לכל מוצר, בתוך ה-' + c('@foreach') + '. בגלל זה ה-id כולל את ' + c('@product.Id') + ': כך לכל מוצר יש חלון משלו, והכפתור פותח את הנכון.</p>',
              code('''@foreach (var product in Model)
 {
@@ -172,7 +172,7 @@ page('09b-bootstrap-components', "Bootstrap חלק ב': רכיבים שזזים"
         </td>
     </tr>
 }''', 'cshtml', DELETE_SAMPLE),
-             '<p class="change-note">הטופס שבתוך החלון שולח ל-Action בשם ' + c('Delete') + ' עם POST. ה-Action הזה צריך להיות קיים ב-Controller (בספריית קטעי הקוד: <a href="snippets.html">"הוספה, עריכה ומחיקה"</a>).</p>',
+             '<p class="change-note">הטופס שבתוך החלון שולח ל-Action בשם ' + c('Delete') + ' עם POST. ה-Action הזה צריך להיות קיים ב-Controller (בספריית קטעי הקוד: <a href="snippets.html#crud">"הוספה, עריכה ומחיקה"</a>).</p>',
          ]),
          ('4. שאלות נפתחות (Accordion)', [
              '<p>רשימה של כותרות, וכל אחת נפתחת כשלוחצים עליה. מושלם לעמוד "שאלות נפוצות".</p>',
@@ -331,7 +331,7 @@ document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
             <li><strong>לוחצים ולא קורה כלום:</strong> בדקו שה-''' + c('data-bs-target') + ''' מתחיל ב-''' + c('#') + ''', ושהשם אחרי ה-''' + c('#') + ''' זהה בדיוק ל-''' + c('id') + ''' (כולל אותיות גדולות וקטנות).</li>
             <li><strong>אף רכיב לא עובד באתר:</strong> בדקו שהשורה של ''' + c('bootstrap.bundle.min.js') + ''' קיימת בסוף ''' + c('_Layout.cshtml') + '''. בכלי המפתחים (F12 ← Console) תופיע שגיאה כמו ''' + c('bootstrap is not defined') + '''.</li>
             <li><strong>הקרוסלה לא מופיעה:</strong> אין אף ''' + c('carousel-item') + ''' עם ''' + c('active') + ''', או שיש יותר מאחד.</li>
-            <li><strong>הכפתור בתוך הלולאה פותח את החלון של מוצר אחר:</strong> ה-''' + c('id') + ''' לא ייחודי. הוסיפו לו ''' + c('@product.Id') + ''' (סעיף 3).</li>
+            <li><strong>הכפתור בתוך הלולאה פותח את החלון של מוצר אחר:</strong> ה-''' + c('id') + ''' לא ייחודי. הוסיפו לו ''' + c('@product.Id') + ''' (<a href="#delete-modal">סעיף 3</a>).</li>
             <li><strong>Tooltip או Toast לא מופיעים:</strong> הם צריכים את שורות ה-JavaScript מסעיף 7. בלעדיהן, Bootstrap לא מפעיל אותם.</li>
         </ul>
     </div>''',

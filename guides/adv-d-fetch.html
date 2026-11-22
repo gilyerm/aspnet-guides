@@ -44,7 +44,7 @@ Update-Database</pre>
     </ul>
 
     <!-- ===================== 2 ===================== -->
-    <h2>2. Action שמחזיר JSON</h2>
+    <h2 id="json-action">2. Action שמחזיר JSON</h2>
     <p>ב-<code class="inline">ProductsController</code>, הוסיפו:</p>
 <pre class="code-block">[HttpPost]
 [ValidateAntiForgeryToken]
@@ -70,7 +70,7 @@ public IActionResult Like(int id)
     </table>
 
     <!-- ===================== 3 ===================== -->
-    <h2>3. הכפתור בעמוד</h2>
+    <h2 id="like-button">3. הכפתור בעמוד</h2>
     <p>ב-<code class="inline">Views/Products/Index.cshtml</code>:</p>
     <ul class="step-list">
         <li>בראש העמוד (אחרי ה-<code class="inline">&lt;h1&gt;</code>) הוסיפו את שדה ההגנה. ה-JavaScript ייקח ממנו את הקוד ויצרף אותו לבקשה:

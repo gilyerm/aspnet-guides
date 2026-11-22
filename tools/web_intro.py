@@ -151,8 +151,8 @@ page('web-intro', 'מה זה HTML, CSS ו-JavaScript?', 'שלוש השפות ש�
          ('5. איפה כל אחת נמצאת בפרויקט', [
              table(['שפה', 'איפה בפרויקט', 'מדריך'], [
                  ['<strong>HTML</strong>', 'בקבצי ' + c('.cshtml') + ' שבתיקייה ' + c('Views') + '. אלה קבצי HTML עם תוספות של C# (הסימן ' + c('@') + '). המסגרת של כל העמודים נמצאת ב-' + c('Views/Shared/_Layout.cshtml') + '.', '<a href="05-cshtml.html">5</a>, <a href="06-layout.html">6</a>'],
-                 ['<strong>CSS</strong>', 'ב-' + c('wwwroot/css/site.css') + '. בנוסף, Bootstrap מביא הרבה עיצוב מוכן.', '<a href="08-css-js.html">8</a>, <a href="09-bootstrap.html">9</a>'],
-                 ['<strong>JavaScript</strong>', 'ב-' + c('wwwroot/js/site.js') + ', או בתוך View מסוים (ב-' + c('@section Scripts') + ').', '<a href="08-css-js.html">8</a>'],
+                 ['<strong>CSS</strong>', 'ב-' + c('wwwroot/css/site.css') + '. בנוסף, Bootstrap מביא הרבה עיצוב מוכן.', '<a href="08-css-js.html#site-css">8</a>, <a href="09-bootstrap.html">9</a>'],
+                 ['<strong>JavaScript</strong>', 'ב-' + c('wwwroot/js/site.js') + ', או בתוך View מסוים (ב-' + c('@section Scripts') + ').', '<a href="08-css-js.html#javascript">8</a>'],
                  ['<strong>C#</strong>', 'ב-' + c('Controllers') + ', ' + c('Models') + ', ' + c('Program.cs') + ', ובתוך ה-' + c('.cshtml') + ' אחרי ' + c('@') + '.', '<a href="04-how-mvc-works.html">4</a>'],
              ]),
              '<p>הקבצים מתחברים זה לזה ב-' + c('_Layout.cshtml') + ': בראש הקובץ יש שורה שטוענת את ה-CSS, ובסופו שורה שטוענת את ה-JavaScript. כך כל עמוד באתר מקבל את שניהם.</p>',

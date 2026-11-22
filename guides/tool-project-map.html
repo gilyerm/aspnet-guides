@@ -106,33 +106,33 @@
     <h2>הפרויקט עצמו</h2>
     <table class="simple item-table">
         <tr><th>שם</th><th>מה יש בו</th><th>נוגעים?</th><th>מדריך</th></tr>
-        <tr id="i-project"><td>MyProject (.csproj)</td><td>הפרויקט כולו. לחיצה כפולה על השם פותחת את קובץ ההגדרות שלו (<code class="inline">.csproj</code>): גרסת ה-.NET ורשימת החבילות. קליק ימני על השם פותח את Manage NuGet Packages, Add ועוד.</td><td>⛔</td><td><a href="02-visual-studio.html">2</a></td></tr>
+        <tr id="i-project"><td>MyProject (.csproj)</td><td>הפרויקט כולו. לחיצה כפולה על השם פותחת את קובץ ההגדרות שלו (<code class="inline">.csproj</code>): גרסת ה-.NET ורשימת החבילות. קליק ימני על השם פותח את Manage NuGet Packages, Add ועוד.</td><td>⛔</td><td><a href="02-visual-studio.html#nuget">2</a></td></tr>
         <tr id="i-connected"><td>Connected Services</td><td>חיבור לשירותים חיצוניים (למשל ענן). לא צריך את זה בפרויקט שלנו.</td><td>⛔</td><td></td></tr>
-        <tr id="i-dependencies"><td>Dependencies</td><td>כל החבילות והספריות שהפרויקט משתמש בהן. כאן רואים חבילות NuGet שהתקנתם (תחת Packages).</td><td>⛔</td><td><a href="02-visual-studio.html">2</a></td></tr>
+        <tr id="i-dependencies"><td>Dependencies</td><td>כל החבילות והספריות שהפרויקט משתמש בהן. כאן רואים חבילות NuGet שהתקנתם (תחת Packages).</td><td>⛔</td><td><a href="02-visual-studio.html#nuget">2</a></td></tr>
         <tr id="i-properties"><td>Properties</td><td>הגדרות הפרויקט.</td><td>⛔</td><td></td></tr>
-        <tr id="i-launch"><td>launchSettings.json</td><td>איך האתר עולה כשלוחצים Play: הפורט של <code class="inline">localhost</code>, ובאיזה דפדפן. בדרך כלל אין סיבה לשנות.</td><td>⛔</td><td><a href="02-visual-studio.html">2</a></td></tr>
+        <tr id="i-launch"><td>launchSettings.json</td><td>איך האתר עולה כשלוחצים Play: הפורט של <code class="inline">localhost</code>, ובאיזה דפדפן. בדרך כלל אין סיבה לשנות.</td><td>⛔</td><td><a href="02-visual-studio.html#run">2</a></td></tr>
     </table>
 
     <h2>wwwroot: קבצים לדפדפן</h2>
     <table class="simple item-table">
         <tr><th>שם</th><th>מה יש בו</th><th>נוגעים?</th><th>מדריך</th></tr>
-        <tr id="i-wwwroot"><td>wwwroot</td><td>התיקייה ה"ציבורית": כל מה שבה נשלח לדפדפן כמו שהוא. ב-cshtml כותבים <code class="inline">~/</code> כדי להגיע אליה.</td><td>✏️</td><td><a href="08-css-js.html">8</a></td></tr>
-        <tr id="i-css"><td>css/site.css</td><td>העיצוב של כל האתר. כאן כותבים CSS משלכם. אפשר להוסיף לתיקייה עוד קבצים, לעמודים מסוימים.</td><td>✏️</td><td><a href="08-css-js.html">8</a></td></tr>
-        <tr id="i-js"><td>js/site.js</td><td>JavaScript שרץ בכל עמוד. אפשר להוסיף לתיקייה עוד קבצים, לעמודים מסוימים.</td><td>✏️</td><td><a href="08-css-js.html">8</a></td></tr>
+        <tr id="i-wwwroot"><td>wwwroot</td><td>התיקייה ה"ציבורית": כל מה שבה נשלח לדפדפן כמו שהוא. ב-cshtml כותבים <code class="inline">~/</code> כדי להגיע אליה.</td><td>✏️</td><td><a href="08-css-js.html#wwwroot">8</a></td></tr>
+        <tr id="i-css"><td>css/site.css</td><td>העיצוב של כל האתר. כאן כותבים CSS משלכם. אפשר להוסיף לתיקייה עוד קבצים, לעמודים מסוימים.</td><td>✏️</td><td><a href="08-css-js.html#site-css">8</a></td></tr>
+        <tr id="i-js"><td>js/site.js</td><td>JavaScript שרץ בכל עמוד. אפשר להוסיף לתיקייה עוד קבצים, לעמודים מסוימים.</td><td>✏️</td><td><a href="08-css-js.html#javascript">8</a></td></tr>
         <tr id="i-lib"><td>lib</td><td>ספריות מוכנות: Bootstrap, jQuery וספריות לבדיקת טפסים. <strong>לא משנים כאן כלום</strong>: את העיצוב של Bootstrap דורסים ב-site.css.</td><td>⛔</td><td><a href="09-bootstrap.html">9</a></td></tr>
-        <tr id="i-images"><td>images</td><td>לא קיימת בהתחלה. יוצרים אותה לבד (קליק ימני על wwwroot ← Add ← New Folder) ושמים בה תמונות, לוגו וכו'. תמונות שמשתמשים מעלים נשמרות ב-<code class="inline">images/products</code>.</td><td>✏️</td><td><a href="16-images.html">16</a></td></tr>
+        <tr id="i-images"><td>images</td><td>לא קיימת בהתחלה. יוצרים אותה לבד (קליק ימני על wwwroot ← Add ← New Folder) ושמים בה תמונות, לוגו וכו'. תמונות שמשתמשים מעלים נשמרות ב-<code class="inline">images/products</code>.</td><td>✏️</td><td><a href="16-images.html#save-file">16</a></td></tr>
         <tr id="i-favicon"><td>favicon.ico</td><td>האייקון הקטן שמופיע בלשונית של הדפדפן. אפשר להחליף בתמונה משלכם (באותו שם): <a href="web-design.html">עיצוב שנראה מקצועי, סעיף 5</a>.</td><td>👀</td><td><a href="snippets.html">קטעי קוד</a></td></tr>
     </table>
 
     <h2>הקוד של האתר</h2>
     <table class="simple item-table">
         <tr><th>שם</th><th>מה יש בו</th><th>נוגעים?</th><th>מדריך</th></tr>
-        <tr id="i-areas"><td>Areas/Identity</td><td>דפי ההרשמה וההתחברות. בהתחלה יש בה מעט מאוד (או שהיא לא קיימת), כי הדפים "מוסתרים" בתוך ספרייה. אחרי Scaffolding של Identity, הם מופיעים כאן ואפשר לערוך אותם.</td><td>👀</td><td><a href="adv-c-identity.html">מתקדם ג</a></td></tr>
+        <tr id="i-areas"><td>Areas/Identity</td><td>דפי ההרשמה וההתחברות. בהתחלה יש בה מעט מאוד (או שהיא לא קיימת), כי הדפים "מוסתרים" בתוך ספרייה. אחרי Scaffolding של Identity, הם מופיעים כאן ואפשר לערוך אותם.</td><td>👀</td><td><a href="adv-c-identity.html#scaffold-identity">מתקדם ג</a></td></tr>
         <tr id="i-controllers"><td>Controllers</td><td>ה-Controllers: מקבלים בקשות ומחליטים איזה עמוד להחזיר. כל Controller חדש נוצר כאן.</td><td>✏️</td><td><a href="04-how-mvc-works.html">4</a>, <a href="07-new-pages.html">7</a></td></tr>
         <tr id="i-homecontroller"><td>HomeController.cs</td><td>ה-Controller של דף הבית ושל עמוד Privacy. אפשר להוסיף לו Actions לעמודים כלליים (אודות, צור קשר).</td><td>✏️</td><td><a href="04-how-mvc-works.html">4</a></td></tr>
         <tr id="i-data"><td>Data</td><td>כל מה שקשור למסד הנתונים.</td><td>✏️</td><td><a href="13-database.html">13</a></td></tr>
-        <tr id="i-dbcontext"><td>ApplicationDbContext.cs</td><td>החיבור למסד הנתונים. כאן מוסיפים <code class="inline">DbSet</code> לכל טבלה חדשה.</td><td>✏️</td><td><a href="13-database.html">13</a></td></tr>
-        <tr id="i-migrations"><td>Migrations</td><td>"הוראות הבנייה" של מסד הנתונים. כבר יש בה Migration ראשון (של טבלאות המשתמשים), ו-<code class="inline">Add-Migration</code> מוסיף עוד. <strong>לא מוחקים ולא עורכים</strong> קבצים כאן.</td><td>⛔</td><td><a href="13-database.html">13</a></td></tr>
+        <tr id="i-dbcontext"><td>ApplicationDbContext.cs</td><td>החיבור למסד הנתונים. כאן מוסיפים <code class="inline">DbSet</code> לכל טבלה חדשה.</td><td>✏️</td><td><a href="13-database.html#dbset">13</a></td></tr>
+        <tr id="i-migrations"><td>Migrations</td><td>"הוראות הבנייה" של מסד הנתונים. כבר יש בה Migration ראשון (של טבלאות המשתמשים), ו-<code class="inline">Add-Migration</code> מוסיף עוד. <strong>לא מוחקים ולא עורכים</strong> קבצים כאן.</td><td>⛔</td><td><a href="13-database.html#migration">13</a></td></tr>
         <tr id="i-models"><td>Models</td><td>המודלים: מחלקות שמתארות מידע (מוצר, קטגוריה, הזמנה).</td><td>✏️</td><td><a href="10-models.html">10</a></td></tr>
         <tr id="i-errorviewmodel"><td>ErrorViewModel.cs</td><td>מודל שהתבנית יצרה בשביל עמוד השגיאה. משאירים אותו.</td><td>⛔</td><td></td></tr>
         <tr id="i-appsettings"><td>appsettings.json</td><td>הגדרות האתר. הכי חשוב בו: <code class="inline">ConnectionStrings</code>, הכתובת של מסד הנתונים. <code class="inline">appsettings.Development.json</code> מכיל הגדרות שחלות רק בזמן פיתוח.</td><td>👀</td><td></td></tr>
@@ -147,9 +147,9 @@
         <tr id="i-shared"><td>Shared</td><td>קבצים ששייכים לכל האתר, ולא ל-Controller מסוים. גם Partial Views משלכם שמים כאן.</td><td>✏️</td><td><a href="adv-a-partial-views.html">מתקדם א</a></td></tr>
         <tr id="i-layout"><td>_Layout.cshtml</td><td>המסגרת של כל העמודים: התפריט, ה-Footer והקישורים לקבצי CSS ו-JS. <code class="inline">@RenderBody()</code> הוא המקום של תוכן העמוד.</td><td>✏️</td><td><a href="06-layout.html">6</a></td></tr>
         <tr id="i-layoutcss"><td>_Layout.cshtml.css</td><td>עיצוב שחל <strong>רק</strong> על ה-Layout (ב-Solution Explorer הוא מופיע "מתחת" ל-_Layout.cshtml). עדיף לכתוב עיצוב ב-site.css.</td><td>👀</td><td></td></tr>
-        <tr id="i-loginpartial"><td>_LoginPartial.cshtml</td><td>הקישורים Register, Login ו-Logout שבתפריט. אפשר לתרגם, אבל לא למחוק.</td><td>👀</td><td><a href="06-layout.html">6</a>, <a href="adv-c-identity.html">מתקדם ג</a></td></tr>
-        <tr id="i-validation"><td>_ValidationScriptsPartial.cshtml</td><td>ה-JavaScript שבודק טפסים כבר בדפדפן. מוסיפים אותו לעמוד עם טופס.</td><td>⛔</td><td><a href="12-validation.html">12</a></td></tr>
-        <tr id="i-error"><td>Error.cshtml</td><td>העמוד שמוצג כשיש שגיאה, באתר שכבר עלה לאוויר (בזמן פיתוח רואים דף שגיאה מפורט יותר).</td><td>👀</td><td><a href="tool-errors.html">שגיאות</a></td></tr>
+        <tr id="i-loginpartial"><td>_LoginPartial.cshtml</td><td>הקישורים Register, Login ו-Logout שבתפריט. אפשר לתרגם, אבל לא למחוק.</td><td>👀</td><td><a href="06-layout.html#register-login">6</a>, <a href="adv-c-identity.html#full-name-menu">מתקדם ג</a></td></tr>
+        <tr id="i-validation"><td>_ValidationScriptsPartial.cshtml</td><td>ה-JavaScript שבודק טפסים כבר בדפדפן. מוסיפים אותו לעמוד עם טופס.</td><td>⛔</td><td><a href="12-validation.html#show-messages">12</a></td></tr>
+        <tr id="i-error"><td>Error.cshtml</td><td>העמוד שמוצג כשיש שגיאה, באתר שכבר עלה לאוויר (בזמן פיתוח רואים דף שגיאה מפורט יותר).</td><td>👀</td><td><a href="tool-errors.html#runtime-errors">שגיאות</a></td></tr>
         <tr id="i-viewimports"><td>_ViewImports.cshtml</td><td>שורות <code class="inline">@using</code> שחלות על <strong>כל</strong> העמודים. בזכותו כותבים <code class="inline">@model Product</code> בלי שם התיקייה. יש בו גם <code class="inline">@addTagHelper</code>, שבזכותו <code class="inline">asp-for</code> ו-<code class="inline">asp-action</code> עובדים.</td><td>👀</td><td><a href="10-models.html">10</a></td></tr>
         <tr id="i-viewstart"><td>_ViewStart.cshtml</td><td>שורה אחת: <code class="inline">Layout = "_Layout";</code>. אומרת לכל העמודים להשתמש ב-Layout.</td><td>⛔</td><td><a href="06-layout.html">6</a></td></tr>
     </table>
@@ -157,8 +157,8 @@
     <h2>קבצים שנוצרים לבד</h2>
     <table class="simple item-table">
         <tr><th>שם</th><th>מה יש בו</th><th>נוגעים?</th><th>מדריך</th></tr>
-        <tr id="i-binobj"><td>bin, obj</td><td>קבצים זמניים שנוצרים בכל Build. כברירת מחדל הם מוסתרים ב-Solution Explorer. לא מעלים אותם ל-GitHub, ואם יש שגיאות מוזרות, מותר למחוק אותם (כשהאתר עצור): הם ייווצרו מחדש.</td><td>⛔</td><td><a href="tool-errors.html">שגיאות</a>, <a href="03-git-github.html">3</a></td></tr>
-        <tr id="i-gitignore"><td>.gitignore</td><td>רשימת הקבצים ש-Git לא מעלה ל-GitHub (למשל bin ו-obj). Visual Studio יוצרת אותו כשמחברים את הפרויקט ל-Git.</td><td>⛔</td><td><a href="03-git-github.html">3</a></td></tr>
+        <tr id="i-binobj"><td>bin, obj</td><td>קבצים זמניים שנוצרים בכל Build. כברירת מחדל הם מוסתרים ב-Solution Explorer. לא מעלים אותם ל-GitHub, ואם יש שגיאות מוזרות, מותר למחוק אותם (כשהאתר עצור): הם ייווצרו מחדש.</td><td>⛔</td><td><a href="tool-errors.html#clean-rebuild">שגיאות</a>, <a href="03-git-github.html#gitignore">3</a></td></tr>
+        <tr id="i-gitignore"><td>.gitignore</td><td>רשימת הקבצים ש-Git לא מעלה ל-GitHub (למשל bin ו-obj). Visual Studio יוצרת אותו כשמחברים את הפרויקט ל-Git.</td><td>⛔</td><td><a href="03-git-github.html#gitignore">3</a></td></tr>
     </table>
 
     <div class="explanation">

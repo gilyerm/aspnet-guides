@@ -52,7 +52,7 @@
     </ul>
 
     <!-- ===================== 3 ===================== -->
-    <h2>3. מוסיפים DbSet</h2>
+    <h2 id="dbset">3. מוסיפים DbSet</h2>
     <p>פתחו את <code class="inline">Data/ApplicationDbContext.cs</code>. המחלקה שם עוד ריקה, והיא נראית כך:</p>
 <pre class="code-block">public class ApplicationDbContext(DbContextOptions&lt;ApplicationDbContext&gt; options) : IdentityDbContext(options)
 {
@@ -74,7 +74,7 @@
     <p style="color:var(--muted)">(בפרויקטים שנוצרו בגרסאות ישנות יותר, בתוך המחלקה יש פונקציה שמתחילה ב-<code class="inline">public ApplicationDbContext(</code>. גם זה בסדר: מוסיפים את ה-DbSet מתחתיה, בתוך המחלקה.)</p>
 
     <!-- ===================== 4 ===================== -->
-    <h2>4. Migration: יוצרים את הטבלה</h2>
+    <h2 id="migration">4. Migration: יוצרים את הטבלה</h2>
     <ul class="step-list">
         <li><strong>עצרו את האתר</strong> אם הוא רץ.</li>
         <li>פתחו את Package Manager Console: <strong>Tools ← NuGet Package Manager ← Package Manager Console</strong>.</li>
@@ -87,7 +87,7 @@
             חכו להודעה <code class="inline">Done.</code>
         </li>
     </ul>
-    <div class="checkpoint">פתחו את SQL Server Object Explorer (מדריך 2, סעיף 7), לחצו על כפתור הרענון (🔄), ופתחו את <strong>Tables</strong> של מסד הנתונים. יש טבלה חדשה: <strong>dbo.Products</strong>, עם עמודות Id, Name, Price ו-Description.</div>
+    <div class="checkpoint">פתחו את SQL Server Object Explorer (<a href="02-visual-studio.html#view-database">מדריך 2, סעיף 7</a>), לחצו על כפתור הרענון (🔄), ופתחו את <strong>Tables</strong> של מסד הנתונים. יש טבלה חדשה: <strong>dbo.Products</strong>, עם עמודות Id, Name, Price ו-Description.</div>
 
     <div class="warning">
         <strong>⚠️ שני כללי ברזל:</strong>
@@ -174,7 +174,7 @@ Update-Database</pre>
     <p>(מקלידים כל שורה בנפרד, ולוחצים <span class="keyboard">Enter</span> אחרי כל אחת.) לכל Migration צריך שם אחר.</p>
 
     <div class="warning">
-        <strong>⚠️ זכרו: מסד הנתונים נמצא על המחשב, לא בפרויקט.</strong> במחשב אחר (אחרי Clone או העתקה) מריצים <code class="inline">Update-Database</code>, וכל הטבלאות נוצרות שם. הן יהיו ריקות: הנתונים עצמם לא עוברים. ראו מדריך 3, סעיף 4.
+        <strong>⚠️ זכרו: מסד הנתונים נמצא על המחשב, לא בפרויקט.</strong> במחשב אחר (אחרי Clone או העתקה) מריצים <code class="inline">Update-Database</code>, וכל הטבלאות נוצרות שם. הן יהיו ריקות: הנתונים עצמם לא עוברים. ראו <a href="03-git-github.html#other-computer">מדריך 3, סעיף 4</a>.
     </div>
 
     <!-- ===================== troubleshooting ===================== -->
@@ -185,7 +185,7 @@ Update-Database</pre>
             <li><strong>"The model for context 'ApplicationDbContext' has pending changes":</strong> שיניתם מודל, אבל לא יצרתם לו Migration. הריצו קודם <code class="inline">Add-Migration</code> עם שם חדש, ורק אחר כך <code class="inline">Update-Database</code>.</li>
             <li><strong>"Build failed":</strong> יש שגיאות בקוד. הפקודות לא ירוצו עד שתתקנו אותן (פתחו את Error List).</li>
             <li><strong>"The process cannot access the file" או שהפקודה נתקעת:</strong> האתר עדיין רץ. עצרו אותו ונסו שוב.</li>
-            <li><strong>"The term 'Add-Migration' is not recognized":</strong> חסרה החבילה <code class="inline">Microsoft.EntityFrameworkCore.Tools</code>. התקינו אותה ב-NuGet (מדריך 2, סעיף 6), עם גרסה שמתאימה לגרסת ה-.NET.</li>
+            <li><strong>"The term 'Add-Migration' is not recognized":</strong> חסרה החבילה <code class="inline">Microsoft.EntityFrameworkCore.Tools</code>. התקינו אותה ב-NuGet (<a href="02-visual-studio.html#nuget">מדריך 2, סעיף 6</a>), עם גרסה שמתאימה לגרסת ה-.NET.</li>
             <li><strong>הנתונים לא נשמרים:</strong> חסר <code class="inline">_context.SaveChanges();</code> אחרי ה-<code class="inline">Add</code>.</li>
             <li><strong>טעיתם ב-Migration ועוד לא הרצתם Update-Database:</strong> <code class="inline">Remove-Migration</code> מוחק את ה-Migration האחרון בצורה בטוחה.</li>
         </ul>

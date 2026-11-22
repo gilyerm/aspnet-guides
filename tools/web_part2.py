@@ -135,7 +135,7 @@ body {
              ]),
              box('explanation', '💡 לא בטוחים באילו צבעים לבחור?', 'באתרים כמו <a href="https://coolors.co" target="_blank">coolors.co</a> יש פלטות מוכנות של צבעים שמתאימים זה לזה. לחצו רווח כדי לקבל פלטה חדשה, והעתיקו את הקודים.'),
          ]),
-         ('5. אייקון ללשונית של הדפדפן (favicon)', [
+         ('5. אייקון ללשונית של הדפדפן (favicon) {#favicon}', [
              concept('Favicon', 'האייקון הקטן שמופיע בלשונית של הדפדפן, ליד שם העמוד, וגם ברשימת המועדפים. השם בא מ-favorite icon (אייקון למועדפים). אתר עם אייקון משלו נראה גמור ומקצועי.',
                      'דוגמה: הסמל הסגול עם ' + c('</>') + ' בלשונית של האתר הזה.'),
              '''<div class="tabmock" aria-hidden="true">
@@ -441,7 +441,7 @@ products.forEach(function (p) {
 });
 
 document.getElementById("products").innerHTML = html;''', title='נסו: הוסיפו מוצר רביעי למערך', height=220),
-             box('explanation', '💡 זה הבסיס ל-fetch:', 'כשהשרת מחזיר JSON (<a href="adv-d-fetch.html">מתקדם ד</a>), מקבלים בדיוק מערך של אובייקטים כזה, ובונים ממנו HTML באותה דרך.'),
+             box('explanation', '💡 זה הבסיס ל-fetch:', 'כשהשרת מחזיר JSON (<a href="adv-d-fetch.html#json-action">מתקדם ד</a>), מקבלים בדיוק מערך של אובייקטים כזה, ובונים ממנו HTML באותה דרך.'),
          ]),
          ('3. טיימרים', [
              table(['פונקציה', 'מה היא עושה'], [
@@ -541,7 +541,7 @@ document.querySelectorAll(".add").forEach(function (btn) {
         document.getElementById("total").textContent = total;
     });
 });''', title='נסו: הוסיפו כפתור רביעי. אין צורך לשנות את ה-JavaScript!', height=190),
-             box('explanation', '💡 בפרויקט:', 'ב-cshtml כותבים ' + c('data-id="@product.Id"') + ' בתוך ה-' + c('@foreach') + ', וכך כל כפתור "יודע" לאיזה מוצר הוא שייך (<a href="adv-d-fetch.html">מתקדם ד</a>).'),
+             box('explanation', '💡 בפרויקט:', 'ב-cshtml כותבים ' + c('data-id="@product.Id"') + ' בתוך ה-' + c('@foreach') + ', וכך כל כפתור "יודע" לאיזה מוצר הוא שייך (<a href="adv-d-fetch.html#like-button">מתקדם ד</a>).'),
          ]),
          ('6. localStorage: הדפדפן זוכר', [
              concept('localStorage', 'מקום קטן בדפדפן שבו אפשר לשמור טקסט, והוא נשאר גם אחרי רענון או סגירה של הדפדפן. כל משתמש, בדפדפן שלו בלבד.',

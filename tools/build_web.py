@@ -4,6 +4,7 @@ Edit the content below and run:  python tools/build_web.py
 Code inside pg(...) is escaped automatically and becomes a live "try it yourself" editor.
 """
 import html
+import re
 import os
 
 OUT = os.path.join(os.path.dirname(__file__), '..', 'guides')
@@ -36,7 +37,9 @@ def c(x):
 def page(slug, title, subtitle, intro, sections, summary, more):
     body = []
     for h2, items in sections:
-        body.append(f'    <h2>{h2}</h2>')
+        m = re.match(r'(.*?)\s*\{#([\w-]+)\}$', h2)  # "כותרת {#id}" = כתובת קבועה לסעיף, לקישורים ממדריכים אחרים
+        h2_id = f' id="{m.group(2)}"' if m else ''
+        body.append(f'    <h2{h2_id}>{m.group(1) if m else h2}</h2>')
         body.extend(items)
     s = '\n'.join(f'<li>{x}</li>' for x in summary)
     out = f'''<!DOCTYPE html>
@@ -261,7 +264,7 @@ page('web-html', 'יסודות HTML', 'התגיות שנשתמש בהן בפרו
              ]),
              '<div class="explanation"><strong>💡 בפרויקט:</strong> את השורות לא כותבים ביד, אלא בונים בלולאה ' + c('@foreach') + ' מתוך נתונים (מדריך 10). ואפשר לוותר על רוב ה-CSS: ' + c('class="table table-striped table-hover"') + ' של Bootstrap עושה את כל זה בשבילכם (מדריך 9).</div>',
          ]),
-         ('7. טפסים', [
+         ('7. טפסים {#forms}', [
              '<p>טפסים הם החלק הכי חשוב ב-HTML בשביל הפרויקט: הרשמה, הוספת מוצר, צור קשר. כל שדה הוא ' + c('<input>') + ' עם ' + c('type') + ' אחר.</p>',
              table(['תגית / type', 'מה היא'], [
                  [c('<form>'), 'עוטפת את כל השדות. כשלוחצים על כפתור submit, כל מה שבתוכה נשלח.'],
@@ -302,7 +305,7 @@ page('web-html', 'יסודות HTML', 'התגיות שנשתמש בהן בפרו
 
     <button type="submit">שליחה</button>
 </form>''', title='נסו: הוסיפו שדה "טלפון" (type="tel")', height=460),
-             '<h3>שדות חובה</h3>',
+             '<h3 id="required">שדות חובה</h3>',
              '<p>בטופס שלמעלה אפשר ללחוץ "שליחה" גם כשהכול ריק. כדי לחייב את המשתמש למלא שדה, מוסיפים לו את המילה ' + c('required') + '. אין לה ערך: עצם זה שהיא כתובה בתגית אומר "חובה".</p>',
              concept('שדה חובה (required)', 'שדה שאי אפשר לשלוח את הטופס בלי למלא. כשלוחצים "שליחה" והוא ריק, הדפדפן עוצר את השליחה, קופץ לשדה ומציג הודעה קטנה לידו.',
                      'דוגמה: ' + c('<input type="text" id="name" required>') + '. נהוג לסמן שדות חובה בכוכבית אדומה ליד התווית, כדי שהמשתמש יידע מראש.'),
@@ -343,7 +346,7 @@ input:user-invalid {
     border: 2px solid #c72e2e;
 }''', title='נסו: לחצו "שליחה" בלי למלא כלום. אחר כך מלאו הכול ושלחו שוב. ואז מחקו את required מהשם ובדקו מה השתנה', height=420),
              '<div class="checkpoint">' + 'לחצתם "שליחה" כשהשם ריק, והדפדפן עצר וקפץ לשדה עם הודעה? וכשמילאתם הכול הופיעה הודעה ירוקה שהטופס נשלח? מצוין.</div>',
-             '<div class="warning"><strong>⚠️ הבדיקה של הדפדפן היא רק עזרה למשתמש.</strong> ' + 'מי שמבין קצת יכול לעקוף אותה (למשל למחוק את ' + c('required') + ' בכלי המפתחים, F12). לכן בפרויקט בודקים שוב בשרת, עם ' + c('[Required]') + ' במודל: <a href="12-validation.html">מדריך 12</a>. החדשות הטובות: כשכותבים ' + c('[Required]') + ' במודל, ASP.NET מוסיף לשדה את הבדיקה בדפדפן לבד.' + '</div>',
+             '<div class="warning"><strong>⚠️ הבדיקה של הדפדפן היא רק עזרה למשתמש.</strong> ' + 'מי שמבין קצת יכול לעקוף אותה (למשל למחוק את ' + c('required') + ' בכלי המפתחים, F12). לכן בפרויקט בודקים שוב בשרת, עם ' + c('[Required]') + ' במודל: <a href="12-validation.html#rules">מדריך 12</a>. החדשות הטובות: כשכותבים ' + c('[Required]') + ' במודל, ASP.NET מוסיף לשדה את הבדיקה בדפדפן לבד.' + '</div>',
              '<div class="explanation"><strong>💡 בפרויקט:</strong> במקום ' + c('id') + ' ו-' + c('name') + ' כותבים ' + c('asp-for="Name"') + ', ו-ASP.NET ממלא אותם לבד ומחבר את השדה למודל (מדריך 11). אבל בסוף, בדפדפן, זה בדיוק אותו HTML.</div>',
          ]),
          ('8. תגיות שמתארות את מבנה העמוד', [
@@ -412,7 +415,7 @@ box_model_demo = '''
 </table>'''
 
 page('web-css', 'יסודות CSS', 'איך מעצבים: צבעים, רווחים, סידור בשורה, ועמוד שמתאים לטלפון',
-     '<strong>💡 על מה העמוד הזה?</strong> אם HTML הוא השלד, CSS הוא הבגדים: צבעים, גדלים, רווחים ומיקום. Bootstrap (מדריך 9) נותן הרבה עיצוב מוכן, אבל כדי לשנות אותו ולהתאים לאתר שלכם צריך להכיר את הבסיס. איפה שמים את ה-CSS בפרויקט: מדריך 8. חדשים בזה? התחילו ב-<a href="web-intro.html">מה זה HTML, CSS ו-JavaScript?</a>',
+     '<strong>💡 על מה העמוד הזה?</strong> אם HTML הוא השלד, CSS הוא הבגדים: צבעים, גדלים, רווחים ומיקום. Bootstrap (מדריך 9) נותן הרבה עיצוב מוכן, אבל כדי לשנות אותו ולהתאים לאתר שלכם צריך להכיר את הבסיס. איפה שמים את ה-CSS בפרויקט: <a href="08-css-js.html#site-css">מדריך 8</a>. חדשים בזה? התחילו ב-<a href="web-intro.html">מה זה HTML, CSS ו-JavaScript?</a>',
      [
          ('1. איך כותבים כלל CSS', [
              concept('כלל CSS', f'"למי" (סלקטור), ואז בסוגריים מסולסלים "מה לשנות" (תכונה: ערך;).',
@@ -573,7 +576,7 @@ p {
 }''', title='נסו: justify-content: center, ואחר כך align-items: flex-start', height=200),
              '<div class="explanation"><strong>💡 ב-Bootstrap:</strong> אותו דבר בקלאסים: ' + c('class="d-flex justify-content-between align-items-center gap-2"') + '.</div>',
          ]),
-         ('7. מצבים: hover ועוד, פינות מעוגלות וצל', [
+         ('7. מצבים: hover ועוד, פינות מעוגלות וצל {#states}', [
              pg('''
 <button class="fancy">עברו עליי עם העכבר</button>''', css='''
 .fancy {
@@ -640,7 +643,7 @@ p {
     outline-offset: 3px;
 }''', title='נסו: החזיקו את העכבר לחוץ על כפתור. ואז שנו את 0.95 ל-0.7', height=150),
          ]),
-         ('8. עיצוב לפי מצב ומיקום: טפסים וטבלאות', [
+         ('8. עיצוב לפי מצב ומיקום: טפסים וטבלאות {#form-table-states}', [
              '<p>אותו רעיון של "מצב" עובד גם על שדות בטופס (מולא נכון? סומן?) ועל המיקום של אלמנט ברשימה (ראשון? אחרון? זוגי?).</p>',
              '<h3>טופס שמגיב למשתמש</h3>',
              table(['סלקטור', 'מתי הוא חל'], [
@@ -774,7 +777,7 @@ tr:hover td {
 tr:last-child td {
     border-bottom: 3px solid #5c2d91;
 }''', title='נסו: שנו even ל-odd. ואז הוסיפו שורה חדשה לטבלה, והפסים יסתדרו לבד', height=270),
-             '<div class="explanation"><strong>💡 בפרויקט:</strong> כשמציגים טבלה מה-DB עם ' + c('@foreach') + ' (<a href="10-models.html">מדריך 10</a>, או "טבלה מהמסד" ב<a href="snippets.html">ספריית קטעי הקוד</a>), אי אפשר לדעת מראש כמה שורות יהיו. ' + c(':nth-child(even)') + ' מפספס אותן לבד, לא משנה כמה. ב-Bootstrap אותו דבר נעשה עם ' + c('class="table table-striped table-hover"') + '.</div>',
+             '<div class="explanation"><strong>💡 בפרויקט:</strong> כשמציגים טבלה מה-DB עם ' + c('@foreach') + ' (<a href="10-models.html#show-products">מדריך 10</a>, או <a href="snippets.html#db-table">"טבלה עם נתונים מהמסד"</a> בספריית קטעי הקוד), אי אפשר לדעת מראש כמה שורות יהיו. ' + c(':nth-child(even)') + ' מפספס אותן לבד, לא משנה כמה. ב-Bootstrap אותו דבר נעשה עם ' + c('class="table table-striped table-hover"') + '.</div>',
          ]),
          ('9. עמוד שמתאים לטלפון', [
              concept('Media Query', f'כלל CSS שחל רק כשהמסך בגודל מסוים. {c("@media (max-width: 600px) { ... }")} פירושו "רק כשהמסך צר מ-600 פיקסלים".'),
@@ -802,7 +805,7 @@ tr:last-child td {
         flex-direction: column;
     }
 }''', title='נסו: שנו 400px ל-1000px, ותראו את התצוגה של "טלפון"', height=200),
-             '<div class="explanation"><strong>💡 ב-Bootstrap:</strong> זה בדיוק מה ש-' + c('col-12 col-md-4') + ' עושה בשבילכם (מדריך 9, סעיף 5).</div>',
+             '<div class="explanation"><strong>💡 ב-Bootstrap:</strong> זה בדיוק מה ש-' + c('col-12 col-md-4') + ' עושה בשבילכם (<a href="09-bootstrap.html#grid">מדריך 9, סעיף 5</a>).</div>',
          ]),
          ('10. CSS משלכם יחד עם Bootstrap', [
              '<p>הדרך הנכונה לשנות עיצוב של Bootstrap: <strong>לא</strong> לגעת בקבצים של Bootstrap, אלא להוסיף class משלכם ב-' + c('site.css') + '. הוא נטען אחרי Bootstrap, ולכן הכלל שלכם "מנצח".</p>',
@@ -829,7 +832,7 @@ tr:last-child td {
 # JavaScript
 # =====================================================================
 page('web-js', 'יסודות JavaScript', 'איך גורמים לעמוד להגיב: לחיצות, הקלדה, הצגה והסתרה',
-     '<strong>💡 על מה העמוד הזה?</strong> HTML הוא השלד, CSS הבגדים, ו-JavaScript הוא מה שגורם לעמוד <strong>לזוז</strong>: כפתור שעושה משהו, הודעה שמופיעה, טופס שבודק את עצמו. JavaScript רץ בדפדפן, אחרי שהעמוד כבר הגיע מהשרת. איפה שמים אותו בפרויקט: מדריך 8, סעיף 4. חדשים בזה? התחילו ב-<a href="web-intro.html">מה זה HTML, CSS ו-JavaScript?</a>',
+     '<strong>💡 על מה העמוד הזה?</strong> HTML הוא השלד, CSS הבגדים, ו-JavaScript הוא מה שגורם לעמוד <strong>לזוז</strong>: כפתור שעושה משהו, הודעה שמופיעה, טופס שבודק את עצמו. JavaScript רץ בדפדפן, אחרי שהעמוד כבר הגיע מהשרת. איפה שמים אותו בפרויקט: <a href="08-css-js.html#javascript">מדריך 8, סעיף 4</a>. חדשים בזה? התחילו ב-<a href="web-intro.html">מה זה HTML, CSS ו-JavaScript?</a>',
      [
          ('1. הצעד הראשון: לחיצה על כפתור', [
              '<p>כמעט כל קוד JavaScript באתר עובד ככה: <strong>מוצאים</strong> אלמנט בעמוד, <strong>מחכים</strong> שמשהו יקרה לו (לחיצה), ואז <strong>משנים</strong> משהו.</p>',

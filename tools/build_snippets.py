@@ -1,7 +1,10 @@
 """Builds guides/snippets.html from the snippet list below (code is escaped automatically)."""
 import html
 
-G = lambda slug, label: f'<a href="{slug}.html">{label}</a>'
+def G(slug, label):
+    # 'guide' or 'guide#section' -> link to that guide (and to that section in it)
+    page, _, section = slug.partition('#')
+    return f'<a href="{page}.html{"#" + section if section else ""}">{label}</a>'
 
 
 def code(src, lang=None, preview=None):
@@ -13,9 +16,9 @@ def code(src, lang=None, preview=None):
     return f'<pre class="code-block"{attr}>{html.escape(src.strip(chr(10)))}</pre>{sample}'
 
 
-def snippet(title, what, parts, change=None, guide=None, star=False, preview=None):
+def snippet(title, what, parts, change=None, guide=None, star=False, preview=None, sid=None):
     """preview: {מספר החלק: True או HTML לדוגמה}. מוסיף לשונית "תצוגה מקדימה" לחלק הזה."""
-    s = ['<div class="snippet">', f'<h3>{"<span class=star>⭐</span> " if star else ""}{title}</h3>', f'<p>{what}</p>']
+    s = ['<div class="snippet">', f'<h3{f" id={chr(34)}{sid}{chr(34)}" if sid else ""}>{"<span class=star>⭐</span> " if star else ""}{title}</h3>', f'<p>{what}</p>']
     for i, (where, src, *lang) in enumerate(parts):
         s.append(f'<p class="where">{where}</p>')
         s.append(code(src, lang[0] if lang else None, (preview or {}).get(i)))
@@ -60,8 +63,9 @@ public IActionResult Index()
     </tbody>
 </table>''')],
             change='החליפו את <code class="inline">Products</code>/<code class="inline">Product</code> בשם הטבלה והמודל שלכם, ואת העמודות בשדות שלכם.',
-            guide=G('13-database', 'מדריך 13') + ', ' + G('10-models', 'מדריך 10'),
-            preview={1: '<table class="table table-striped table-hover"><thead><tr><th>שם</th><th>מחיר</th></tr></thead><tbody><tr><td>תיק גב</td><td>89 ₪</td></tr><tr><td>מחברת</td><td>12 ₪</td></tr><tr><td>עט</td><td>5 ₪</td></tr><tr><td>מחשבון</td><td>60 ₪</td></tr></tbody></table>'}),
+            guide=G('13-database', 'מדריך 13') + ', ' + G('10-models#show-products', 'מדריך 10'),
+            preview={1: '<table class="table table-striped table-hover"><thead><tr><th>שם</th><th>מחיר</th></tr></thead><tbody><tr><td>תיק גב</td><td>89 ₪</td></tr><tr><td>מחברת</td><td>12 ₪</td></tr><tr><td>עט</td><td>5 ₪</td></tr><tr><td>מחשבון</td><td>60 ₪</td></tr></tbody></table>'},
+            sid='db-table'),
 
     snippet('כרטיסים ברשת',
             'כל פריט ככרטיס עם תמונה: שלושה בשורה במחשב, אחד בשורה בטלפון.',
@@ -82,8 +86,9 @@ public IActionResult Index()
     }
 </div>''')],
             change='אם אין לכם <code class="inline">ImageUrl</code>, מחקו את שורת ה-<code class="inline">&lt;img&gt;</code>.',
-            guide=G('09-bootstrap', 'מדריך 9') + ', ' + G('adv-a-partial-views', 'מתקדם א (אותו כרטיס בכמה עמודים)'),
-            preview={0: '<div class="row"><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Bag" class="card-img-top" alt="תיק גב" /><div class="card-body"><h5 class="card-title">תיק גב</h5><p class="card-text">89 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Notebook" class="card-img-top" alt="מחברת" /><div class="card-body"><h5 class="card-title">מחברת</h5><p class="card-text">12 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Pen" class="card-img-top" alt="עט" /><div class="card-body"><h5 class="card-title">עט</h5><p class="card-text">5 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div></div>'}),
+            guide=G('09-bootstrap#cards', 'מדריך 9') + ', ' + G('adv-a-partial-views#same-card', 'מתקדם א (אותו כרטיס בכמה עמודים)'),
+            preview={0: '<div class="row"><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Bag" class="card-img-top" alt="תיק גב" /><div class="card-body"><h5 class="card-title">תיק גב</h5><p class="card-text">89 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Notebook" class="card-img-top" alt="מחברת" /><div class="card-body"><h5 class="card-title">מחברת</h5><p class="card-text">12 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div><div class="col-12 col-md-6 col-lg-4 mb-4"><div class="card h-100"><img src="https://placehold.co/400x300?text=Pen" class="card-img-top" alt="עט" /><div class="card-body"><h5 class="card-title">עט</h5><p class="card-text">5 ₪</p><a href="#" class="btn btn-primary">לפרטים</a></div></div></div></div>'},
+            sid='cards'),
 
     snippet('קרוסלה של מוצרים',
             'שקופיות מתחלפות, אחת לכל מוצר מהמסד, עם תמונה, שם ומחיר.',
@@ -112,8 +117,9 @@ public IActionResult Index()
     </button>
 </div>''', 'cshtml')],
             change='רק לשקופית הראשונה יש <code class="inline">active</code>, ולכן <code class="inline">for</code> עם <code class="inline">i</code> ולא <code class="inline">foreach</code>. אם אין לכם <code class="inline">ImageUrl</code>, מחקו את שורת ה-<code class="inline">&lt;img&gt;</code>.',
-            guide=G('09b-bootstrap-components', "Bootstrap חלק ב', סעיף 2"),
-            preview={0: '<div id="pc" class="carousel slide" data-bs-ride="carousel"><div class="carousel-inner"><div class="carousel-item active"><img src="https://picsum.photos/seed/bag/800/400" class="d-block w-100" alt=""><div class="carousel-caption bg-dark bg-opacity-50 rounded-3 py-2 mb-3"><h5>תיק גב</h5><p>89 ₪</p></div></div><div class="carousel-item"><img src="https://picsum.photos/seed/notebook/800/400" class="d-block w-100" alt=""><div class="carousel-caption bg-dark bg-opacity-50 rounded-3 py-2 mb-3"><h5>מחברת</h5><p>12 ₪</p></div></div></div><button class="carousel-control-prev" type="button" data-bs-target="#pc" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button><button class="carousel-control-next" type="button" data-bs-target="#pc" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button></div>'}),
+            guide=G('09b-bootstrap-components#carousel-db', "Bootstrap חלק ב', סעיף 2"),
+            preview={0: '<div id="pc" class="carousel slide" data-bs-ride="carousel"><div class="carousel-inner"><div class="carousel-item active"><img src="https://picsum.photos/seed/bag/800/400" class="d-block w-100" alt=""><div class="carousel-caption bg-dark bg-opacity-50 rounded-3 py-2 mb-3"><h5>תיק גב</h5><p>89 ₪</p></div></div><div class="carousel-item"><img src="https://picsum.photos/seed/notebook/800/400" class="d-block w-100" alt=""><div class="carousel-caption bg-dark bg-opacity-50 rounded-3 py-2 mb-3"><h5>מחברת</h5><p>12 ₪</p></div></div></div><button class="carousel-control-prev" type="button" data-bs-target="#pc" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button><button class="carousel-control-next" type="button" data-bs-target="#pc" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button></div>'},
+            sid='carousel'),
 
     snippet('עמוד פרטים של פריט אחד',
             'עמוד שמציג פריט אחד לפי המספר שבכתובת, למשל /Products/Details/5.',
@@ -139,7 +145,7 @@ public IActionResult Details(int id)
 <a asp-action="Index" class="btn btn-secondary">חזרה לרשימה</a>'''),
              ('הקישור לעמוד (למשל בטבלה)', '''
 <a asp-action="Details" asp-route-id="@product.Id">פרטים</a>''')],
-            guide=G('10-models', 'מדריך 10, סעיף 5')),
+            guide=G('10-models#details', 'מדריך 10, סעיף 5')),
 
     snippet('"אין עדיין נתונים" כשהרשימה ריקה',
             'במקום טבלה ריקה, הודעה ידידותית.',
@@ -193,7 +199,8 @@ public IActionResult Index(int page = 1)
     </ul>
 </nav>''')],
             change='<code class="inline">pageSize</code> קובע כמה פריטים בכל עמוד.',
-            preview={1: '<nav><ul class="pagination"><li class="page-item"><a class="page-link" href="#">1</a></li><li class="page-item active"><a class="page-link" href="#">2</a></li><li class="page-item"><a class="page-link" href="#">3</a></li></ul></nav><p class="text-muted small">(כאן עמוד 2 הוא העמוד הנוכחי)</p>'}),
+            preview={1: '<nav><ul class="pagination"><li class="page-item"><a class="page-link" href="#">1</a></li><li class="page-item active"><a class="page-link" href="#">2</a></li><li class="page-item"><a class="page-link" href="#">3</a></li></ul></nav><p class="text-muted small">(כאן עמוד 2 הוא העמוד הנוכחי)</p>'},
+            sid='paging'),
 
     snippet('ספירה: "נמצאו 12 מוצרים"',
             'מציג כמה פריטים יש ברשימה.',
@@ -205,7 +212,7 @@ public IActionResult Index(int page = 1)
             [('ב-View', '''
 <img src="@(product.ImageUrl ?? "https://placehold.co/400x300?text=No+Image")" alt="@product.Name" class="img-fluid" />''')],
             change='אפשר לשים תמונה משלכם ב-<code class="inline">wwwroot/images</code> ולכתוב <code class="inline">"/images/no-image.png"</code> במקום הכתובת.',
-            guide=G('16-images', 'מדריך 16')),
+            guide=G('16-images#show-image', 'מדריך 16')),
 
     snippet('קיצור טקסט ארוך',
             'מציג רק את 100 התווים הראשונים של תיאור ארוך, עם "...".',
@@ -264,7 +271,8 @@ public IActionResult Delete(int id)
     return RedirectToAction("Index");
 }''')],
             change='בטופס העריכה חובה <code class="inline">&lt;input type="hidden" asp-for="Id" /&gt;</code>, אחרת האתר לא יודע איזו שורה לעדכן.',
-            guide=G('15-scaffolding', 'מדריך 15 (הדרך האוטומטית)') + ', ' + G('11-forms', 'מדריך 11')),
+            guide=G('15-scaffolding', 'מדריך 15 (הדרך האוטומטית)') + ', ' + G('11-forms', 'מדריך 11'),
+            sid='crud'),
 
     snippet('חלון אישור לפני מחיקה',
             'לפני מחיקה קופץ "בטוחים?", ורק אישור מוחק.',
@@ -273,7 +281,8 @@ public IActionResult Delete(int id)
       onsubmit="return confirm('בטוחים שרוצים למחוק?');">
     <button type="submit" class="btn btn-sm btn-danger">מחיקה</button>
 </form>''')],
-            change='זו הגרסה הפשוטה, עם חלון של הדפדפן. גרסה יפה יותר, עם חלון של Bootstrap: ' + G('09b-bootstrap-components', "Bootstrap חלק ב', סעיף 3") + '.'),
+            change='זו הגרסה הפשוטה, עם חלון של הדפדפן. גרסה יפה יותר, עם חלון של Bootstrap: ' + G('09b-bootstrap-components#delete-modal', "Bootstrap חלק ב', סעיף 3") + '.',
+            sid='confirm-delete'),
 
     snippet('הודעת "נשמר בהצלחה"',
             'אחרי שמירה ומעבר לעמוד אחר, מופיעה הודעה ירוקה פעם אחת.',
@@ -289,7 +298,8 @@ return RedirectToAction("Index");'''),
     </div>
 }''')],
             change='<code class="inline">TempData</code> שורד מעבר עמוד אחד (Redirect), ואז נמחק לבד. כשההודעה ב-Layout, היא עובדת בכל העמודים.',
-            preview={1: '<div class="alert alert-success alert-dismissible fade show mt-3">המוצר נשמר בהצלחה!<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>'}),
+            preview={1: '<div class="alert alert-success alert-dismissible fade show mt-3">המוצר נשמר בהצלחה!<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>'},
+            sid='saved-message'),
 
     snippet('רשימה נפתחת מטבלה אחרת',
             'בחירת קטגוריה למוצר מתוך טבלת הקטגוריות.',
@@ -299,7 +309,7 @@ ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name");
 <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
     <option value="">-- בחרו קטגוריה --</option>
 </select>''')],
-            guide=G('14-relationships', 'מדריך 14, סעיף 4')),
+            guide=G('14-relationships#dropdown', 'מדריך 14, סעיף 4')),
 
     snippet('חיפוש, מיון וסינון',
             'תיבת חיפוש לפי שם, מיון לפי מחיר וסינון לפי קטגוריה.',
@@ -328,7 +338,7 @@ public IActionResult Index(string? search)
     ...
 </form>''')],
             change='ב-<code class="inline">Program.cs</code> צריך גם <code class="inline">app.UseStaticFiles();</code> לפני <code class="inline">app.UseRouting();</code>, אחרת תמונות שהועלו לא יוצגו.',
-            guide=G('16-images', 'מדריך 16 (כולל הקוד המלא לשמירה ב-Controller)')),
+            guide=G('16-images#save-file', 'מדריך 16 (כולל הקוד המלא לשמירה ב-Controller)')),
 
     snippet('נתונים התחלתיים (Seed)',
             'מוצרים לדוגמה שנכנסים למסד הנתונים לבד, אם הטבלה ריקה. נוח מאוד במחשב חדש.',
@@ -348,7 +358,8 @@ using (var scope = app.Services.CreateScope())
     }
 }''')],
             change='החליפו את המוצרים בנתונים שלכם. <code class="inline">Product</code> יסומן באדום: <span class="keyboard">Ctrl+.</span> יוסיף בראש <code class="inline">Program.cs</code> את ה-<code class="inline">using</code> של התיקייה Models. אם עשיתם את מדריך 17, אפשר לשים את זה באותו בלוק <code class="inline">using</code> של יצירת המנהל.',
-            star=True),
+            star=True,
+            sid='seed'),
 
     snippet('סינון לפי קטגוריה',
             'קישורים לכל קטגוריה, שמציגים רק את המוצרים שלה.',
@@ -363,7 +374,7 @@ if (categoryId != null)
     products = products.Where(p => p.CategoryId == categoryId);
 }
 ViewBag.Categories = _context.Categories.ToList();''')],
-            guide=G('adv-b-search', 'מתקדם ב, סעיף 3')),
+            guide=G('adv-b-search#sort-filter', 'מתקדם ב, סעיף 3')),
 
     snippet('כפתור "אהבתי" עם מונה',
             'לחיצה מעלה מונה, בלי לטעון את העמוד מחדש.',
@@ -396,7 +407,7 @@ public string? Phone { get; set; }
 [Range(1, 120, ErrorMessage = "גיל בין 1 ל-120")]
 [Display(Name = "גיל")]
 public int Age { get; set; }''')],
-            guide=G('12-validation', 'מדריך 12'),
+            guide=G('12-validation#rules', 'מדריך 12'),
             star=True),
 
     snippet('בחירת תאריך',
@@ -473,7 +484,7 @@ else
     <a asp-area="Identity" asp-page="/Account/Login">התחברות</a>
     <a asp-area="Identity" asp-page="/Account/Register">הרשמה</a>
 }''')],
-            guide=G('17-users', 'מדריך 17, סעיף 3') + ', ' + G('adv-c-identity', 'מתקדם ג (שם מלא במקום אימייל)'),
+            guide=G('17-users#who-is-logged-in', 'מדריך 17, סעיף 3') + ', ' + G('adv-c-identity#full-name-menu', 'מתקדם ג (שם מלא במקום אימייל)'),
             preview={0: '<p>שלום, dana@example.com!</p><hr><p class="text-muted small mb-1">ומי שלא התחבר רואה:</p><a href="#">התחברות</a> <a href="#">הרשמה</a>'}),
 
     snippet('כפתור שרק מנהל רואה',
@@ -483,13 +494,13 @@ else
 {
     <a asp-action="Create" class="btn btn-primary">הוספת מוצר</a>
 }''')],
-            guide=G('17-users', 'מדריך 17, סעיף 5')),
+            guide=G('17-users#admin-only', 'מדריך 17, סעיף 5')),
 
     snippet('עמוד שרק מנהל נכנס אליו',
             'חוסם Action אחד, או Controller שלם.',
             [('מעל Action או מעל ה-class של ה-Controller', '''
 [Authorize(Roles = "Admin")]''')],
-            guide=G('17-users', 'מדריך 17, סעיף 4')),
+            guide=G('17-users#admin-role', 'מדריך 17, סעיף 4')),
 
     snippet('יצירת המנהל הראשון',
             'בכל הפעלה: יוצר את התפקיד Admin ונותן אותו לאימייל מסוים.',
@@ -511,7 +522,8 @@ using (var scope = app.Services.CreateScope())
     }
 }''')],
             change='החליפו את האימייל. אם עשיתם את מתקדם ג, כתבו <code class="inline">ApplicationUser</code> במקום <code class="inline">IdentityUser</code>.',
-            guide=G('17-users', 'מדריך 17, סעיף 4 (כל השלבים)')),
+            guide=G('17-users#first-admin', 'מדריך 17, סעיף 4 (כל השלבים)'),
+            sid='first-admin'),
 
     snippet('רק הנתונים של המשתמש המחובר ("ההזמנות שלי")',
             'כל משתמש רואה רק את מה שהוא יצר. מתאים להזמנות, פוסטים, משימות.',
@@ -614,8 +626,9 @@ sections.append(('עיצוב ומבנה', [
              ('במקום הקישור ל-bootstrap.min.css', '''
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" />''')],
             change='בדקו את גרסת ה-Bootstrap בפרויקט (בשורה הראשונה של <code class="inline">wwwroot/lib/bootstrap/dist/css/bootstrap.min.css</code>) ושימו אותה במקום 5.3.3.',
-            guide=G('08-css-js', 'מדריך 8, סעיף 6'),
-            star=True),
+            guide=G('08-css-js#rtl', 'מדריך 8, סעיף 6'),
+            star=True,
+            sid='rtl'),
 
     snippet('קישור בתפריט',
             'עוד פריט בתפריט העליון.',
@@ -623,7 +636,7 @@ sections.append(('עיצוב ומבנה', [
 <li class="nav-item">
     <a class="nav-link text-dark" asp-controller="Products" asp-action="Index">מוצרים</a>
 </li>''')],
-            guide=G('06-layout', 'מדריך 6, סעיף 3')),
+            guide=G('06-layout#add-link', 'מדריך 6, סעיף 3')),
 
     snippet('תפריט שמשתנה לפי מי שמחובר',
             'קישורים שונים לאורח, למשתמש ולמנהל.',
@@ -681,7 +694,8 @@ sections.append(('עיצוב ומבנה', [
     </div>
 </div>''')],
             change='ה-<code class="inline">data-bs-target</code> של הכפתור חייב להיות זהה ל-<code class="inline">id</code> של החלון (עם # לפניו).',
-            preview={0: True}),
+            preview={0: True},
+            sid='modal'),
 
     snippet('הודעה שנסגרת בלחיצה',
             'הודעה עם X לסגירה.',
@@ -702,7 +716,8 @@ sections.append(('עיצוב ומבנה', [
              ('ב-_Layout.cshtml, בתוך ה-head', '''
 <link rel="icon" href="~/images/icon.png" />''')],
             change='שימו את התמונות בתיקייה <code class="inline">wwwroot/images</code>. האייקון בלשונית נקרא favicon. הכי פשוט: להחליף את <code class="inline">wwwroot/favicon.ico</code> בקובץ משלכם עם אותו שם, בלי שורת קוד. אם עדיין רואים את הישן: <span class="keyboard">Ctrl</span>+<span class="keyboard">F5</span>.',
-            guide=G('web-design', 'עיצוב שנראה מקצועי, סעיף 5')),
+            guide=G('web-design#favicon', 'עיצוב שנראה מקצועי, סעיף 5'),
+            sid='logo-favicon'),
 
     snippet('עמוד 404 מעוצב',
             'במקום עמוד ריק כשכתובת לא קיימת, עמוד "העמוד לא נמצא" משלכם.',
@@ -755,7 +770,7 @@ sections.append(('JavaScript פשוט', [
         });
     </script>
 }''')],
-            change='בדפי ההרשמה וההתחברות צריך קודם להוציא אותם לעריכה (מתקדם ג, סעיף 4).'),
+            change='בדפי ההרשמה וההתחברות צריך קודם להוציא אותם לעריכה (' + G('adv-c-identity#scaffold-identity', 'מתקדם ג, סעיף 4') + ').'),
 
     snippet('מונה תווים בתיבת טקסט',
             'מציג כמה תווים הוקלדו מתוך המקסימום.',

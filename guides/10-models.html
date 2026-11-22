@@ -18,7 +18,7 @@
     <div class="explanation">
         <strong>💡 על מה המדריך הזה?</strong> עד עכשיו כל הטקסט בעמודים היה כתוב ישירות ב-HTML. אבל באתר אמיתי מציגים <strong>מידע</strong>: רשימת מוצרים, פרטים של משתמש, הזמנות. במדריך הזה נגדיר איך נראה "מוצר", ניצור כמה מוצרים, ונציג אותם בטבלה ובעמוד פרטים.
         <br><br>
-        <strong>מה צריך לפני:</strong> Controller בשם <code class="inline">ProductsController</code> עם View בשם <code class="inline">Index</code>. אם אין לכם, צרו אותם לפי מדריך 7, סעיף 4. מומלץ לקרוא קודם גם את מדריך 4 (איך אתר MVC עובד).
+        <strong>מה צריך לפני:</strong> Controller בשם <code class="inline">ProductsController</code> עם View בשם <code class="inline">Index</code>. אם אין לכם, צרו אותם לפי <a href="07-new-pages.html#new-controller">מדריך 7, סעיף 4</a>. מומלץ לקרוא קודם גם את מדריך 4 (איך אתר MVC עובד).
     </div>
 
     <!-- ===================== 1 ===================== -->
@@ -95,7 +95,7 @@ public IActionResult Index()
     </table>
 
     <!-- ===================== 4 ===================== -->
-    <h2>4. מציגים את המוצרים בעמוד</h2>
+    <h2 id="show-products">4. מציגים את המוצרים בעמוד</h2>
     <p>פתחו את <code class="inline">Views/Products/Index.cshtml</code>, מחקו את כל התוכן והדביקו:</p>
 <pre class="code-block">@model List&lt;Product&gt;
 @{
@@ -133,7 +133,7 @@ public IActionResult Index()
     <div class="checkpoint">היכנסו ל-<code class="inline">/Products</code>. מופיעה טבלה עם שלושת המוצרים. הוסיפו מוצר רביעי לרשימה ב-Controller, והריצו שוב: הוא יופיע בטבלה בלי שנגעתם ב-View.</div>
 
     <!-- ===================== 5 ===================== -->
-    <h2>5. עמוד פרטים של מוצר אחד</h2>
+    <h2 id="details">5. עמוד פרטים של מוצר אחד</h2>
     <p>בטבלה יש קישור "פרטים". ה-<code class="inline">asp-route-id="@product.Id"</code> מוסיף לכתובת את המספר של המוצר, למשל <code class="inline">/Products/Details/2</code>. עכשיו ניצור את העמוד הזה.</p>
 
     <h3>ה-Action</h3>

@@ -37,6 +37,7 @@ assets/site.js        Guide list, navigation, table of contents, search, copy bu
 assets/vendor/        Prism.js (syntax highlighting) and the VS Code Dark+ theme
 tools/build_snippets.py  Generates guides/snippets.html (edit the snippet list there, then run it)
 tools/build_web.py       Generates the web basics pages (web-intro, web-html, web-css, web-js, ...)
+tools/check_links.py     Checks every internal link and #section anchor (run after editing pages)
 ```
 
 ## Adding or publishing a guide

@@ -76,7 +76,7 @@ products.forEach(function (p) {
 
 document.getElementById(&quot;products&quot;).innerHTML = html;</textarea>
 </div>
-<div class="explanation"><strong>💡 זה הבסיס ל-fetch:</strong> כשהשרת מחזיר JSON (<a href="adv-d-fetch.html">מתקדם ד</a>), מקבלים בדיוק מערך של אובייקטים כזה, ובונים ממנו HTML באותה דרך.</div>
+<div class="explanation"><strong>💡 זה הבסיס ל-fetch:</strong> כשהשרת מחזיר JSON (<a href="adv-d-fetch.html#json-action">מתקדם ד</a>), מקבלים בדיוק מערך של אובייקטים כזה, ובונים ממנו HTML באותה דרך.</div>
     <h2>3. טיימרים</h2>
 <table class="simple"><tr><th>פונקציה</th><th>מה היא עושה</th></tr><tr><td><code class="inline">setTimeout(function, 2000)</code></td><td>מריצה את הפונקציה <strong>פעם אחת</strong>, אחרי 2000 מילישניות (2 שניות).</td></tr><tr><td><code class="inline">setInterval(function, 1000)</code></td><td>מריצה את הפונקציה <strong>שוב ושוב</strong>, כל שנייה.</td></tr><tr><td><code class="inline">clearInterval(id)</code></td><td>עוצרת setInterval.</td></tr></table>
 <div class="playground" data-title="נסו: שנו את הספירה להתחיל מ-5" data-height="180">
@@ -173,7 +173,7 @@ document.querySelectorAll(&quot;.add&quot;).forEach(function (btn) {
     });
 });</textarea>
 </div>
-<div class="explanation"><strong>💡 בפרויקט:</strong> ב-cshtml כותבים <code class="inline">data-id=&quot;@product.Id&quot;</code> בתוך ה-<code class="inline">@foreach</code>, וכך כל כפתור "יודע" לאיזה מוצר הוא שייך (<a href="adv-d-fetch.html">מתקדם ד</a>).</div>
+<div class="explanation"><strong>💡 בפרויקט:</strong> ב-cshtml כותבים <code class="inline">data-id=&quot;@product.Id&quot;</code> בתוך ה-<code class="inline">@foreach</code>, וכך כל כפתור "יודע" לאיזה מוצר הוא שייך (<a href="adv-d-fetch.html#like-button">מתקדם ד</a>).</div>
     <h2>6. localStorage: הדפדפן זוכר</h2>
 <div class="concept"><span class="concept-title">📖 localStorage</span>מקום קטן בדפדפן שבו אפשר לשמור טקסט, והוא נשאר גם אחרי רענון או סגירה של הדפדפן. כל משתמש, בדפדפן שלו בלבד.<span class="example">מתאים להעדפות (מצב לילה, גודל טקסט). <strong>לא</strong> מתאים לנתונים חשובים או משותפים: אלה הולכים למסד הנתונים.</span></div>
 <table class="simple"><tr><th>קוד</th><th>מה הוא עושה</th></tr><tr><td><code class="inline">localStorage.setItem(&quot;theme&quot;, &quot;dark&quot;)</code></td><td>שומר.</td></tr><tr><td><code class="inline">localStorage.getItem(&quot;theme&quot;)</code></td><td>קורא (או <code class="inline">null</code> אם אין).</td></tr><tr><td><code class="inline">localStorage.removeItem(&quot;theme&quot;)</code></td><td>מוחק.</td></tr></table>
