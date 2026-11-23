@@ -46,6 +46,12 @@ tools/check_links.py     Checks every internal link and #section anchor (run aft
 2. In `assets/site.js`, find the guide in the `GUIDES` list and set `ready: true`.
 3. Commit and push. GitHub Pages publishes the change within a minute or two.
 
+## License
+
+- **Code** (site code, build scripts, and all code samples in the guides): [MIT](LICENSE). Students can copy the samples into their projects freely.
+- **Written content** (guides, explanations, exercises, diagrams): [CC BY 4.0](LICENSE-CONTENT.md). Share and adapt with credit.
+- **Not covered:** Prism and prism-themes in `assets/vendor/` (their own MIT licenses), and the screenshots in `assets/images/install/` by Hila Kadman, which remain hers.
+
 ## Credits
 
 The Visual Studio installation guide (guide 0) is based on the guide and screenshots by Hila Kadman ([kadman11.wordpress.com](https://kadman11.wordpress.com)).

@@ -758,5 +758,7 @@
         }
     }
 
-    document.body.appendChild(el('footer', { 'class': 'site-footer' }, 'מדריכים לתלמידים ללימוד ASP.NET Core MVC'));
+    document.body.appendChild(el('footer', { 'class': 'site-footer' }, 'מדריכים לתלמידים ללימוד ASP.NET Core MVC.<br>' +
+        'הקוד ברישיון <a href="https://github.com/gilyerm/aspnet-guides/blob/main/LICENSE">MIT</a>, ' +
+        'והתוכן ברישיון <a href="https://github.com/gilyerm/aspnet-guides/blob/main/LICENSE-CONTENT.md">CC BY 4.0</a>.'));
 })();
